@@ -1,0 +1,14 @@
+---
+title: "Final project - Prostate cancer data"
+author: "Group 5"
+date: "29 4 2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Description
+
+** Describe what is in the repository
