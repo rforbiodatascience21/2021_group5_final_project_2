@@ -4,6 +4,7 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
+library("readxl")
 
 
 # Define functions --------------------------------------------------------
@@ -11,7 +12,7 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-my_data_raw <- read_tsv(file = "data/_raw/my_raw_data.tsv")
+prostate_raw <- read_xlsx(path = "data/_raw/prostate.xlsx")
 
 
 # Wrangle data ------------------------------------------------------------
