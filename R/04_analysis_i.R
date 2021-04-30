@@ -4,6 +4,8 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
+library("broom")
+library("cowplot")
 library("ggplot2")
 library("GGally")
 
@@ -12,7 +14,7 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-my_data_clean_aug <- read_tsv(file = "data/02_my_data_clean.tsv")
+my_data_clean_aug <- readRDS(file = "data/02_my_data_clean.rds")
 #change back to "03_my_data_clean_aug"
 
 # Wrangle data ------------------------------------------------------------
@@ -29,8 +31,6 @@ model_age <- my_data_clean_aug %>% glm(outcome ~ age,
 summary(model_age)
 
 # Visualise data ----------------------------------------------------------
-my_data_clean_aug <- my_data_clean_aug %>% 
-  mutate(outcome = factor(outcome)) 
 
 ggplot(data = my_data_clean_aug,
        mapping = aes(x = Treatment,
@@ -53,6 +53,24 @@ ggplot(data = my_data_clean_aug,
                      y = Treatment,
                      color = outcome)) +
   geom_point()
+
+# PCA analysis
+pca_fit <- my_data_clean_aug %>%
+  select(where(is.numeric)) %>%
+  prcomp(scale = TRUE)
+
+pca_fit %>%
+  augment(my_data_clean_aug) %>%
+  ggplot(aes(.fittedPC1, .fittedPC2, color = outcome))+
+  geom_point(size = 1.5)+
+  scale_color_manual(
+    values = c("1" = "#D55E00", "0" = "#0072B2")
+  )+
+  theme_half_open(12) + background_grid()
+
+pca_fit %>%
+  tidy(matrix = "rotation")
+
 
 # Write data --------------------------------------------------------------
 write_tsv(...)

@@ -22,7 +22,7 @@ my_data <- full_join(prostate_raw, prostate_raw_1, by = "patno")
 
 # delete the columns that we do not need in the analysis
 my_data <- my_data  %>%
-  select(-sdate, -dtime, -pf, -ekg)
+  select(-sdate, -dtime, -pf, -ekg, -sg)
 
 
 # Write data --------------------------------------------------------------

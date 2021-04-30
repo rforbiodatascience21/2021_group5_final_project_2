@@ -19,8 +19,12 @@ my_data <- read_tsv(file = "data/01_my_data.tsv")
 my_data_clean <- my_data %>%
   drop_na() %>%
   mutate(stage = factor(stage)) %>%
+  mutate(patno = factor(patno)) %>%
+  mutate(bm = factor(bm)) %>%
+  mutate(hx = factor(hx)) %>%
   mutate(outcome = case_when(status == "alive" ~ 0,
-                             status != "alive" ~ 1))
+                             status != "alive" ~ 1)) %>%
+  mutate(outcome = factor(outcome))
 
 
 # Making the rx variable to a continuous variable "Treatment" 
@@ -33,5 +37,5 @@ my_data_clean <- my_data_clean %>%
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data_clean,
-          file = "data/02_my_data_clean.tsv")
+saveRDS(object = my_data_clean,
+          file = "data/02_my_data_clean.rds")
