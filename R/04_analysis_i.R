@@ -4,7 +4,8 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-
+library("ggplot2")
+library("GGally")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -40,6 +41,12 @@ ggplot(data = my_data_clean_aug,
 # Investigating correlation 
 my_data_clean_aug %>% select(.data = ., Treatment, age, hg)%>% 
   cor( use = "pairwise.complete.obs", method = "pearson")
+
+ggpairs(my_data_clean_aug,
+        mapping = aes(color = outcome),
+        columns = c("Treatment", "hg", "age", "stage", "outcome"))
+#Not really useful ... 
+
 
 # Write data --------------------------------------------------------------
 write_tsv(...)
