@@ -37,9 +37,11 @@ my_data_clean <- my_data %>%
 
 # Making the rx variable to a continuous variable "treatment" 
 my_data_clean <- my_data_clean %>%
-  mutate(Treatment = str_sub(rx, 1, 3))
-# placebo must be 0 - dunno how to 
+ mutate(Treatment = str_sub(rx, 1, 3)) %>% 
+ mutate(Treatment = case_when(Treatment == "pla" ~ 0,
+                               TRUE  ~ as.numeric(Treatment)))
 
+# placebo must be 0 - dunno how to 
 
 # Write data --------------------------------------------------------------
 write_tsv(x = my_data_clean,
