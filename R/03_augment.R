@@ -17,6 +17,13 @@ my_data_clean <- read_tsv(file = "data/02_my_data_clean.tsv")
 
 
 # Wrangle data ------------------------------------------------------------
+
+# Create new variable age_group, mean = 71,57
+my_data_clean <- my_data_clean %>% 
+  mutate(age_group = case_when( age <= 71 ~ "Young",
+                    age > 71 ~ "Old"))
+
+
 ## make a plot to show the correlation of status, stage type and hg(Serum Hemoglobin (g/100ml))
 p1 <- my_data_clean %>%
   distinct(patno,stage,rx,status) %>%
@@ -38,7 +45,7 @@ p2 <- my_data_clean %>%
 
 p3 <-grid.arrange(p1,p2,nrow=2,ncol=1)
 
-my_data_clean_aug <- my_data_clean %>%
+my_data_clean_aug <- my_data_clean
   
 
 
