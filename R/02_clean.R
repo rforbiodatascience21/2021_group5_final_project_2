@@ -21,27 +21,16 @@ my_data_clean <- my_data %>%
   mutate(stage = factor(stage)) %>%
   mutate(outcome = case_when(status == "alive" ~ 0,
                              status != "alive" ~ 1))
-#my_data_clean <- my_data %>%
- # drop_na() %>%
-  #mutate(stage = factor(stage)) %>%
-  #mutate(outcome = case_when(status == "alive" ~ 0,
-   #                          status == "dead - pulmonary embolus" ~ 1,
-    #                         status == "dead - prostatic ca" ~ 1,
-     #                        status == "dead - heart or vascular" ~ 1,
-      #                       status == "dead - cerebrovascular" ~ 1,
-       #                      status == "dead - other ca" ~ 1,
-        #                     status == "dead - respiratory disease" ~ 1,
-         #                    status == "dead - other specific non-ca" ~ 1,
-          #                   status == "dead - unspecified non-ca" ~ 1,
-           #                  status == "dead - unknown cause" ~ 1))
 
-# Making the rx variable to a continuous variable "treatment" 
+
+# Making the rx variable to a continuous variable "Treatment" 
 my_data_clean <- my_data_clean %>%
  mutate(Treatment = str_sub(rx, 1, 3)) %>% 
  mutate(Treatment = case_when(Treatment == "pla" ~ 0,
                                TRUE  ~ as.numeric(Treatment)))
 
-# placebo must be 0 - dunno how to 
+# If there is a better way to do it, pleace change :) 
+
 
 # Write data --------------------------------------------------------------
 write_tsv(x = my_data_clean,
