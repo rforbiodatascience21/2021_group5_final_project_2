@@ -48,6 +48,12 @@ ggpairs(my_data_clean_aug,
 #Not really useful ... 
 
 
+ggplot(data = my_data_clean_aug,
+       mapping = aes(x = age,
+                     y = Treatment,
+                     color = outcome)) +
+  geom_point()
+
 # Write data --------------------------------------------------------------
 write_tsv(...)
 ggsave(...)
