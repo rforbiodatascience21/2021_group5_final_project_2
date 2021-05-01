@@ -24,6 +24,19 @@ prostate_clean_aug %>% ...
 
 # Visualise data ----------------------------------------------------------
 
+## Distribution of alive/dead for each treatment, scaled for better comparison
+## across groups
+prostate_clean_aug %>% 
+  ggplot(mapping = aes(treatment,
+                       fill = outcome)) +
+  geom_bar(position = "fill")
+
+## Scatterplot of age vs tumor size
+prostate_clean_aug %>% 
+  ggplot(mapping = aes(age,
+                       tumor_size)) +
+  geom_point()
+
 ## Barplot/histogram of status colored by treatment
 p1 <- prostate_clean_aug %>%
   distinct(patno,stage,treatment,status) %>%
