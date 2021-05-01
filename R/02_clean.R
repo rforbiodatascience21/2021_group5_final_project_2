@@ -11,31 +11,32 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-my_data <- read_tsv(file = "data/01_my_data.tsv")
+prostate_data <- read_tsv(file = "data/01_prostate_data.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-## add a new column, outcome, to divide status into dead or alive, which is easy to analyze further
-my_data_clean <- my_data %>%
-  drop_na() %>%
-  mutate(stage = factor(stage)) %>%
-  mutate(patno = factor(patno)) %>%
-  mutate(bm = factor(bm)) %>%
-  mutate(hx = factor(hx)) %>%
-  mutate(outcome = case_when(status == "alive" ~ 0,
-                             status != "alive" ~ 1)) %>%
-  mutate(outcome = factor(outcome))
+## Remove columns that we do not need in the analysis
+prostate_clean <- prostate_data  %>%
+  select(-sdate, -dtime, -pf, -ekg, -sg)
 
-
-# Making the rx variable to a continuous variable "Treatment" 
-my_data_clean <- my_data_clean %>%
- mutate(Treatment = str_sub(rx, 1, 3)) %>% 
- mutate(Treatment = case_when(Treatment == "pla" ~ 0,
-                               TRUE  ~ as.numeric(Treatment)))
-
-# If there is a better way to do it, pleace change :) 
+## Rename variables
+prostate_clean <- prostate_clean %>% 
+  rename(treatment = rx,
+         weight_index = wt,
+         tumor_size = sz,
+         acid_phosphatase = ap,
+         bone_mets = bm,
+         CVD = hx)
+ 
+## Change the type of four variables to factor
+prostate_clean <- prostate_clean %>%
+  mutate(stage = factor(stage),
+         patno = factor(patno),
+         bone_mets = factor(bone_mets),
+         CVD = factor(CVD))
+# drop_na()
 
 
 # Write data --------------------------------------------------------------
-saveRDS(object = my_data_clean,
-          file = "data/02_my_data_clean.rds")
+write_tsv(x = prostate_clean,
+          file = "data/02_prostate_clean.tsv.gz")
