@@ -21,6 +21,35 @@ my_data_clean_aug <- readRDS(file = "data/02_my_data_clean.rds")
 my_data_clean_aug %>% ...
 
 
+
+## make a plot to show the correlation of status, stage type and hg(Serum Hemoglobin (g/100ml))
+p1 <- prostate_clean_aug %>%
+  distinct(patno,stage,rx,status) %>%
+  count(status,rx) %>%
+  ggplot(aes(y = status,x = n))+
+  geom_col(aes(fill = rx),position = "dodge",
+           alpha = 0.5)+
+  theme_classic(base_family = "Avenir",
+                base_size = 12)+
+  theme(legend.position = "none")
+
+p2 <- my_data_clean %>%
+  distinct(patno,stage,hg,status) %>%
+  ggplot(aes(y = status, x = hg))+
+  geom_point(aes(colour = stage))+
+  theme_classic(base_family = "Avenir",
+                base_size = 12)+
+  theme(legend.position = "bottom")
+
+p3 <-grid.arrange(p1,p2,nrow=2,ncol=1)
+
+my_data_clean_aug <- my_data_clean
+
+
+
+
+
+________________________________________________________________
 # Model data
 #Creating a logistic model
 ## We will try to use the age of the patients to predict the risk for the outcome 
