@@ -106,4 +106,16 @@ p6+p7
 p5+p8
 p3
 
+#just a try
+library("ggridges")
+ggplot(data = longer_data,
+       mapping = aes(x = value,
+                     y = parameter,
+                     fill = parameter)) +
+  geom_density_ridges(alpha = 0.5) +
+  scale_fill_viridis_d() +
+  labs(title = "Distribution for different parameter") +
+  theme_minimal(base_family = "Avenir", base_size = 12) +
+  theme(legend.position = "bottom") +
+  facet_wrap(vars(outcome), ncol = 2)
 
