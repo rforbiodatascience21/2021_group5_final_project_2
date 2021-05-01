@@ -13,42 +13,28 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-my_data_clean <- readRDS(file = "data/02_my_data_clean.rds")
+prostate_clean <- read_tsv(file = "data/02_prostate_clean.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
+## Add a new binary <fct>-variable "outcome" based on the status is alive or dead
+prostate_clean_aug <- prostate_clean %>%
+  mutate(outcome = case_when(status == "alive" ~ 0,
+                             status != "alive" ~ 1),
+         outcome = factor(outcome))
 
-# Create new variable age_group, mean = 71,57
-my_data_clean <- my_data_clean %>% 
-  mutate(age_group = case_when( age <= 71 ~ "Young",
-                    age > 71 ~ "Old"))
+## Add numeric variable of estrogen dose
+prostate_clean_aug <- prostate_clean_aug %>%
+  mutate(treatment_mg = str_sub(treatment, 1, 3),
+         treatment_mg = str_replace(treatment_mg, "pla", "0"),
+         treatment_mg = as.numeric(treatment_mg)) 
 
-
-## make a plot to show the correlation of status, stage type and hg(Serum Hemoglobin (g/100ml))
-p1 <- my_data_clean %>%
-  distinct(patno,stage,rx,status) %>%
-  count(status,rx) %>%
-  ggplot(aes(y = status,x = n))+
-  geom_col(aes(fill = rx),position = "dodge",
-           alpha = 0.5)+
-  theme_classic(base_family = "Avenir",
-                base_size = 12)+
-  theme(legend.position = "none")
-
-p2 <- my_data_clean %>%
-  distinct(patno,stage,hg,status) %>%
-  ggplot(aes(y = status, x = hg))+
-  geom_point(aes(colour = stage))+
-  theme_classic(base_family = "Avenir",
-                base_size = 12)+
-  theme(legend.position = "bottom")
-
-p3 <-grid.arrange(p1,p2,nrow=2,ncol=1)
-
-my_data_clean_aug <- my_data_clean
-  
+## Add new variable age_group (mean = 71.57)
+prostate_clean_aug <- prostate_clean_aug %>% 
+  mutate(age_group = case_when(age <= 71 ~ "Young",
+                               age > 71 ~ "Old"))
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data_clean_aug,
-          file = "data/03_my_data_clean_aug.tsv")
+write_tsv(x = prostate_clean_aug,
+          file = "data/03_prostate_clean_aug.tsv.gz")
