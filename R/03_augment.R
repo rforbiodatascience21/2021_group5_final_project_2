@@ -13,8 +13,7 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-prostate_clean <- read_tsv(file = "data/02_prostate_clean.tsv.gz")
-
+prostate_clean <- read_rds(file = "data/02_prostate_clean.rds.gz")
 
 # Wrangle data ------------------------------------------------------------
 ## Add a new binary <fct>-variable "outcome" based on the status is alive or dead
@@ -27,7 +26,7 @@ prostate_clean_aug <- prostate_clean %>%
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(treatment_mg = str_sub(treatment, 1, 3),
          treatment_mg = str_replace(treatment_mg, "pla", "0"),
-         treatment_mg = as.numeric(treatment_mg)) 
+         treatment_mg = factor(treatment_mg)) 
 
 ## Add new variable age_group (mean = 71.57)
 prostate_clean_aug <- prostate_clean_aug %>% 
@@ -36,5 +35,5 @@ prostate_clean_aug <- prostate_clean_aug %>%
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = prostate_clean_aug,
-          file = "data/03_prostate_clean_aug.tsv.gz")
+write_rds(x = prostate_clean_aug,
+          file = "data/03_prostate_clean_aug.rds.gz")

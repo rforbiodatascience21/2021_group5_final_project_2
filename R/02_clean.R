@@ -38,5 +38,6 @@ prostate_clean <- prostate_clean %>%
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = prostate_clean,
-          file = "data/02_prostate_clean.tsv.gz")
+## We use write_rds instead of write_tsv to keep information of type of variables
+write_rds(x = prostate_clean,
+          file = "data/02_prostate_clean.rds.gz")
