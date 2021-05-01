@@ -8,9 +8,9 @@ library("tidyverse")
 source(file = "R/99_project_functions.R")
 
 # Load data and wrangle----------------------------------------------------
-my_data <- read_tsv(file = "data/03_my_data_clean_aug.tsv")
+my_data <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
-num_data<- select(my_data,age,wt,sbp,dbp,hg,sz,sg,outcome,ap,Treatment)
+num_data<- select(my_data,age,weight_index,sbp,dbp,hg,tumor_size,outcome,acid_phosphatase,treatment_mg)
 
 longer_data_2 <- pivot_longer(num_data,cols = -"outcome",
                               names_to = "parameter", 
