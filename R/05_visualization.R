@@ -1,33 +1,34 @@
 # Clear workspace ---------------------------------------------------------
 rm(list = ls())
 
+
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("patchwork")
+
+
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
+
 # Load data and wrangle----------------------------------------------------
-my_data <- read_tsv(file = "data/03_my_data_clean_aug.tsv")%>% 
-          mutate(outcome = factor(outcome))%>%
-          mutate(bm=factor(bm))%>%
-          mutate(outcome= case_when(outcome == "0"~"alive",
-                                    outcome=="1"~"death"))
+prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
 
 
 # Visualise data ----------------------------------------------------------
-#just try to see distribution
-p1<-ggplot(data = my_data,
+## Boxplot of age for each status colored by Bone Metastasis
+p1<-ggplot(data = prostate_clean_aug,
            mapping = aes(x = outcome,
-                         y= age, fill=bm)) +
+                         y= age, fill = bone_mets)) +
   geom_boxplot(alpha = 0.5, show.legend = FALSE) +
   scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
                     values = c("red","blue"))+
   theme_classic()
 
-p2<-ggplot(data = my_data,
+## Boxplot of Weight Index for each status colored by Bone Metastasis
+p2<-ggplot(data = prostate_clean_aug,
            mapping = aes(x = outcome,
-                         y= wt,fill=bm)) +
+                         y=  weight_index, fill= bone_mets)) +
   geom_boxplot(alpha = 0.5) +
   scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
                     values = c("red","blue"))+
@@ -35,9 +36,10 @@ p2<-ggplot(data = my_data,
   theme_classic()+
   theme(legend.position = "bottom")
 
-p3<-ggplot(data = my_data,
+## Boxplot of Acid Phosphatase for each status colored by Bone Metastasis
+p3<-ggplot(data = prostate_clean_aug,
            mapping = aes(x = outcome,
-                         y= ap,fill=bm)) +
+                         y= acid_phosphatase, fill = bone_mets)) +
   geom_boxplot(alpha = 0.5) +
   scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
                     values = c("red","blue"))+
@@ -45,33 +47,29 @@ p3<-ggplot(data = my_data,
   theme_classic()+
   theme(legend.position = "bottom")
 
-p4<-ggplot(data = my_data,
+
+## Boxplot of Tumor Size for each status colored by Bone Metastasis
+p4<-ggplot(data = prostate_clean_aug,
            mapping = aes(x = outcome,
-                         y= sz,fill=bm)) +
+                         y= tumor_size, fill = bone_mets)) +
+  geom_boxplot(alpha = 0.5) +
+  scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
+                    values = c("red","blue"))+
+  theme_classic()
+
+## Boxplot of Diastolic Blood Pressure for each status colored by Bone Metastasis
+p6<-ggplot(data = prostate_clean_aug,
+           mapping = aes(x = outcome,
+                         y= dbp,fill=bone_mets)) +
   geom_boxplot(alpha = 0.5, show.legend = FALSE) +
   scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
                     values = c("red","blue"))+
   theme_classic()
 
-p5<-ggplot(data = my_data,
+## Boxplot of Systolic Blood Pressure for each status colored by Bone Metastasis
+p7<-ggplot(data = prostate_clean_aug,
            mapping = aes(x = outcome,
-                         y= Treatment,fill=bm)) +
-  geom_boxplot(alpha = 0.5, show.legend = FALSE) +
-  scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
-                    values = c("red","blue"))+
-  theme_classic()
-
-p6<-ggplot(data = my_data,
-           mapping = aes(x = outcome,
-                         y= dbp,fill=bm)) +
-  geom_boxplot(alpha = 0.5, show.legend = FALSE) +
-  scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
-                    values = c("red","blue"))+
-  theme_classic()
-
-p7<-ggplot(data = my_data,
-           mapping = aes(x = outcome,
-                         y= sbp,fill=bm)) +
+                         y= sbp,fill=bone_mets)) +
   geom_boxplot(alpha = 0.5) +
   scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
                     values = c("red","blue"))+
@@ -79,9 +77,10 @@ p7<-ggplot(data = my_data,
   theme_classic()+
   theme(legend.position = "bottom")
 
-p8<-ggplot(data = my_data,
+## Boxplot of Hemoglobin for each status colored by Bone Metastasis
+p8<-ggplot(data = prostate_clean_aug,
            mapping = aes(x = outcome,
-                         y= hg,fill=bm)) +
+                         y= hg,fill=bone_mets)) +
   geom_boxplot(alpha = 0.5) +
   scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
                     values = c("red","blue"))+
@@ -89,23 +88,13 @@ p8<-ggplot(data = my_data,
   theme_classic()+
   theme(legend.position = "bottom")
 
-p9<-ggplot(data = my_data,
-           mapping = aes(x = outcome,
-                         y= sg,fill=bm)) +
-  geom_boxplot(alpha = 0.5) +
-  scale_fill_manual(labels = c("Non_Metastases", "Metastases"),
-                    values = c("red","blue"))+
-  labs(caption = "Data from D.P.Byar(1977)")+
-  theme_classic()+
-  theme(legend.position = "bottom")
-
-# make plot easy to see
+# Overview
 p1+p2
-p4+p9
-p6+p7
-p5+p8
+p4+p6
+p7+p8
 p3
 
+## Not supposed to use this package..
 #just a try
 library("ggridges")
 ggplot(data = longer_data,
@@ -119,81 +108,62 @@ ggplot(data = longer_data,
   theme(legend.position = "bottom") +
   facet_wrap(vars(outcome), ncol = 2)
 
-# Treatment plot
 
-my_data <- read_tsv(file = "data/03_my_data_clean_aug.tsv")%>% 
-           mutate(Treatment = factor(Treatment))%>%
-           mutate(bm=factor(bm))%>%
-           mutate(outcome= case_when(outcome == "0"~"alive",
-                                     outcome=="1"~"death"))
-p1<-ggplot(data = my_data,
+## Boxplots colored according to treatment
+
+p1<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= age, fill=Treatment)) +
+                      y= age, fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5, show.legend = FALSE) +
   theme_classic()
   
-p2<-ggplot(data = my_data,
+p2<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= wt,fill=Treatment)) +
+                      y= weight_index,fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5) +
   labs(caption = "Data from D.P.Byar(1977)")+
   theme_classic()+
   theme(legend.position = "bottom")
 
-p3<-ggplot(data = my_data,
+p3<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= ap,fill=Treatment)) +
+                      y= acid_phosphatase,fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5) +
   labs(caption = "Data from D.P.Byar(1977)")+
   theme_classic()+
   theme(legend.position = "bottom")
 
-p4<-ggplot(data = my_data,
+p4<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= sz,fill=Treatment)) +
+                      y= tumor_size,fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5, show.legend = FALSE) +
   theme_classic()
 
-p5<-ggplot(data = my_data,
+p6<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= rx,fill=Treatment)) +
-  geom_boxplot(alpha = 0.5, show.legend = FALSE) +
-  theme_classic()
-
-p6<-ggplot(data = my_data,
-       mapping = aes(x = outcome,
-                      y= dbp,fill=Treatment)) +
+                      y= dbp,fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5,show.legend = FALSE) +
   theme_classic()
 
-p7<-ggplot(data = my_data,
+p7<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= sbp,fill=Treatment)) +
+                      y= sbp,fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5) +
   labs(caption = "Data from D.P.Byar(1977)")+
   theme_classic()+
   theme(legend.position = "bottom")
 
-p8<-ggplot(data = my_data,
+p8<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = outcome,
-                      y= hg,fill=Treatment)) +
-  geom_boxplot(alpha = 0.5) +
-  labs(caption = "Data from D.P.Byar(1977)")+
-  theme_classic()+
-  theme(legend.position = "bottom")
-
-p9<-ggplot(data = my_data,
-       mapping = aes(x = outcome,
-                      y= sg,fill=Treatment)) +
+                      y= hg,fill=treatment_mg)) +
   geom_boxplot(alpha = 0.5) +
   labs(caption = "Data from D.P.Byar(1977)")+
   theme_classic()+
   theme(legend.position = "bottom")
 
 p1+p2
-p4+p9
+p4+p8
 p6+p7
-p5+p8
 p3
 
 
