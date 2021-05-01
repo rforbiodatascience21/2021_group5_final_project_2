@@ -49,12 +49,6 @@ tidy(prostate_logistic)
 
 
 
-## Maybe try another variable to predict outcome - fx treatment?
-
-
-# What can we say about this? 
-
-
 # Visualise data ----------------------------------------------------------
 prostate_clean_aug %>% ...
 
