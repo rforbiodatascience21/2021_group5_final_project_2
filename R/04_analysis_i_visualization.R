@@ -19,7 +19,7 @@ prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-prostate_clean_aug %>% ...
+
 
 
 # Visualise data ----------------------------------------------------------
@@ -30,6 +30,13 @@ prostate_clean_aug %>%
   ggplot(mapping = aes(treatment,
                        fill = outcome)) +
   geom_bar(position = "fill")
+
+## Boxplots of tumor_size for each status after treatment with 1mg
+prostate_clean_aug %>% 
+  filter(treatment_mg == "1.0") %>% 
+  ggplot(mapping = aes(tumor_size,
+                       fill = outcome)) +
+  geom_boxplot()
 
 ## Scatterplot of age vs tumor size
 prostate_clean_aug %>% 
