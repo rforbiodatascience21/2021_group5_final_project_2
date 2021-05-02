@@ -16,19 +16,19 @@ prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
 
 # Wrangle data ------------------------------------------------------------
 ## Remove rows containing NA
-prostate_data_pca <- prostate_clean_aug %>% 
+prostate_clean_sub <- prostate_clean_aug %>% 
   select(-patno, -treatment, -status, -age_group) %>% 
   drop_na()
 
 # Model data --------------------------------------------------------------
 # PCA analysis
-pca_fit <- prostate_data_pca %>%
+pca_fit <- prostate_clean_sub %>%
   select(where(is.numeric)) %>% # only numeric columns
   prcomp(scale = TRUE) # PCA on scaled data
 
 ## Plot data in PC coordinates
 p1 <- pca_fit %>%
-  augment(prostate_data_pca) %>% # add original dataset back in
+  augment(prostate_clean_sub) %>% # add original dataset back in
   ggplot(aes(.fittedPC1, .fittedPC2, color = outcome)) + 
   geom_point(size = 1.5, alpha = 0.4) + 
   theme_minimal()
@@ -74,4 +74,10 @@ prostate_clean_aug %>% ...
 
 
 # Write data --------------------------------------------------------------
-write_tsv(...)
+save(pca_fit, file = "results/06_mdl_pca_fit.RData")
+ggsave(filename = "results/06_plot_PCA_PCcoords.png",
+       plot = p1)
+ggsave(filename = "results/06_plot_PCA_rotation.png",
+       plot = p2)
+ggsave(filename = "results/06_plot_PCA_varExpl.png",
+       plot = p3)
