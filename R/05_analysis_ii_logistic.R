@@ -15,6 +15,7 @@ prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
 
 
 ###################################
+# Tests..
 log_mod <- prostate_log %>% 
   drop_na %>% 
   filter(treatment_mg == 0) %>% 
@@ -22,18 +23,17 @@ log_mod <- prostate_log %>%
       data = .,
       family = binomial(link = "logit"))
 tidy(log_mod)
-
 ###################################
 
 # Wrangle data ------------------------------------------------------------
 ## Remove <chr> variables
 prostate_log <- prostate_clean_aug %>% 
-  select(-treatment, -status, -age_group)# %>% 
-  #filter(treatment_mg == "1.0")
+  select(-treatment, -status, -age_group) %>% 
+  filter(treatment_mg == "1.0")
 
 ## Create long nested data of <fct> variables
 long_nested_fct <- prostate_log %>%
-  select(patno, outcome, stage, CVD, bone_mets, treatment_mg) %>% ## deleted treatent_mg
+  select(patno, outcome, stage, CVD, bone_mets) %>% ## deleted treatent_mg
   pivot_longer(cols = c(-patno, -outcome), 
                names_to = "variable", 
                values_to = "value") %>%
