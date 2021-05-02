@@ -28,7 +28,7 @@ tidy(log_mod)
 # Wrangle data ------------------------------------------------------------
 ## Remove <chr> variables
 prostate_1mg <- prostate_clean_aug %>% 
-  select(-treatment, -status, -age_group) %>% 
+  select(-treatment, -status, -age_group, -stage, -CVD, -bone_mets) %>% 
   filter(treatment_mg == "1.0")
 
 ## Create long nested data of <fct> variables
@@ -52,12 +52,13 @@ long_nested_dbl <- prostate_1mg %>%
   ungroup()
 
 ## Combine to one long nested data set
+## why need long_nested_fct? they are factor variables
 long_nested_1mg <- bind_rows(long_nested_dbl, long_nested_fct)
 
 
 # Model data --------------------------------------------------------------
 ## Creating a logistic model for each variable
-prostate_logistic <- long_nested_1mg %>% 
+prostate_logistic <- long_nested_dbl%>% 
   mutate(mdl = map(data, ~ glm(outcome ~ value, 
                                data = .x,
                                family = binomial(link = "logit"))))

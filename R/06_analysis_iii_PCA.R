@@ -56,12 +56,12 @@ p2 <- pca_fit %>%
   coord_fixed() + # fix aspect ratio to 1:1
   theme_minimal()
 
-## Plot of variance explained by first 10 PCs
+## Plot of variance explained by first 7 PCs
 p3 <- pca_fit %>%
   tidy(matrix = "eigenvalues") %>%
   ggplot(aes(PC, percent)) +
   geom_col(fill = "#56B4E9", alpha = 0.8) +
-  scale_x_continuous(breaks = 1:10) +
+  scale_x_continuous(breaks = 1:7) +
   scale_y_continuous(
     labels = scales::percent_format(),
     expand = expansion(mult = c(0, 0.01))
