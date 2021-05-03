@@ -18,6 +18,8 @@ prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
 ## Remove rows containing NA
 prostate_clean_sub <- prostate_clean_aug %>% 
   select(-patno, -treatment, -status, -age_group) %>% 
+  filter(treatment_mg == "1.0") %>% 
+  select(-treatment_mg) %>% 
   drop_na()
 
 # Model data --------------------------------------------------------------

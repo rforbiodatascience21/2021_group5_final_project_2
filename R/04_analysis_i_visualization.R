@@ -5,9 +5,9 @@ rm(list = ls())
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("broom")
-library("cowplot")
+#library("cowplot")
 library("ggplot2")
-library("GGally")
+#library("GGally")
 library("patchwork")
 
 # Define functions --------------------------------------------------------
