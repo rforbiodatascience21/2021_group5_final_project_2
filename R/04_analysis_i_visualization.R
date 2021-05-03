@@ -17,23 +17,27 @@ prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-
 prostate_clean_aug <- prostate_clean_aug %>% 
   mutate(outcome = case_when(outcome == 0 ~ "alive",
                              outcome == 1 ~ "dead"))
 
 # Visualise data ----------------------------------------------------------
 
+########################################
 ### Plots of pre-treatment variables ###
+########################################
 
+# could we create a heatmap here with correlation between the variables?
 
+######################################
 ### Plots of treatment and outcome ###
+######################################
 
 ## Distribution of alive/dead
 prostate_clean_aug %>% 
   ggplot(mapping = aes(outcome,
                        fill = outcome)) +
-  geom_bar(alpha = 0.8, show.legend = FALSE) +
+  geom_bar(alpha = 0.7, show.legend = FALSE) +
   theme_minimal()
 
 ## Distribution of alive/dead for each treatment, scaled for better comparison
@@ -42,28 +46,8 @@ prostate_clean_aug %>%
   ggplot(mapping = aes(treatment,
                        fill = outcome)) +
   geom_bar(alpha = 0.8, position = "fill") +
-  facet_wrap(~stage)
-
-## Boxplots of tumor_size for each status after treatment with 1mg
-prostate_clean_aug %>% 
-  ggplot(mapping = aes(age,
-                       tumor_size)) +
-  geom_point() +
-  geom_smooth()
-  #facet_wrap(~treatment_mg) +
-  #coord_flip()
-
-
-## Barplot/histogram of status colored by treatment
-prostate_clean_aug %>%
-  distinct(patno,stage,treatment,status) %>%
-  count(status,treatment) %>%
-  ggplot(aes(y = status,x = n))+
-  geom_col(aes(fill = treatment),position = "dodge",
-           alpha = 0.5)+
-  theme_classic(base_family = "Avenir",
-                base_size = 12)+
-  theme(legend.position = "none")
+  facet_wrap(~stage) +
+  theme_minimal()
 
 
 ## Boxplot of tumor size for each outcome stratified on treatment
@@ -74,28 +58,40 @@ ggplot(data = prostate_clean_aug,
   geom_boxplot(alpha = 0.5, show.legend = TRUE) +
   theme_minimal()
 
+# maybe another plot which really show that treatment 1mg is the best?
 
-## Boxplots colored according to treatment
-ggplot(data = prostate_clean_aug,
-           mapping = aes(x = outcome,
-                         y= age, fill=treatment_mg)) +
-  geom_boxplot(alpha = 0.5, show.legend = FALSE) +
-  theme_classic()
-
-### Plots of those with treatment 1mg
-## Look at one treatment to see which variables play a role in the outcome
-prostate_clean_aug %>% 
+#############################################################################
+### Plots of significant variables found by logistic regression (dose 1mg) ##
+#############################################################################
+p1 <- prostate_clean_aug %>% 
   filter(treatment_mg == "1.0") %>% 
-  ggplot() +
-  geom_density(mapping = aes(age,
-                             color = outcome))
+  ggplot(mapping = aes(age,
+                       color = outcome)) +
+  geom_density() +
+  theme_minimal()
 
-prostate_clean_aug %>% 
+p2 <- prostate_clean_aug %>% 
   filter(treatment_mg == "1.0") %>% 
-  ggplot() +
-  geom_density(mapping = aes(age,
-                             color = outcome))
- 
+  ggplot(mapping = aes(weight_index,
+                       color = outcome)) +
+  geom_density() +
+  theme_minimal()
+
+p3 <- prostate_clean_aug %>% 
+  filter(treatment_mg == "1.0") %>% 
+  ggplot(mapping = aes(tumor_size,
+                       color = outcome)) +
+  geom_density() +
+  theme_minimal()
+
+p4 <- prostate_clean_aug %>% 
+  filter(treatment_mg == "1.0") %>% 
+  ggplot(mapping = aes(CVD,
+                       fill = outcome)) +
+  geom_bar(position = "fill") +
+  theme_minimal()
+
+p4 + p1 / p2 / p3
 
 # Write data --------------------------------------------------------------
 write_tsv(...)
