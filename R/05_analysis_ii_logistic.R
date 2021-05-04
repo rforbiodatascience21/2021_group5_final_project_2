@@ -4,7 +4,7 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-
+library("broom")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -28,10 +28,11 @@ tidy(log_mod)
 # Wrangle data ------------------------------------------------------------
 ## Remove <chr> variables
 prostate_1mg <- prostate_clean_aug %>% 
-  select(-treatment, -status, -age_group, -stage, -CVD, -bone_mets) %>% 
+  select(-treatment, -status, -age_group) %>% 
   filter(treatment_mg == "1.0")
 
 ## Create long nested data of <fct> variables
+# maybe better to use prostate_clean_aug %>% select(where(is.factor)) ? 
 long_nested_fct <- prostate_1mg %>%
   select(patno, outcome, stage, CVD, bone_mets) %>% ## deleted treatent_mg
   pivot_longer(cols = c(-patno, -outcome), 
@@ -58,7 +59,7 @@ long_nested_1mg <- bind_rows(long_nested_dbl, long_nested_fct)
 
 # Model data --------------------------------------------------------------
 ## Creating a logistic model for each variable
-prostate_logistic <- long_nested_dbl%>% 
+prostate_logistic <- long_nested_1mg%>% 
   mutate(mdl = map(data, ~ glm(outcome ~ value, 
                                data = .x,
                                family = binomial(link = "logit"))))
