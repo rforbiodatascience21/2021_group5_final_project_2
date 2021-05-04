@@ -7,6 +7,7 @@ library("tidyverse")
 library("broom")
 library("ggplot2")
 library("patchwork")
+library("GGally")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -28,6 +29,20 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ########################################
 
 # could we create a heatmap here with correlation between the variables?
+
+ggcorr( data = prostate_clean_aug %>% 
+          select(where(is.numeric)), 
+          method = c("pairwise", "pearson"))
+
+prostate_clean_aug %>%
+  select(where(is.numeric), outcome) %>% 
+  ggpairs(., mapping = aes(color = outcome), 
+          columns = c(1,2,3,4,5,7),
+          upper = list(continuous = "blank"),
+          lower = list(continuous = "points", combo = "box_no_facet"))
+
+# Investigating the condition of the patients 
+
 
 ######################################
 ### Plots of treatment and outcome ###
@@ -91,7 +106,7 @@ p4 <- prostate_clean_aug %>%
   geom_bar(position = "fill") +
   theme_minimal()
 
-p4 + p1 / p2 / p3
+p4 + p1 / p2 / p3 
 
 # Write data --------------------------------------------------------------
 write_tsv(...)

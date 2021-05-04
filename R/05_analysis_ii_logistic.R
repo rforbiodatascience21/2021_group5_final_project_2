@@ -110,6 +110,11 @@ p2 <- prostate_logistic %>%
   theme(legend.position = "bottom" ) +
   labs( x = "Estimate", y = "Variable")
 
+<<<<<<< HEAD
+p1 + p2 
+
+=======
+>>>>>>> c109ffbefe773960511f21a16bf359c9059adbf9
 # Write data --------------------------------------------------------------
 write_tsv(...)
 
