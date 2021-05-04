@@ -12,7 +12,7 @@ source(file = "R/99_project_functions.R")
 
 # Load data ---------------------------------------------------------------
 load(file = "results/06_mdl_pca_fit.RData")
-prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
+prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------

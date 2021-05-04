@@ -11,7 +11,7 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-prostate_clean <- read_rds(file = "data/02_prostate_clean.rds.gz")
+prostate_clean <- read_tsv(file = "data/02_prostate_clean.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
@@ -55,5 +55,5 @@ prostate_clean_aug <- prostate_clean_aug %>%
 
 
 # Write data --------------------------------------------------------------
-write_rds(x = prostate_clean_aug,
-          file = "data/03_prostate_clean_aug.rds.gz")
+write_tsv(x = prostate_clean_aug,
+          file = "data/03_prostate_clean_aug.tsv.gz")
