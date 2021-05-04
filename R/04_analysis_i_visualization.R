@@ -36,17 +36,21 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
+#Pre-treatment - deselect treatment + outcome 
 
 # Looking at the numeric variables in the data set to find possible patterns
 ggcorr( data = prostate_clean_aug %>% 
-          select(where(is.numeric)), 
-          method = c("pairwise", "pearson"))
+          select(where(is.numeric), -treatment_mg), 
+          method = c("pairwise", "pearson"),
+        label = TRUE, 
+        legend.position = "bottom", 
+        hjust = 0.8)
 
 #Looking at outcome or stage?
 prostate_clean_aug %>%
   select(where(is.numeric), stage) %>% 
   ggpairs(., mapping = aes(color = stage), 
-          columns = c(1:11),
+          columns = c(1:10),
           upper = list(continuous = "blank"),
           diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
           lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
@@ -68,8 +72,7 @@ prostate_clean_aug %>%
 # Investigating the condition of the patients 
 p01<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = tumor_size,
-                     y = stage, 
-                     fill = stage)) +
+                     y = outcome)) +
   geom_boxplot(alpha = 0.5, show.legend = TRUE) +
   theme_minimal() + 
   scale_color_economist() + 
@@ -77,8 +80,7 @@ p01<-ggplot(data = prostate_clean_aug,
 
 p02<-ggplot(data = prostate_clean_aug,
             mapping = aes(x = age,
-                          y = stage, 
-                          fill = stage)) +
+                          y = outcome)) +
   geom_boxplot(alpha = 0.5, show.legend = TRUE) +
   theme_minimal() + 
   scale_color_economist() + 
@@ -123,7 +125,7 @@ prostate_clean_aug %>%
   ggplot(mapping = aes(treatment,
                        fill = outcome)) +
   geom_bar(alpha = 0.8, position = "fill") +
-  facet_wrap(~stage) +
+  facet_wrap(~age_group) +
   theme_minimal()+
   scale_fill_economist()
 
@@ -159,7 +161,7 @@ ggplot(prostate_clean_aug,
   scale_fill_economist()
 
 
-  #############################################################################
+#############################################################################
 ### Plots of significant variables found by logistic regression (dose 1mg) ##
 #############################################################################
 p1 <- prostate_clean_aug %>% 
