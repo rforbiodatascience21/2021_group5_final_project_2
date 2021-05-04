@@ -4,7 +4,7 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-library("broom")
+
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -14,92 +14,61 @@ source(file = "R/99_project_functions.R")
 prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
-###################################
-
-###################################
-
 # Wrangle data ------------------------------------------------------------
 
-## Change the type of four variables to factor
-prostate_clean_aug <- prostate_clean_aug %>%
-  mutate(patient_ID = factor(patient_ID),
-         stage = factor(stage),
-         bone_mets = factor(bone_mets),
-         CVD = factor(CVD))
-
-## Remove <chr> variables
+## Remove <chr> variables and NA
 prostate_logi <- prostate_clean_aug %>% 
   select(-where(is.character)) %>% 
-  drop_na
+  drop_na %>% 
+  mutate(treatment_mg = factor(treatment_mg))
 
-## Subset data - only treatment 1 mg
-prostate_1mg <- prostate_logi %>% 
-  filter(treatment_mg == "1.0")
-
-## Create long nested data of <fct> variables
-# maybe better to use prostate_clean_aug %>% select(where(is.factor)) ? 
-long_nested_fct <- prostate_1mg %>%
-  select(patient_ID, outcome, stage, CVD, bone_mets) %>%
+## Subset data according treatment 1 mg and create long nested version
+prostate_1mg_long_nest <- prostate_logi %>% 
+  filter(treatment_mg == 1) %>% 
+  select(-treatment_mg) %>% 
   pivot_longer(cols = c(-patient_ID, -outcome), 
                names_to = "variable", 
                values_to = "value") %>%
   group_by(variable) %>%
   nest() %>%
   ungroup()
-
-## Create long nested data of <dbl> variables
-long_nested_dbl <- prostate_1mg %>%
-  select(-stage, -CVD, -bone_mets, -treatment_mg) %>%
-  pivot_longer(cols = c(-patient_ID, -outcome), 
-               names_to = "variable", 
-               values_to = "value") %>%
-  group_by(variable) %>%
-  nest() %>%
-  ungroup()
-
-## Combine to one long nested data set
-## why need long_nested_fct? they are factor variables
-long_nested_1mg <- bind_rows(long_nested_dbl, long_nested_fct)
 
 
 # Model data --------------------------------------------------------------
 
 ## Logistic regression based on treatments
-log_mod <- prostate_logi %>% 
+log_mod_treatment <- prostate_logi %>% 
   glm(outcome ~ treatment_mg,
       data = .,
       family = binomial(link = "logit"))
-tidy(log_mod)
+tidy(log_mod_treatment)
 
-## Creating a logistic model for each variable
-prostate_logistic <- long_nested_1mg%>% 
+## Creating a logistic model for each variable in data for treatment 1 mg
+prostate_1mg_log_mod <- prostate_1mg_long_nest %>% 
   mutate(mdl = map(data, ~ glm(outcome ~ value, 
                                data = .x,
                                family = binomial(link = "logit"))))
 
-## Adding statistical variables for intercept and the estimated values for each model
-## (std.error, statistic,  p.value, conf.low, conf.high)
-prostate_logistic <- prostate_logistic %>% 
+## Tidy each model and remove rows for intercept
+prostate_1mg_log_mod <- prostate_1mg_log_mod %>% 
   mutate(mdl_tidy = map(mdl, tidy, conf.int = TRUE)) %>% 
-  unnest(mdl_tidy)
-
-## Remove rows for intercept
-prostate_logistic <- prostate_logistic %>% 
+  unnest(mdl_tidy) %>% 
   filter(str_detect(term, "value"))
-
+  
 ## Identify significant and non-significant variables
-prostate_logistic <- prostate_logistic %>% 
+prostate_1mg_log_mod <- prostate_1mg_log_mod %>% 
   mutate(identified_as = case_when(p.value < 0.05 ~ "Significant",
                                    TRUE ~ "Non-significant"))
 
-
-# Visualise data ----------------------------------------------------------
 ## Create variable "neg_log10_p"
-prostate_logistic <- prostate_logistic %>%
+prostate_1mg_log_mod <- prostate_1mg_log_mod %>%
   mutate(neg_log10_p = -log10(p.value))
 
+
+# Visualise data ----------------------------------------------------------
+
 ## Manhattan plot
-p1 <- prostate_logistic %>% 
+p1 <- prostate_1mg_log_mod %>% 
   ggplot(mapping = aes(x = fct_reorder(variable, neg_log10_p, .desc = TRUE), 
                        y = neg_log10_p,
                        color = identified_as)) +
@@ -111,7 +80,7 @@ p1 <- prostate_logistic %>%
   labs( x = "Variable", y = "Minus log10(p)")
 
 ## A confidence interval plot with effect directions
-p2 <- prostate_logistic %>% 
+p2 <- prostate_1mg_log_mod %>% 
   ggplot(mapping = aes(x = estimate, y = fct_reorder(variable, estimate, .desc = TRUE),
                        color = identified_as)) + 
   geom_point() + 
@@ -123,11 +92,8 @@ p2 <- prostate_logistic %>%
   theme(legend.position = "bottom" ) +
   labs( x = "Estimate", y = "Variable")
 
-<<<<<<< HEAD
 p1 + p2 
 
-=======
->>>>>>> c109ffbefe773960511f21a16bf359c9059adbf9
 # Write data --------------------------------------------------------------
 write_tsv(...)
 
