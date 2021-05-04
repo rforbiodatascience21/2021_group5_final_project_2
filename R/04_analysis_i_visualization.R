@@ -28,22 +28,44 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ### Plots of pre-treatment variables ###
 ########################################
 
-# could we create a heatmap here with correlation between the variables?
-
+# Looking at the numeric variables in the data set to find possible patterns
 ggcorr( data = prostate_clean_aug %>% 
           select(where(is.numeric)), 
           method = c("pairwise", "pearson"))
-
+#Looking at outcome or stage?
 prostate_clean_aug %>%
-  select(where(is.numeric), outcome) %>% 
-  ggpairs(., mapping = aes(color = outcome), 
-          columns = c(1,2,3,4,5,7),
+  select(where(is.numeric), stage) %>% 
+  ggpairs(., mapping = aes(color = stage), 
+          columns = c(1,2,3,4,5,6,7),
           upper = list(continuous = "blank"),
-          lower = list(continuous = "points", combo = "box_no_facet"))
+          diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
+          lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
+          axisLabels = "show") +
+  theme(legend.position = "bottom") +
+  theme_minimal()
+
+# As we don't get any distribution from Acid Phosphatase, we look into that variable 
+prostate_clean_aug %>% 
+  ggplot(mapping = aes(acid_phosphatase,
+                       color=stage)) +
+  geom_boxplot()
 
 # Investigating the condition of the patients 
+p01<-ggplot(data = prostate_clean_aug,
+       mapping = aes(x = tumor_size,
+                     y = stage, 
+                     fill = stage)) +
+  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
+  theme_minimal()
 
+p02<-ggplot(data = prostate_clean_aug,
+            mapping = aes(x = age,
+                          y = stage, 
+                          fill = stage)) +
+  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
+  theme_minimal()
 
+p01 + p02
 ######################################
 ### Plots of treatment and outcome ###
 ######################################
@@ -67,8 +89,8 @@ prostate_clean_aug %>%
 
 ## Boxplot of tumor size for each outcome stratified on treatment
 ggplot(data = prostate_clean_aug,
-           mapping = aes(x = outcome,
-                         y = tumor_size, 
+           mapping = aes(x = tumor_size,
+                         y = outcome, 
                          fill = treatment_mg)) +
   geom_boxplot(alpha = 0.5, show.legend = TRUE) +
   theme_minimal()
