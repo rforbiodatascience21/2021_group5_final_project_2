@@ -17,7 +17,7 @@ prostate_data <- read_tsv(file = "data/01_prostate_data.tsv.gz")
 # Wrangle data ------------------------------------------------------------
 ## Remove columns that we wont use in the analysis
 prostate_clean <- prostate_data  %>%
-  select(-sdate, -dtime)
+  select(-sdate, -dtime, -sg)
 
 ## Rename variables
 prostate_clean <- prostate_clean %>% 
@@ -29,7 +29,6 @@ prostate_clean <- prostate_clean %>%
          EKG = ekg,
          hemoglobin = hg,
          tumor_size = sz,
-         sg_index = sg,
          acid_phosphatase = ap,
          bone_mets = bm)
 
