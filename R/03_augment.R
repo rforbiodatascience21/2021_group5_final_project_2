@@ -4,8 +4,6 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-library("gridExtra")
-library("fs")
 
 
 # Define functions --------------------------------------------------------
@@ -15,12 +13,14 @@ source(file = "R/99_project_functions.R")
 # Load data ---------------------------------------------------------------
 prostate_clean <- read_rds(file = "data/02_prostate_clean.rds.gz")
 
+
 # Wrangle data ------------------------------------------------------------
 ## Add a new binary <fct>-variable "outcome" based on the status is alive or dead
 prostate_clean_aug <- prostate_clean %>%
   mutate(outcome = case_when(status == "alive" ~ 0,
                              status != "alive" ~ 1),
-         outcome = factor(outcome))
+         outcome = factor(outcome)) %>% 
+  relocate(outcome, .after = status)
 
 ## Add numeric variable of estrogen dose
 prostate_clean_aug <- prostate_clean_aug %>%
@@ -34,7 +34,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
   mutate(performance_lvl = case_when(performance == "normal activity" ~ 0,
                                      performance == "in bed < 50% daytime" ~ 1,
                                      performance == "in bed > 50% daytime" ~ 2,
-                                     performance == "confined to bed" ~ 3))
+                                     performance == "confined to bed" ~ 3)) %>% 
+  relocate(performance_lvl, .after = performance)
 
 # Add variable of EKG level  
 prostate_clean_aug <- prostate_clean_aug %>%   
@@ -44,9 +45,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
                              EKG == "heart block or conduction def" ~ 3,
                              EKG == "heart strain" ~ 4,
                              EKG == "old MI" ~ 5,
-                             EKG == "recent MI" ~ 6))
-
-
+                             EKG == "recent MI" ~ 6)) %>% 
+  relocate(EKG_lvl, .after = EKG)
 
 ## Add new variable age_group (mean = 71.57)
 prostate_clean_aug <- prostate_clean_aug %>% 
