@@ -18,7 +18,7 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 ## Remove rows containing NA
 
 ## Change the type of four variables to factor
-prostate_clean <- prostate_clean %>%
+prostate_clean_aug <- prostate_clean_aug %>%
   mutate(patient_ID = factor(patient_ID),
          stage = factor(stage),
          bone_mets = factor(bone_mets),
