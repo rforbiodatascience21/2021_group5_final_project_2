@@ -153,7 +153,7 @@ ggplot(data = prostate_clean_aug,
 ggplot(prostate_clean_aug, 
        mapping = aes(treatment,
                      age, fill = outcome)) +
-  geom_raster() + 
+  geom_raster(alpha = 0.8) + 
   geom_hline(yintercept = 70, linetype = "dashed")+
   theme_minimal() +
   scale_fill_economist()
