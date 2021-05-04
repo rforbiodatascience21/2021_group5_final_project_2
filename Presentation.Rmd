@@ -1,0 +1,50 @@
+---
+title: "Exam Presentation"
+author: "Group 5"
+date: "11th May 2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+### Introduction
+
+Byar & Greene prostate cancer data, from Andrews DF and Herzberg AM (1985). 
+
+- x variables 
+- 500 observations 
+- we have chosen to focus on weather the patients survive or not and which variables are influencing this.  
+
+## Materials and Methods
+### Materials and Methods
+
+- Correlation matrix 
+
+- Logistic regression 
+
+- PCA
+
+- K-means 
+
+##  Output slide
+### Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Results
+### Results 
+
+```{r pressure}
+plot(pressure)
+```
+
+## Discusion 
+### Discusion 
+? 
+
+
