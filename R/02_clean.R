@@ -15,26 +15,33 @@ prostate_data <- read_tsv(file = "data/01_prostate_data.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-## Remove columns that we do not need in the analysis
+## Remove columns that we wont use in the analysis
 prostate_clean <- prostate_data  %>%
-  select(-sdate, -dtime, -pf, -ekg, -sg)
+  select(-sdate, -dtime)
 
 ## Rename variables
 prostate_clean <- prostate_clean %>% 
-  rename(treatment = rx,
+  rename(patient_ID = patno, 
+         treatment = rx,
          weight_index = wt,
+         performance = pf,
+         CVD = hx,
+         EKG = ekg,
+         hemoglobin = hg,
          tumor_size = sz,
+         sg_index = sg,
          acid_phosphatase = ap,
-         bone_mets = bm,
-         CVD = hx)
+         bone_mets = bm)
+
+# NA values
+sum(is.na(prostate_clean))
  
 ## Change the type of four variables to factor
 prostate_clean <- prostate_clean %>%
-  mutate(stage = factor(stage),
-         patno = factor(patno),
+  mutate(patient_ID = factor(patient_ID),
+         stage = factor(stage),
          bone_mets = factor(bone_mets),
          CVD = factor(CVD))
-# drop_na()
 
 
 # Write data --------------------------------------------------------------

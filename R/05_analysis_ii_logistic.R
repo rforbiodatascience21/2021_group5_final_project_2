@@ -34,8 +34,8 @@ prostate_1mg <- prostate_clean_aug %>%
 ## Create long nested data of <fct> variables
 # maybe better to use prostate_clean_aug %>% select(where(is.factor)) ? 
 long_nested_fct <- prostate_1mg %>%
-  select(patno, outcome, stage, CVD, bone_mets) %>% ## deleted treatent_mg
-  pivot_longer(cols = c(-patno, -outcome), 
+  select(patient_ID, outcome, stage, CVD, bone_mets) %>% ## deleted treatent_mg
+  pivot_longer(cols = c(-patient_ID, -outcome), 
                names_to = "variable", 
                values_to = "value") %>%
   group_by(variable) %>%
@@ -45,7 +45,7 @@ long_nested_fct <- prostate_1mg %>%
 ## Create long nested data of <dbl> variables
 long_nested_dbl <- prostate_1mg %>%
   select(-stage, -CVD, -bone_mets, -treatment_mg) %>%
-  pivot_longer(cols = c(-patno, -outcome), 
+  pivot_longer(cols = c(-patient_ID, -outcome), 
                names_to = "variable", 
                values_to = "value") %>%
   group_by(variable) %>%
@@ -110,8 +110,11 @@ p2 <- prostate_logistic %>%
   theme(legend.position = "bottom" ) +
   labs( x = "Estimate", y = "Variable")
 
+<<<<<<< HEAD
 p1 + p2 
 
+=======
+>>>>>>> c109ffbefe773960511f21a16bf359c9059adbf9
 # Write data --------------------------------------------------------------
 write_tsv(...)
 

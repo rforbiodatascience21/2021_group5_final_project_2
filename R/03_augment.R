@@ -26,7 +26,27 @@ prostate_clean_aug <- prostate_clean %>%
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(treatment_mg = str_sub(treatment, 1, 3),
          treatment_mg = str_replace(treatment_mg, "pla", "0"),
-         treatment_mg = factor(treatment_mg)) 
+         treatment_mg = factor(treatment_mg)) %>% 
+  relocate(treatment_mg, .after = treatment)
+
+## Add variable of performance level
+prostate_clean_aug <- prostate_clean_aug %>% 
+  mutate(performance_lvl = case_when(performance == "normal activity" ~ 0,
+                                     performance == "in bed < 50% daytime" ~ 1,
+                                     performance == "in bed > 50% daytime" ~ 2,
+                                     performance == "confined to bed" ~ 3))
+
+# Add variable of EKG level  
+prostate_clean_aug <- prostate_clean_aug %>%   
+  mutate(EKG_lvl = case_when(EKG == "normal" ~ 0,
+                             EKG == "benign" ~ 1,
+                             EKG == "rhythmic disturb & electrolyte ch" ~ 2,
+                             EKG == "heart block or conduction def" ~ 3,
+                             EKG == "heart strain" ~ 4,
+                             EKG == "old MI" ~ 5,
+                             EKG == "recent MI" ~ 6))
+
+
 
 ## Add new variable age_group (mean = 71.57)
 prostate_clean_aug <- prostate_clean_aug %>% 
