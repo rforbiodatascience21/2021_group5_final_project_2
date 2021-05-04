@@ -11,11 +11,20 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-prostate_clean_aug <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
+prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
 ## Remove rows containing NA
+
+## Change the type of four variables to factor
+prostate_clean_aug <- prostate_clean_aug %>%
+  mutate(patient_ID = factor(patient_ID),
+         stage = factor(stage),
+         bone_mets = factor(bone_mets),
+         CVD = factor(CVD))
+
+
 prostate_clean_sub <- prostate_clean_aug %>% 
   select(-patno, -treatment, -status, -age_group) %>% 
   filter(treatment_mg == "1.0") %>% 
