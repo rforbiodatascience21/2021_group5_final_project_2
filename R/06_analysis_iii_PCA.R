@@ -4,7 +4,7 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-
+library("broom")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -15,34 +15,32 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-## Remove rows containing NA
-
-## Change the type of four variables to factor
-prostate_clean_aug <- prostate_clean_aug %>%
-  mutate(bone_mets = factor(bone_mets),
-         CVD = factor(CVD))
-
-
-prostate_clean_sub <- prostate_clean_aug %>% 
-  select(-patno, -treatment, -status, -age_group) %>% 
-  filter(treatment_mg == "1.0") %>% 
-  select(-treatment_mg) %>% 
+prostate_pca <- prostate_clean_aug %>%
+  select(-where(is.character), -patient_ID, treatment_mg) %>% 
+  mutate(outcome = factor(outcome)) %>% 
   drop_na()
 
 # Model data --------------------------------------------------------------
-# PCA analysis
-pca_fit <- prostate_clean_sub %>%
+
+## PCA analysis
+pca_fit <- prostate_pca %>%
   select(where(is.numeric)) %>% # only numeric columns
   prcomp(scale = TRUE) # PCA on scaled data
 
+
+# Visualise data ----------------------------------------------------------
+
 ## Plot data in PC coordinates
 p1 <- pca_fit %>%
-  augment(prostate_clean_sub) %>% # add original dataset back in
-  ggplot(aes(.fittedPC1, .fittedPC2, color = outcome)) + 
-  geom_point(size = 1.5, alpha = 0.4) + 
+  augment(prostate_pca) %>% # add original dataset back in
+  ggplot(aes(.fittedPC1, 
+             .fittedPC2, 
+             color = outcome)) + 
+  geom_point(size = 1.5, 
+             alpha = 0.4) + 
   theme_minimal()
 
-# Define arrow style for plotting
+# Arrow style for plot of rotation matrix
 arrow_style <- arrow(angle = 20, 
                      ends = "first", 
                      type = "closed", 
@@ -61,25 +59,22 @@ p2 <- pca_fit %>%
     hjust = 1, nudge_x = -0.02, 
     color = "#904C2F"
   ) +
-  xlim(-1,1) +
+  xlim(-0.6,0.5) +
   coord_fixed() + # fix aspect ratio to 1:1
   theme_minimal()
+p2
 
-## Plot of variance explained by first 7 PCs
+## Plot of variance explained by first 10 PCs
 p3 <- pca_fit %>%
   tidy(matrix = "eigenvalues") %>%
-  ggplot(aes(PC, percent)) +
-  geom_col(fill = "#56B4E9", alpha = 0.8) +
-  scale_x_continuous(breaks = 1:7) +
-  scale_y_continuous(
-    labels = scales::percent_format(),
-    expand = expansion(mult = c(0, 0.01))
+  filter(percent > 0.05) %>% 
+  ggplot(mapping = aes(PC, percent)) +
+  geom_col(fill = "#56B4E9", 
+           alpha = 0.8) +
+  scale_x_continuous(breaks = 1:10) +
+  scale_y_continuous(labels = scales::percent_format(),
+                     expand = expansion(mult = c(0, 0.01))
   )
-
-
-
-# Visualise data ----------------------------------------------------------
-prostate_clean_aug %>% ...
 
 
 # Write data --------------------------------------------------------------
