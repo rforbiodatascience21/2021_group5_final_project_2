@@ -16,9 +16,10 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
 
-## Remove <chr> variables and NA
+## Remove <chr> variables, NA, and performance_lvl (logreg can't handle it,
+## and it doesn't change the model if removed)
 prostate_logi <- prostate_clean_aug %>% 
-  select(-where(is.character)) %>% 
+  select(-where(is.character), -performance_lvl) %>% 
   drop_na %>% 
   mutate(treatment_mg = factor(treatment_mg))
 
@@ -36,7 +37,7 @@ prostate_1mg_long_nest <- prostate_logi %>%
 
 # Model data --------------------------------------------------------------
 
-## Logistic regression based on treatments
+## Logistic regression based on treatments to find significant treatment dose
 log_mod_treatment <- prostate_logi %>% 
   glm(outcome ~ treatment_mg,
       data = .,
@@ -73,27 +74,35 @@ p1 <- prostate_1mg_log_mod %>%
                        y = neg_log10_p,
                        color = identified_as)) +
   geom_point() + 
-  geom_hline(yintercept = - log10(0.05), linetype = "dashed") +
-  theme_classic(base_size = 8, base_family = "Avenir") +
+  geom_hline(yintercept = -log10(0.05), 
+             linetype = "dashed") +
+  theme_classic(base_size = 8, 
+                base_family = "Avenir") +
   theme(legend.position = "bottom", 
-        axis.text.x = element_text(angle = 45 , vjust = 1, hjust = 1)) +
-  labs( x = "Variable", y = "Minus log10(p)")
+        axis.text.x = element_text(angle = 45 , 
+                                   vjust = 1, 
+                                   hjust = 1)) +
+  labs(x = "Variable", y = "Minus log10(p)")
 
-## A confidence interval plot with effect directions
+## Plot of confidence intervals for effects of variables
 p2 <- prostate_1mg_log_mod %>% 
-  ggplot(mapping = aes(x = estimate, y = fct_reorder(variable, estimate, .desc = TRUE),
+  ggplot(mapping = aes(x = estimate, 
+                       y = fct_reorder(variable, estimate, .desc = TRUE),
                        color = identified_as)) + 
   geom_point() + 
-  geom_vline(xintercept = 0, linetype = "dashed" ) + 
-  geom_errorbarh(aes(xmin = conf.low,
-                     xmax = conf.high,
-                     height = 0.1)) +
-  theme_classic(base_size = 8, base_family = "Avenir") +
+  geom_vline(xintercept = 0, 
+             linetype = "dashed" ) + 
+  geom_errorbarh(mapping = aes(xmin = conf.low,
+                               xmax = conf.high,
+                               height = 0.1)) +
+  theme_classic(base_size = 8, 
+                base_family = "Avenir") +
   theme(legend.position = "bottom" ) +
-  labs( x = "Estimate", y = "Variable")
+  labs(x = "Estimate", y = "Variable")
 
-p1 + p2 
 
 # Write data --------------------------------------------------------------
-write_tsv(...)
-
+ggsave(filename = "results/05_plot_Manhattan.png",
+       plot = p1)
+ggsave(filename = "results/05_plot_CIeffects.png",
+       plot = p2)
