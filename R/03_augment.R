@@ -48,10 +48,16 @@ prostate_clean_aug <- prostate_clean_aug %>%
                              EKG == "recent MI" ~ 6)) %>% 
   relocate(EKG_lvl, .after = EKG)
 
-## Add new variable age_group (mean = 71.57)
+# Find mean of age
+prostate_clean_aug %>% 
+  drop_na() %>% 
+  summarize(mean(age))
+
+## Add new variable age_group (mean = 71.5)
 prostate_clean_aug <- prostate_clean_aug %>% 
   mutate(age_group = case_when(age <= 71 ~ "Young",
-                               age > 71 ~ "Old"))
+                               age > 71 ~ "Old")) %>% 
+  relocate(age_group, .after = age)
 
 
 # Write data --------------------------------------------------------------
