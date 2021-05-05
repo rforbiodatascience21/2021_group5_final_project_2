@@ -16,7 +16,7 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
 prostate_pca <- prostate_clean_aug %>%
-  select(-where(is.character), -patient_ID, treatment_mg) %>% 
+  select(-where(is.character), -patient_ID, -treatment_mg) %>% 
   mutate(outcome = factor(outcome)) %>% 
   drop_na()
 
