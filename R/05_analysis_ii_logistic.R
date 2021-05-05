@@ -24,7 +24,7 @@ prostate_logi <- prostate_clean_aug %>%
   drop_na %>% 
   mutate(treatment_mg = factor(treatment_mg))
 
-## Subset data according treatment 1 mg and create long nested version
+## Subset data according treatment 1 mg and create long nested version (Why?)
 prostate_1mg_long_nest <- prostate_logi %>% 
   filter(treatment_mg == 1) %>% 
   select(-treatment_mg) %>% 
