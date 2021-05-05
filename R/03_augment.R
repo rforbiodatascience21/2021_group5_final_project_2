@@ -34,7 +34,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
   mutate(performance_lvl = case_when(performance == "normal activity" ~ 4,
                                      performance == "in bed < 50% daytime" ~ 3,
                                      performance == "in bed > 50% daytime" ~ 2,
-                                     performance == "confined to bed" ~ 1)) %>% 
+                                     performance == "confined to bed" ~ 1),
+         performance_lvl = factor(performance_lvl)) %>% 
   relocate(performance_lvl, .after = performance)
 
 # Add variable of EKG level  
@@ -45,7 +46,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
                              EKG == "heart block or conduction def" ~ 3,
                              EKG == "heart strain" ~ 4,
                              EKG == "old MI" ~ 5,
-                             EKG == "recent MI" ~ 6)) %>% 
+                             EKG == "recent MI" ~ 6),
+         EKG_lvl = factor(EKG_lvl)) %>% 
   relocate(EKG_lvl, .after = EKG)
 
 # Find mean of age

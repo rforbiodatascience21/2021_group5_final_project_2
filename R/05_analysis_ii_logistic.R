@@ -4,6 +4,7 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
+library("generics")
 
 
 # Define functions --------------------------------------------------------
@@ -16,7 +17,7 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
 
-## Remove <chr> variables, NA, and performance_lvl (logreg can't handle it,
+## Remove <chr> variables, NA, and performance_lvl (logreg can't handle it (why?),
 ## and it doesn't change the model if removed)
 prostate_logi <- prostate_clean_aug %>% 
   select(-where(is.character), -performance_lvl) %>% 

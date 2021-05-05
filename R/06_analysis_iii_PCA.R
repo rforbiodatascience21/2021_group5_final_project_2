@@ -5,6 +5,7 @@ rm(list = ls())
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("broom")
+library("cowplot")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -17,7 +18,9 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 # Wrangle data ------------------------------------------------------------
 prostate_pca <- prostate_clean_aug %>%
   select(-where(is.character), -patient_ID, -treatment_mg) %>% 
-  mutate(outcome = factor(outcome)) %>% 
+  mutate(outcome = factor(outcome)) %>%
+  mutate(performance_lvl = factor(performance_lvl)) %>%
+  mutate(EKG_lvl = factor(EKG_lvl)) %>%
   drop_na()
 
 # Model data --------------------------------------------------------------
@@ -40,6 +43,8 @@ p1 <- pca_fit %>%
              alpha = 0.4) + 
   theme_minimal()
 
+p1
+
 # Arrow style for plot of rotation matrix
 arrow_style <- arrow(angle = 20, 
                      ends = "first", 
@@ -59,14 +64,15 @@ p2 <- pca_fit %>%
     hjust = 1, nudge_x = -0.02, 
     color = "#904C2F"
   ) +
-  xlim(-0.6,0.5) +
+  xlim(-0.6,0.5) + ylim(-0.7,0.2)+
   coord_fixed() + # fix aspect ratio to 1:1
-  theme_minimal()
+  theme_minimal_grid(10)
 p2
 
 ## Plot of variance explained by first 10 PCs
 p3 <- pca_fit %>%
   tidy(matrix = "eigenvalues") %>%
+  ## why?
   filter(percent > 0.05) %>% 
   ggplot(mapping = aes(PC, percent)) +
   geom_col(fill = "#56B4E9", 
@@ -76,9 +82,10 @@ p3 <- pca_fit %>%
                      expand = expansion(mult = c(0, 0.01))
   )
 
-
+p3
 # Write data --------------------------------------------------------------
 save(pca_fit, file = "results/06_mdl_pca_fit.RData")
+save(prostate_pca, file = "results/06_pca_data.RData")
 ggsave(filename = "results/06_plot_PCA_PCcoords.png",
        plot = p1)
 ggsave(filename = "results/06_plot_PCA_rotation.png",
