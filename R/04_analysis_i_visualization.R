@@ -24,6 +24,7 @@ prostate_clean_aug <- prostate_clean_aug %>%
          CVD = factor(CVD),
          treatment = factor(treatment),
          stage = factor(stage),
+         performance_lvl = factor(performance_lvl),
          outcome = case_when(outcome == 0 ~ "alive",
                              outcome == 1 ~ "dead"),
          acid_phosphatase_log = log(acid_phosphatase)) %>% 
@@ -35,10 +36,10 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
-#Pre-treatment - deselect treatment + outcome 
-#distribution plot 
+ 
+# Distribution plot for the numeric variables stratified on "stage" 
 prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(patient_ID, stage, where(is.numeric)) %>% 
+  select(patient_ID, stage, where(is.numeric), -treatment_mg) %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
 
 ggplot(prostate_clean_aug_longer, 
@@ -48,14 +49,66 @@ ggplot(prostate_clean_aug_longer,
   facet_wrap(~ variables, scales = "free", ncol = 3) +
   labs(x = " ", 
        y = "Density",
-       title = "Distribution of the Pre-treatment Variables", 
+       title = "Distribution of the Pre-treatment Variables",
+       subtitle = "The distribution of the numeric variables for the pre-treatment measures",
        fill = "Stage") +
-  theme(legend.position = "top") +
   theme_minimal() + 
+  theme(legend.position = "bottom") +
   scale_color_economist() +
   scale_fill_economist()
 # We can use fct_inorder() to set the order of the plots
-# Legend position is not working 
+
+
+# Distribution of the categorical variables stratified on "stage" 
+# CVD, bone_mets, performance_lvl
+
+prostate_clean_aug %>%
+  select(patient_ID, stage, CVD, bone_mets, performance_lvl) %>%
+  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values") %>% 
+  ggplot(mapping = aes(values,
+                       fill = stage)) +
+  geom_bar() +
+  facet_wrap(~ variables, scales = "free") +
+  labs(x = " ", 
+       y = "Number of cases",
+       title = "Distribution of the Pre-treatment Variables",
+       subtitle = "The distribution of the categorical variables for the pre-treatment measures",
+       fill = "Stage") +
+  theme_minimal() + 
+  scale_fill_economist()
+  
+
+CVD_plot <- prostate_clean_aug %>%
+  ggplot(mapping = aes(CVD,
+                       fill = stage)) +
+  geom_bar(show.legend = FALSE) +
+  theme_minimal() + 
+  scale_color_economist() + 
+  scale_fill_economist()
+
+BM_plot <- prostate_clean_aug %>%
+  ggplot(mapping = aes(bone_mets,
+                       fill = stage)) +
+  geom_bar(show.legend = FALSE) +
+  theme_minimal() + 
+  scale_color_economist() + 
+  scale_fill_economist()
+
+performance_plot <- prostate_clean_aug %>%
+  ggplot(mapping = aes(performance_lvl,
+                       fill = stage)) +
+  geom_bar(show.legend = TRUE) +
+  theme_minimal() + 
+  scale_color_economist() + 
+  scale_fill_economist()
+
+
+CVD_plot + BM_plot + performance_plot +
+  plot_annotation( title = "Distribution of the Pre-treatment Variables",
+                   subtitle = "The distribution of the categorical variables for the pre-treatment measures") +
+  plot_layout(guides = "collect") 
+
+# Must fix axis-label 
 
 # Heatmap of correlations between the numeric variables
 prostate_clean_aug %>% 
