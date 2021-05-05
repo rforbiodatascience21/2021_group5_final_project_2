@@ -19,16 +19,11 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-## Change the type of four variables to factor
 prostate_clean_aug <- prostate_clean_aug %>%
-  mutate(patient_ID = factor(patient_ID),
-         stage = factor(stage),
-         bone_mets = factor(bone_mets),
+  mutate(bone_mets = factor(bone_mets),
          CVD = factor(CVD),
-         treatment = factor(treatment))
-
-prostate_clean_aug <- prostate_clean_aug %>% 
-  mutate(outcome = case_when(outcome == 0 ~ "alive",
+         treatment = factor(treatment),
+         outcome = case_when(outcome == 0 ~ "alive",
                              outcome == 1 ~ "dead"))
 
 # Visualise data ----------------------------------------------------------
@@ -38,18 +33,20 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ########################################
 #Pre-treatment - deselect treatment + outcome 
 
-# Looking at the numeric variables in the data set to find possible patterns
-ggcorr( data = prostate_clean_aug %>% 
-          select(where(is.numeric), -treatment_mg), 
-          method = c("pairwise", "pearson"),
-        label = TRUE, 
-        legend.position = "bottom", 
-        hjust = 0.8)
+# Heatmap of correlations between the numeric variables
+prostate_clean_aug %>% 
+  select(where(is.numeric), -patient_ID, -treatment_mg) %>% 
+  ggcorr(method = c("pairwise", "pearson"),
+         label = TRUE, 
+         legend.position = "bottom", 
+         hjust = 0.8)
 
-#Looking at outcome or stage?
+#Looking at outcome or stage? # Signe has changed stage to numeric, so we can
+#only stratify on outcome. Should we remove categorical variables? Doesn't make
+#sense to plot them in a scatterplot
 prostate_clean_aug %>%
-  select(where(is.numeric), stage) %>% 
-  ggpairs(., mapping = aes(color = stage), 
+  select(where(is.numeric), outcome, -patient_ID, -treatment_mg) %>% 
+  ggpairs(., mapping = aes(color = outcome), 
           columns = c(1:10),
           upper = list(continuous = "blank"),
           diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
@@ -60,10 +57,27 @@ prostate_clean_aug %>%
   scale_color_economist() + 
   scale_fill_economist() 
 
-# As we don't get any distribution from Acid Phosphatase, we look into that variable 
+## Same as above, but no color according to a variable.
+prostate_clean_aug %>%
+  select(where(is.numeric), outcome, -patient_ID, -treatment_mg,-stage,-performance_lvl,-EKG_lvl) %>% 
+  ggpairs(., 
+          columns = c(1:7),
+          upper = list(continuous = "blank"),
+          diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
+          lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
+          axisLabels = "show") +
+  theme(legend.position = "bottom") +
+  theme_minimal() + 
+  scale_color_economist() + 
+  scale_fill_economist() 
+
+# As we don't get any distribution from Acid Phosphatase, we log-transform
+# and plot it for itself
 prostate_clean_aug %>% 
-  ggplot(mapping = aes(acid_phosphatase,
-                       color=stage)) +
+  mutate(stage = factor(stage),
+         log_ap = log10(acid_phosphatase)) %>% 
+  ggplot(mapping = aes(log_ap,
+                       fill = stage)) +
   geom_boxplot() + 
   theme_minimal() + 
   scale_color_economist() + 
@@ -87,7 +101,11 @@ p02<-ggplot(data = prostate_clean_aug,
   scale_fill_economist()
 
 p01 + p02
-#####################
+
+###############################
+## Plots with status reasons ##
+###############################
+## Distribution of tumor size for each stage, stratified on status with reason
 prostate_clean_aug %>% 
   ggplot(mapping = aes(tumor_size,
                        fill = status)) +
@@ -107,6 +125,7 @@ prostate_clean_aug %>%
   theme(axis.text.x=element_text(angle = 45, hjust = 1)) +
   scale_fill_economist()
 
+
 ######################################
 ### Plots of treatment and outcome ###
 ######################################
@@ -122,6 +141,7 @@ prostate_clean_aug %>%
 ## Distribution of alive/dead for each treatment, scaled for better comparison
 ## across groups
 prostate_clean_aug %>% 
+  drop_na() %>% 
   ggplot(mapping = aes(treatment,
                        fill = outcome)) +
   geom_bar(alpha = 0.8, position = "fill") +
@@ -129,27 +149,27 @@ prostate_clean_aug %>%
   theme_minimal()+
   scale_fill_economist()
 
-
 ## Boxplot of tumor size for each outcome stratified on treatment
 ggplot(data = prostate_clean_aug,
            mapping = aes(x = tumor_size,
                          y = outcome, 
-                         fill = treatment_mg)) +
+                         fill = treatment)) +
   geom_boxplot(alpha = 0.5, show.legend = TRUE) +
   theme_minimal() +
   scale_color_economist()
 
-# maybe another plot which really show that treatment 1mg is the best?
+## Histogram of treatment for alive/dead stratified on age_group
 ggplot(data = prostate_clean_aug,
        mapping = aes(treatment,
                      fill = age_group)) +
   geom_histogram(binwidth = 10, 
-                 alpha = 0.5, 
+                 alpha = 0.8, 
                  stat="count") +
   facet_wrap(~ outcome) +
   theme_minimal()+
   theme(axis.text.x=element_text(angle = 30, hjust = 1)) +
   scale_fill_economist()
+
 
 ################# show that younger people respond better
 ggplot(prostate_clean_aug, 
