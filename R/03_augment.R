@@ -31,10 +31,10 @@ prostate_clean_aug <- prostate_clean_aug %>%
 
 ## Add variable of performance level
 prostate_clean_aug <- prostate_clean_aug %>% 
-  mutate(performance_lvl = case_when(performance == "normal activity" ~ 0,
-                                     performance == "in bed < 50% daytime" ~ 1,
+  mutate(performance_lvl = case_when(performance == "normal activity" ~ 4,
+                                     performance == "in bed < 50% daytime" ~ 3,
                                      performance == "in bed > 50% daytime" ~ 2,
-                                     performance == "confined to bed" ~ 3)) %>% 
+                                     performance == "confined to bed" ~ 1)) %>% 
   relocate(performance_lvl, .after = performance)
 
 # Add variable of EKG level  
