@@ -19,9 +19,7 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 ## Change the type of four variables to factor
 prostate_clean_aug <- prostate_clean_aug %>%
-  mutate(patient_ID = factor(patient_ID),
-         stage = factor(stage),
-         bone_mets = factor(bone_mets),
+  mutate(bone_mets = factor(bone_mets),
          CVD = factor(CVD))
 
 
