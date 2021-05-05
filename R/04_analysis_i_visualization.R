@@ -36,7 +36,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
- 
+# I think if we want to investigate the data before treatment, we should select the data when treament_mg = 0 
+
 # Distribution plot for the numeric variables stratified on "stage" 
 prostate_clean_aug_longer <- prostate_clean_aug %>% 
   select(patient_ID, stage, where(is.numeric), -treatment_mg) %>% 
@@ -77,7 +78,7 @@ prostate_clean_aug %>%
   theme_minimal() + 
   scale_fill_economist()
   
-
+#The below plot is same with the above, why do it?
 CVD_plot <- prostate_clean_aug %>%
   ggplot(mapping = aes(CVD,
                        fill = stage)) +
@@ -235,6 +236,8 @@ ggplot(data = prostate_clean_aug,
   theme_minimal() +
   scale_color_economist()
 
+
+# I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
 ## Histogram of treatment for alive/dead stratified on age_group
 ggplot(data = prostate_clean_aug,
        mapping = aes(treatment,
