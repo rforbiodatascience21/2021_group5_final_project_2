@@ -23,8 +23,12 @@ prostate_clean_aug <- prostate_clean_aug %>%
   mutate(bone_mets = factor(bone_mets),
          CVD = factor(CVD),
          treatment = factor(treatment),
+         stage = factor(stage),
          outcome = case_when(outcome == 0 ~ "alive",
-                             outcome == 1 ~ "dead"))
+                             outcome == 1 ~ "dead"),
+         acid_phosphatase_log = log(acid_phosphatase)) %>% 
+  relocate(acid_phosphatase_log, .after = acid_phosphatase)
+
 
 # Visualise data ----------------------------------------------------------
 
@@ -32,6 +36,26 @@ prostate_clean_aug <- prostate_clean_aug %>%
 ### Plots of pre-treatment variables ###
 ########################################
 #Pre-treatment - deselect treatment + outcome 
+#distribution plot 
+prostate_clean_aug_longer <- prostate_clean_aug %>% 
+  select(patient_ID, stage, where(is.numeric)) %>% 
+  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
+
+ggplot(prostate_clean_aug_longer, 
+       mapping = aes(values, 
+                     fill = stage)) +
+  geom_density(alpha = 0.6) +
+  facet_wrap(~ variables, scales = "free", ncol = 3) +
+  labs(x = " ", 
+       y = "Density",
+       title = "Distribution of the Pre-treatment Variables", 
+       fill = "Stage") +
+  theme(legend.position = "top") +
+  theme_minimal() + 
+  scale_color_economist() +
+  scale_fill_economist()
+# We can use fct_inorder() to set the order of the plots
+# Legend position is not working 
 
 # Heatmap of correlations between the numeric variables
 prostate_clean_aug %>% 
@@ -188,7 +212,7 @@ p1 <- prostate_clean_aug %>%
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(age,
                        color = outcome)) +
-  geom_density() +
+  geom_density(show.legend = FALSE) +
   theme_minimal() +
   scale_color_economist()
 
@@ -196,7 +220,7 @@ p2 <- prostate_clean_aug %>%
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(weight_index,
                        color = outcome)) +
-  geom_density() +
+  geom_density(show.legend = FALSE) +
   theme_minimal() +
   scale_color_economist()
 
@@ -204,7 +228,7 @@ p3 <- prostate_clean_aug %>%
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(tumor_size,
                        color = outcome)) +
-  geom_density() +
+  geom_density(show.legend = FALSE) +
   theme_minimal() +
   scale_color_economist()
 
@@ -216,7 +240,10 @@ p4 <- prostate_clean_aug %>%
   theme_minimal() +
   scale_fill_economist()
 
-p4 + p1 / p2 / p3 
+p4 + p1 / p2 / p3 +
+  plot_annotation( title = "Significant variables influencing the outcome",
+                   subtitle = "From the logistics regression it was found that CVD, age, weight and tumor size had a significant influence on the outcome") +
+  plot_layout(guides = "collect")
 
 # Write data --------------------------------------------------------------
 write_tsv(...)
