@@ -8,32 +8,68 @@ library("tidyverse")
 source(file = "R/99_project_functions.R")
 
 # Load data and wrangle----------------------------------------------------
-my_data <- read_rds(file = "data/03_prostate_clean_aug.rds.gz")
+my_data <- read_tsv(file = "data/03_prostate_clean_aug.tsv")
 
-num_data<- select(my_data,age,weight_index,sbp,dbp,hg,tumor_size,outcome,acid_phosphatase)
+num_data<- my_data %>% select(patient_ID, stage, outcome, where(is.numeric), -treatment_mg)
 
-longer_data_2 <- pivot_longer(num_data,cols = -"outcome",
-                              names_to = "parameter", 
-                              values_to = "value") %>% 
-                 mutate(outcome = factor(outcome)) 
+longer_data <- num_data %>% pivot_longer(cols = c(-patient_ID, -stage, -outcome), 
+                            names_to = "variables", 
+                            values_to = "values")
 
-alive_long_data <- longer_data_2 %>% filter(outcome == 0)
-death_long_data <- longer_data_2 %>% filter(outcome == 1)
+# Summary (total)----------------------------------------------------------
+total_table <- longer_data %>% group_by(variables) %>% 
+                summarise(n = n(),
+                          max_value = max(values),
+                          min_value = min(values),
+                          mean_value = mean(values),
+                          sigma_value = sd(values))
 
-# Summary------------------------------------------------------------------
-table_alive <- alive_long_data %>% 
-  group_by(parameter) %>% 
-  summarise(n = n(),
-            mean_alive = mean(value),
-            sigma_alive = sd(value))
+# Summary by outcome ------------------------------------------------------
 
-table_death <- death_long_data %>% 
-  group_by(parameter) %>% 
-  summarise(n = n(),
-            mean_death = mean(value),
-            sigma_death = sd(value))
+alive_long_data <- longer_data %>% filter(outcome == 0)
+death_long_data <- longer_data %>% filter(outcome == 1)
 
-summary_table<- full_join(table_alive,table_death,by="parameter")
+
+table_alive <- alive_long_data %>% group_by(variables) %>% 
+               summarise(n = n(),
+                         max_value = max(values),
+                         min_value = min(values),            
+                         mean_alive = mean(values),
+                         sigma_alive = sd(values))
+
+table_death <- death_long_data %>% group_by(variables) %>% 
+               summarise(n = n(),
+                         max_value = max(values),
+                         min_value = min(values),            
+                         mean_alive = mean(values),
+                         sigma_alive = sd(values))
+
+
+SummaryByOutcome_table<- full_join(table_alive,table_death,by="variables")
+
+# Summary by stage ------------------------------------------------------
+
+stage3_long_data <- longer_data %>% filter(stage == 3)
+stage4_long_data <- longer_data %>% filter(stage == 4)
+
+
+table_stage3 <- stage3_long_data %>% group_by(variables) %>% 
+               summarise(n = n(),
+                         max_value = max(values),
+                         min_value = min(values),            
+                         mean_alive = mean(values),
+                         sigma_alive = sd(values))
+
+table_stage4 <- stage4_long_data %>% group_by(variables) %>% 
+               summarise(n = n(),
+                         max_value = max(values),
+                         min_value = min(values),            
+                         mean_alive = mean(values),
+                         sigma_alive = sd(values))
+
+
+SummaryByStage_table<- full_join(table_stage3,table_stage4,by="variables")
+
 
 # Write data --------------------------------------------------------------
 write_tsv(x = summary_table,
