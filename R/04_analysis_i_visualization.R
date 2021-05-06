@@ -78,7 +78,7 @@ prostate_clean_aug %>%
   theme_minimal() + 
   scale_fill_economist()
   
-#The below plot is same with the above, why do it?
+# Same as above - slightly different layout 
 CVD_plot <- prostate_clean_aug %>%
   ggplot(mapping = aes(CVD,
                        fill = stage)) +

@@ -8,7 +8,7 @@ library("tidyverse")
 source(file = "R/99_project_functions.R")
 
 # Load data and wrangle----------------------------------------------------
-my_data <- read_tsv(file = "data/03_prostate_clean_aug.tsv")
+my_data <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 num_data<- my_data %>% select(patient_ID, stage, outcome, where(is.numeric), -treatment_mg)
 
