@@ -55,6 +55,21 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
   select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
 
+# more intuitive name 
+variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
+                     "age" = "Age [years]",
+                     "dbp" = "dbp", 
+                     "EKG_lvl" = "EKG level",
+                     "EKG" = "Electrocardiography",
+                     "hemoglobin" ="Hemoglobin [g/100ml]",
+                     "sbp" ="sbp",
+                     "tumor_size" = "Tumor Size [cm^2]",
+                     "weight_index" = "Weight Index",
+                     "performance" = "Performace",
+                     "performance_lvl" = "Performance level", 
+                     "bone_mets" = "Bone Metastases",
+                     "CVD" = "History of Cardiovascular Disease")
+
 
 ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
@@ -76,6 +91,7 @@ theme_minimal() +
        fill = "Stage of prostate cancer") +
   scale_fill_economist() +
   scale_color_economist()
+             
 
 # Distribution of the categorical variables stratified on "stage" 
 # CVD, bone_mets, performance, EKG
