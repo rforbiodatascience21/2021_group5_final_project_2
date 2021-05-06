@@ -25,98 +25,94 @@ prostate_clean_aug <- prostate_clean_aug %>%
          treatment = factor(treatment),
          stage = factor(stage),
          performance_lvl = factor(performance_lvl),
+         EKG_lvl = factor(EKG_lvl),
          outcome = case_when(outcome == 0 ~ "alive",
                              outcome == 1 ~ "dead"))
-         
 
+# Creating a variable with more intuitive names for the variables 
+variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
+                     "age" = "Age [years]",
+                     "dbp" = "Diastolic Blood Pressure/10", 
+                     "EKG_lvl" = "EKG level",
+                     "EKG" = "Electrocardiography",
+                     "hemoglobin" ="Hemoglobin [g/100ml]",
+                     "sbp" ="Systolic Blood Pressure/10",
+                     "tumor_size" = "Tumor Size [cm^2]",
+                     "weight_index" = "Weight Index",
+                     "performance" = "Performace",
+                     "performance_lvl" = "Performance level", 
+                     "bone_mets" = "Bone Metastases",
+                     "CVD" = "History of Cardiovascular Disease")
 
-# Visualise data ----------------------------------------------------------
+# Visualize data ----------------------------------------------------------
 
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
-# I think if we want to investigate the data before treatment, we should select the data when treament_mg = 0 
 
 # Distribution plot for the numeric variables stratified on "stage" 
 prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(patient_ID, stage, where(is.numeric), -treatment_mg) %>% 
+  select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
+
 
 ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
                      fill = stage)) +
   geom_density(alpha = 0.6) +
-  facet_wrap(~ variables, scales = "free", ncol = 3) +
+  facet_wrap(~ variables, 
+             scales = "free", 
+             nrow = 2,
+             labeller = labeller(variables = variables_names)) +
+theme_minimal() + 
+  theme(legend.position = c(0.85, 
+                            0.1),
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(face = "italic")) +
   labs(x = " ", 
        y = "Density",
-       title = "Distribution of the Pre-treatment Variables",
-       subtitle = "The distribution of the numeric variables for the pre-treatment measures",
-       fill = "Stage") +
-  theme_minimal() + 
-  theme(legend.position = "bottom") +
-  scale_color_economist() +
-  scale_fill_economist()
-# We can use fct_inorder() to set the order of the plots
-
+       title = "Distribution of the Pre-treatment Numerical Variables",
+       subtitle = "Density plots of the numerical variables for the pre-treatment measurements, stratified on the stage of Prostate cancer",
+       fill = "Stage of prostate cancer") +
+  scale_fill_economist() +
+  scale_color_economist()
 
 # Distribution of the categorical variables stratified on "stage" 
-# CVD, bone_mets, performance_lvl
+# CVD, bone_mets, performance, EKG
 
 prostate_clean_aug %>%
-  select(patient_ID, stage, CVD, bone_mets, performance_lvl) %>%
+  select(patient_ID, stage, CVD, bone_mets, performance, EKG) %>%
+  drop_na() %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values") %>% 
   ggplot(mapping = aes(values,
                        fill = stage)) +
   geom_bar() +
-  facet_wrap(~ variables, scales = "free") +
+  facet_wrap(~ variables,
+             scale = "free_x",
+             nrow = 1,
+             labeller = labeller(variables = variables_names)) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 35, 
+                                   hjust = 1),
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(face = "italic")) +
   labs(x = " ", 
        y = "Number of cases",
-       title = "Distribution of the Pre-treatment Variables",
-       subtitle = "The distribution of the categorical variables for the pre-treatment measures",
+       title = "Distribution of the Pre-treatment Categorical Variables",
+       subtitle = "Bar plots of the categorical variables for the pre-treatment measurements, stratified on the stage of Prostate cancer",
        fill = "Stage") +
-  theme_minimal() + 
   scale_fill_economist()
-  
-# Same as above - slightly different layout 
-CVD_plot <- prostate_clean_aug %>%
-  ggplot(mapping = aes(CVD,
-                       fill = stage)) +
-  geom_bar(show.legend = FALSE) +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist()
-
-BM_plot <- prostate_clean_aug %>%
-  ggplot(mapping = aes(bone_mets,
-                       fill = stage)) +
-  geom_bar(show.legend = FALSE) +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist()
-
-performance_plot <- prostate_clean_aug %>%
-  ggplot(mapping = aes(performance_lvl,
-                       fill = stage)) +
-  geom_bar(show.legend = TRUE) +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist()
-
-
-CVD_plot + BM_plot + performance_plot +
-  plot_annotation( title = "Distribution of the Pre-treatment Variables",
-                   subtitle = "The distribution of the categorical variables for the pre-treatment measures") +
-  plot_layout(guides = "collect") 
-
-# Must fix axis-label 
 
 # Heatmap of correlations between the numeric variables
 prostate_clean_aug %>% 
   select(where(is.numeric), -patient_ID, -treatment_mg) %>% 
   ggcorr(method = c("pairwise", "pearson"),
          label = TRUE, 
-         legend.position = "bottom", 
-         hjust = 0.8)
+         name = "Person Coefficient",
+         legend.position = "bottom",
+         hjust = 0.8) +
+  labs(title = "Heatmap of Correlations between the Numeric Variables") +
+  theme(plot.title = element_text(face = "bold", size = 16))
 
 #Looking at outcome or stage? # Signe has changed stage to numeric, so we can
 #only stratify on outcome. Should we remove categorical variables? Doesn't make
