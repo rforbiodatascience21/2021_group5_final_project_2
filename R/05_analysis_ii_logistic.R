@@ -17,14 +17,14 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
 
-## Remove <chr> variables, NA, and performance_lvl (logreg can't handle it (why?),
-## and it doesn't change the model if removed)
+## Remove <chr> variables, NA, and performance_lvl 
+## (logreg can't handle it , and it doesn't change the model if removed)
 prostate_logi <- prostate_clean_aug %>% 
   select(-where(is.character), -performance_lvl) %>% 
   drop_na %>% 
   mutate(treatment_mg = factor(treatment_mg))
 
-## Subset data according treatment 1 mg and create long nested version (Why?)
+## Subset data according to most significant treatment (1 mg) and create long nested version
 prostate_1mg_long_nest <- prostate_logi %>% 
   filter(treatment_mg == 1) %>% 
   select(-treatment_mg) %>% 
@@ -62,7 +62,7 @@ prostate_1mg_log_mod <- prostate_1mg_log_mod %>%
   mutate(identified_as = case_when(p.value < 0.05 ~ "Significant",
                                    TRUE ~ "Non-significant"))
 
-## Create variable "neg_log10_p"
+## Create variable "neg_log10_p", log-transforming the p-values
 prostate_1mg_log_mod <- prostate_1mg_log_mod %>%
   mutate(neg_log10_p = -log10(p.value))
 

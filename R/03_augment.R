@@ -61,6 +61,10 @@ prostate_clean_aug <- prostate_clean_aug %>%
                                age > 71 ~ "Old")) %>% 
   relocate(age_group, .after = age)
 
+## Add log-transformed variable of the acid_phosphatase 
+prostate_clean_aug <- prostate_clean_aug %>% 
+  mutate( acid_phosphatase_log = log(acid_phosphatase)) %>% 
+  relocate(acid_phosphatase_log, .after = acid_phosphatase)
 
 # Write data --------------------------------------------------------------
 write_tsv(x = prostate_clean_aug,

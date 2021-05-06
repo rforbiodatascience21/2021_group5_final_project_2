@@ -26,9 +26,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
          stage = factor(stage),
          performance_lvl = factor(performance_lvl),
          outcome = case_when(outcome == 0 ~ "alive",
-                             outcome == 1 ~ "dead"),
-         acid_phosphatase_log = log(acid_phosphatase)) %>% 
-  relocate(acid_phosphatase_log, .after = acid_phosphatase)
+                             outcome == 1 ~ "dead"))
+         
 
 
 # Visualise data ----------------------------------------------------------
