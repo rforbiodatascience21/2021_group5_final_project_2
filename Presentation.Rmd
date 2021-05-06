@@ -16,11 +16,13 @@ Byar & Greene prostate cancer data, from Andrews DF and Herzberg AM (1985).
 
 - x variables 
 There are 14 variables totally, 7 variables are factor and 7 variables are numeric.
-For Physiological Index: age, weight_index, sbp(Systolic Blood Pressure/10), dbp(Diastolic Blood                              Pressure/10), hemoglobin, acid__phosphatase.
+For Physiological Index: age, weight_index, sbp(Systolic Blood Pressure/10), dbp(Diastolic Blood Pressure/10), hemoglobin, acid__phosphatase.
 For health state: CVD (History of Cardiovascular Disease), EKG(heart situation),performance,status.
 For cancer: stage, treatment, tumor_size, bone_mets.
 
-As you can see, there are some confounding factors to interference the judgement which are important features for patient survive or not. And also It is hard to determine that cancer results in death or treatment improve rate of survival. There are some competing events. Before getting results, we don't know the cause of death. 
+As you can see, there are some confounding factors to interference the judgement which are important features for patient survive or not. 
+And also it is hard to determine that cancer results in death or treatment improve rate of survival. 
+There are some competing events. Before getting results, we don't know the cause of death. 
 
 - 500 observations 
 - we have chosen to focus on weather the patients survive or not and which variables are influencing this.  
