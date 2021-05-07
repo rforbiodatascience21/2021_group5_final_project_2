@@ -16,15 +16,18 @@ source(file = "R/99_project_functions.R")
 # Load data ---------------------------------------------------------------
 prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
+# Wrangle data ------------------------------------------------------------
+
 # Renaming some the binary values 
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(outcome = case_when(outcome == 0 ~ "Alive",
                              outcome == 1 ~ "Dead"),
-         CVD = case_when(CVD == 0 ~ "Yes",
-                         CVD == 1 ~ "No"))
+         CVD = case_when(CVD == 0 ~ "No",
+                         CVD == 1 ~ "Yes"),
+         bone_mets = case_when(bone_mets == 0 ~ "No",
+                               bone_mets == 1 ~ "Yes"))
 
-# Wrangle data ------------------------------------------------------------
-# Factorizing variables and adding levels
+# Factorizing variables and adding levels 
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(bone_mets = factor(bone_mets),
          CVD = factor(CVD),
@@ -213,7 +216,10 @@ prostate_clean_aug %>%
                        fill = outcome)) +
   geom_bar(show.legend = FALSE)+
   theme_minimal()+
-  theme(axis.text.x=element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x=element_text(angle = 25, hjust = 1)) +
+  labs(title = "The Status Variable",
+       x = "Status",
+       y = "Number of cases") +
   scale_fill_economist()
 
 ######################################
