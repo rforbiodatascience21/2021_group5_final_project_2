@@ -28,8 +28,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
          outcome = case_when(outcome == 0 ~ "alive",
                              outcome == 1 ~ "dead"))
 
-# Creating a variable with more intuitive names for the variables 
-variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
+# Creating a variable with real names for the variables 
+variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "age" = "Age [years]",
                      "dbp" = "Diastolic Blood Pressure/10", 
                      "EKG_lvl" = "EKG level",
@@ -43,6 +43,11 @@ variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
                      "bone_mets" = "Bone Metastases",
                      "CVD" = "History of Cardiovascular Disease")
 
+
+prostate_clean_aug_longer <- prostate_clean_aug %>% 
+  select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
+  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
+
 # Visualize data ----------------------------------------------------------
 
 ########################################
@@ -50,26 +55,6 @@ variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
 ########################################
 
 # Distribution plot for the numeric variables stratified on "stage" 
-prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
-  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
-
-# more intuitive name 
-variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
-                     "age" = "Age [years]",
-                     "dbp" = "Diastolic Blood Pressure/10", 
-                     "EKG_lvl" = "EKG level",
-                     "EKG" = "Electrocardiography",
-                     "hemoglobin" ="Hemoglobin [g/100ml]",
-                     "sbp" ="	Systolic Blood Pressure/10",
-                     "tumor_size" = "Tumor Size [cm^2]",
-                     "weight_index" = "Weight Index",
-                     "performance" = "Performace",
-                     "performance_lvl" = "Performance level", 
-                     "bone_mets" = "Bone Metastases",
-                     "CVD" = "History of Cardiovascular Disease")
-
-
 ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
                      fill = stage)) +
@@ -78,7 +63,7 @@ ggplot(prostate_clean_aug_longer,
              scales = "free", 
              nrow = 2,
              labeller = labeller(variables = variables_names)) +
-theme_minimal() + 
+  theme_minimal() + 
   theme(legend.position = c(0.85, 
                             0.1),
         plot.title = element_text(face = "bold", size = 16),
