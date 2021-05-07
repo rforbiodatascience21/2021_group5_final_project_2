@@ -1,6 +1,5 @@
 # Clear workspace ---------------------------------------------------------
 rm(list = ls())
- #
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
@@ -58,11 +57,11 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
 # more intuitive name 
 variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
                      "age" = "Age [years]",
-                     "dbp" = "dbp", 
+                     "dbp" = "Diastolic Blood Pressure/10", 
                      "EKG_lvl" = "EKG level",
                      "EKG" = "Electrocardiography",
                      "hemoglobin" ="Hemoglobin [g/100ml]",
-                     "sbp" ="sbp",
+                     "sbp" ="	Systolic Blood Pressure/10",
                      "tumor_size" = "Tumor Size [cm^2]",
                      "weight_index" = "Weight Index",
                      "performance" = "Performace",
@@ -130,21 +129,18 @@ prostate_clean_aug %>%
   labs(title = "Heatmap of Correlations between the Numeric Variables") +
   theme(plot.title = element_text(face = "bold", size = 16))
 
-#Looking at outcome or stage? # Signe has changed stage to numeric, so we can
-#only stratify on outcome. Should we remove categorical variables? Doesn't make
-#sense to plot them in a scatterplot
+# Overall distribution plot, for numeric value
+# NOT TO BE USED FOR PRESENTATION
 prostate_clean_aug %>%
   select(where(is.numeric), outcome, -patient_ID, -treatment_mg) %>% 
   ggpairs(., mapping = aes(color = outcome), 
-          columns = c(1:10),
+          columns = c(1:9),
           upper = list(continuous = "blank"),
           diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
           lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
           axisLabels = "show") +
   theme(legend.position = "bottom") +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist() 
+  theme_minimal() 
 
 ## Same as above, but no color according to a variable.
 prostate_clean_aug %>%
@@ -162,6 +158,8 @@ prostate_clean_aug %>%
 
 # As we don't get any distribution from Acid Phosphatase, we log-transform
 # and plot it for itself
+#Lucille suggest to delete this plot 
+
 prostate_clean_aug %>% 
   mutate(stage = factor(stage),
          log_ap = log10(acid_phosphatase)) %>% 
@@ -173,6 +171,7 @@ prostate_clean_aug %>%
   scale_fill_economist()
 
 # Investigating the condition of the patients 
+#Lucille suggest to delete this plot 
 p01<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = tumor_size,
                      y = outcome)) +
@@ -194,15 +193,31 @@ p01 + p02
 ###############################
 ## Plots with status reasons ##
 ###############################
-## Distribution of tumor size for each stage, stratified on status with reason
-prostate_clean_aug %>% 
+## Distribution of tumor size stratified on status with reason
+# Investigating if the tumor size have an affect of death reason
+
+# NOT USED FOR PRESENTATION
+
+p03 <- prostate_clean_aug %>% 
   ggplot(mapping = aes(tumor_size,
                        fill = status)) +
-  geom_histogram(binwidth = 15) +
-  facet_wrap(~stage) +
+  geom_histogram(binwidth = 5) +
   theme_minimal() + 
   scale_color_economist() + 
   scale_fill_economist()
+
+p04 <- prostate_clean_aug %>% 
+    ggplot(mapping = aes(tumor_size,
+                         fill = outcome)) +
+    geom_histogram(binwidth = 5) +
+    geom_vline(xintercept = 28,
+               linetype = "dashed") +
+    theme_minimal() + 
+    scale_color_economist() + 
+    scale_fill_economist()
+
+p03 / p04 
+
 
 # Looking at the number of observations within each status-group 
 # additionally we see that the majority of the dead people are 'old'
