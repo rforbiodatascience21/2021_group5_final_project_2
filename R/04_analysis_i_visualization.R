@@ -27,17 +27,18 @@ prostate_clean_aug <- prostate_clean_aug %>%
          performance_lvl = factor(performance_lvl),
          EKG = factor(EKG),
          EKG_lvl = factor(EKG_lvl),
-         outcome = case_when(outcome == 0 ~ "alive",
-                             outcome == 1 ~ "dead"))
+         outcome = case_when(outcome == 0 ~ "Alive",
+                             outcome == 1 ~ "Dead"))
 
 # Creating a variable with real names for the variables 
 variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "age" = "Age [years]",
+                     "age_group" = "Age Group",
                      "dbp" = "Diastolic Blood Pressure/10", 
                      "EKG_lvl" = "EKG level",
                      "EKG" = "Electrocardiography",
                      "hemoglobin" ="Hemoglobin [g/100ml]",
-                     "sbp" ="Systolic Blood Pressure/10",
+                     "sbp" ="	Systolic Blood Pressure/10",
                      "tumor_size" = "Tumor Size [cm^2]",
                      "weight_index" = "Weight Index",
                      "performance" = "Performace",
@@ -50,11 +51,14 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
   select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
 
+<<<<<<< HEAD
+=======
 # Visualize data ----------------------------------------------------------
 
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
+>>>>>>> 4a784f6cdb468987d238d314a00d4ae599dab80c
 
 ## Plot 1
 # Distribution plot for the numeric variables stratified on "stage" 
@@ -219,6 +223,15 @@ prostate_clean_aug %>%
   theme(axis.text.x=element_text(angle = 45, hjust = 1)) +
   scale_fill_economist()
 
+#OR 
+
+prostate_clean_aug %>% 
+  ggplot(mapping = aes(status,
+                       fill = outcome)) +
+  geom_bar(show.legend = FALSE)+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle = 45, hjust = 1)) +
+  scale_fill_economist()
 
 ######################################
 ### Plots of treatment and outcome ###
@@ -226,21 +239,27 @@ prostate_clean_aug %>%
 
 ## Plot 4
 ## Distribution of alive/dead
-prostate_clean_aug %>% 
+p05 <- prostate_clean_aug %>%   
   ggplot(mapping = aes(outcome,
+                       color = outcome,
                        fill = outcome)) +
-  geom_bar(alpha = 0.7, show.legend = FALSE) +
+  geom_bar(alpha = 0.1,
+           show.legend = FALSE) +
   theme_minimal() +
+  labs( x = "Outcome",
+        y = "Number of cases") +
+  scale_color_economist() +
   scale_fill_economist()
 
 ## Distribution of alive/dead for each treatment, scaled for better comparison
 ## across groups
+#Lucille - suggust to delete this plot
 prostate_clean_aug %>% 
   drop_na() %>% 
   ggplot(mapping = aes(treatment,
-                       fill = outcome)) +
+                       fill = age_group)) +
   geom_bar(alpha = 0.8, position = "fill") +
-  facet_wrap(~age_group) +
+  facet_wrap(~outcome) +
   theme_minimal()+
   scale_fill_economist()
 
@@ -257,17 +276,28 @@ ggplot(data = prostate_clean_aug,
 ## Plot 5
 # I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
 ## Histogram of treatment for alive/dead stratified on age_group
-ggplot(data = prostate_clean_aug,
-       mapping = aes(treatment,
+p06 <- prostate_clean_aug %>% 
+  drop_na() %>%  
+  ggplot(mapping = aes(treatment,
                      fill = age_group)) +
-  geom_histogram(binwidth = 10, 
-                 alpha = 0.8, 
-                 stat="count") +
+  geom_bar() +
   facet_wrap(~ outcome) +
   theme_minimal()+
-  theme(axis.text.x=element_text(angle = 30, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 30, 
+                                   hjust = 1),
+        legend.position = "bottom") +
+  labs(title = "Treatment, age, outcome",
+       x = "Treatment",
+       y = "Number of cases",
+       fill = "Age Group") +
   scale_fill_economist()
 
+p05 + p06 +
+  plot_annotation(title = "Distribution of outcome in relation to Treatment and Age",
+                  caption = "this figure shows the number of patients alive vs. dead. Additionally ",
+                  tag_levels = "A",
+                  theme = theme(plot.title = element_text(face = "bold", size = 16),
+                                plot.caption = element_text(face = "italic")))
 
 ################# show that younger people respond better
 ggplot(prostate_clean_aug, 
