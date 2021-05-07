@@ -56,6 +56,7 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
 ### Plots of pre-treatment variables ###
 ########################################
 
+## Plot 1
 # Distribution plot for the numeric variables stratified on "stage" 
 ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
@@ -79,9 +80,9 @@ ggplot(prostate_clean_aug_longer,
   scale_color_economist()
              
 
+## Plot 2
 # Distribution of the categorical variables stratified on "stage" 
 # CVD, bone_mets, performance, EKG
-
 prostate_clean_aug %>%
   select(patient_ID, stage, CVD, bone_mets, performance, EKG) %>%
   drop_na() %>% 
@@ -105,6 +106,7 @@ prostate_clean_aug %>%
        fill = "Stage") +
   scale_fill_economist()
 
+## Plot 3
 # Heatmap of correlations between the numeric variables
 prostate_clean_aug %>% 
   select(where(is.numeric), -patient_ID, -treatment_mg) %>% 
@@ -222,6 +224,7 @@ prostate_clean_aug %>%
 ### Plots of treatment and outcome ###
 ######################################
 
+## Plot 4
 ## Distribution of alive/dead
 prostate_clean_aug %>% 
   ggplot(mapping = aes(outcome,
@@ -251,7 +254,7 @@ ggplot(data = prostate_clean_aug,
   theme_minimal() +
   scale_color_economist()
 
-
+## Plot 5
 # I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
 ## Histogram of treatment for alive/dead stratified on age_group
 ggplot(data = prostate_clean_aug,
@@ -279,6 +282,7 @@ ggplot(prostate_clean_aug,
 #############################################################################
 ### Plots of significant variables found by logistic regression (dose 1mg) ## ? and is treatment a important variable for outcome
 #############################################################################
+## Plot 6
 p1 <- prostate_clean_aug %>% 
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(age,
