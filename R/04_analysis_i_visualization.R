@@ -51,14 +51,13 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
   select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
 
-<<<<<<< HEAD
-=======
+
 # Visualize data ----------------------------------------------------------
 
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
->>>>>>> 4a784f6cdb468987d238d314a00d4ae599dab80c
+
 
 ## Plot 1
 # Distribution plot for the numeric variables stratified on "stage" 
@@ -316,6 +315,8 @@ p1 <- prostate_clean_aug %>%
   ggplot(mapping = aes(age,
                        color = outcome)) +
   geom_density(show.legend = FALSE) +
+  labs(x = "Age",
+       y= "Density") +
   theme_minimal() +
   scale_color_economist()
 
@@ -324,6 +325,8 @@ p2 <- prostate_clean_aug %>%
   ggplot(mapping = aes(weight_index,
                        color = outcome)) +
   geom_density(show.legend = FALSE) +
+  labs(x = "Weight Index",
+       y= "Density") +
   theme_minimal() +
   scale_color_economist()
 
@@ -332,6 +335,8 @@ p3 <- prostate_clean_aug %>%
   ggplot(mapping = aes(tumor_size,
                        color = outcome)) +
   geom_density(show.legend = FALSE) +
+  labs(x = "Tumor Size",
+       y= "Density") +
   theme_minimal() +
   scale_color_economist()
 
@@ -341,12 +346,23 @@ p4 <- prostate_clean_aug %>%
                        fill = outcome)) +
   geom_bar(position = "fill") +
   theme_minimal() +
+  theme(legend.title = element_blank()) +
+  labs(x = "History of Cardiovascular Disease", 
+         y = "Number of cases") +
   scale_fill_economist()
 
 p4 + p1 / p2 / p3 +
-  plot_annotation( title = "Significant variables influencing the outcome",
-                   subtitle = "From the logistics regression it was found that CVD, age, weight and tumor size had a significant influence on the outcome") +
-  plot_layout(guides = "collect")
+  plot_annotation( title = "Significant Variables Influencing the Outcome",
+                   subtitle = "From the logistic regression it was found that the variables 'CVD', 'age', 'weight' and 'tumor size' had a significant influence on the outcome",
+                   tag_levels = list(c("A", "B1","B2", "B3")),
+                   tag_prefix = "Figure ",
+                   theme = theme(plot.title = element_text(face = "bold", 
+                                                           size = 16),
+                                 plot.subtitle = element_text(face = "italic",
+                                                              hjust = 0,
+                                                              size = 12),
+                                 plot.tag = element_text(size = 8, hjust = 0.5))) +
+   plot_layout(guides = "collect") 
 
 # Write data --------------------------------------------------------------
 write_tsv(...)
