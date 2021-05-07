@@ -23,9 +23,20 @@ prostate_clean_aug <- prostate_clean_aug %>%
          CVD = factor(CVD),
          treatment = factor(treatment),
          stage = factor(stage),
-         performance = factor(performance),
+         performance = factor(performance,
+                              levels = c("normal activity",
+                                         "in bed < 50% daytime",
+                                         "in bed > 50% daytime",
+                                         "confined to bed")),
          performance_lvl = factor(performance_lvl),
-         EKG = factor(EKG),
+         EKG = factor(EKG,
+                      levels = c("normal",
+                                 "benign",
+                                 "rhythmic disturb & electrolyte ch",
+                                 "heart block or conduction def",
+                                 "heart strain",
+                                 "old MI",
+                                 "recent MI")),
          EKG_lvl = factor(EKG_lvl),
          outcome = case_when(outcome == 0 ~ "Alive",
                              outcome == 1 ~ "Dead"))
@@ -148,39 +159,6 @@ prostate_clean_aug %>%
   scale_color_economist() + 
   scale_fill_economist() 
 
-# As we don't get any distribution from Acid Phosphatase, we log-transform
-# and plot it for itself
-#Lucille suggest to delete this plot. Signe approve. 
-
-prostate_clean_aug %>% 
-  mutate(stage = factor(stage),
-         log_ap = log10(acid_phosphatase)) %>% 
-  ggplot(mapping = aes(log_ap,
-                       fill = stage)) +
-  geom_boxplot() + 
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist()
-
-# Investigating the condition of the patients 
-#Lucille suggest to delete this plot. Signe approve. 
-p01<-ggplot(data = prostate_clean_aug,
-       mapping = aes(x = tumor_size,
-                     y = outcome)) +
-  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist()
-
-p02<-ggplot(data = prostate_clean_aug,
-            mapping = aes(x = age,
-                          y = outcome)) +
-  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist()
-
-p01 + p02
 
 ###############################
 ## Plots with status reasons ##
@@ -250,17 +228,6 @@ p05 <- prostate_clean_aug %>%
   scale_color_economist() +
   scale_fill_economist()
 
-## Distribution of alive/dead for each treatment, scaled for better comparison
-## across groups
-#Lucille - suggust to delete this plot
-prostate_clean_aug %>% 
-  drop_na() %>% 
-  ggplot(mapping = aes(treatment,
-                       fill = age_group)) +
-  geom_bar(alpha = 0.8, position = "fill") +
-  facet_wrap(~outcome) +
-  theme_minimal()+
-  scale_fill_economist()
 
 ## Boxplot of tumor size for each outcome stratified on treatment
 #Lucille - do we need this plot?
@@ -272,7 +239,7 @@ ggplot(data = prostate_clean_aug,
   theme_minimal() +
   scale_color_economist()
 
-## Plot 5
+
 # I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
 ## Histogram of treatment for alive/dead stratified on age_group
 p06 <- prostate_clean_aug %>% 
@@ -289,7 +256,7 @@ p06 <- prostate_clean_aug %>%
        y = "Number of cases",
        fill = "Age Group") +
   scale_fill_economist()
-
+## Plot 5
 p05 + p06 +
   plot_annotation(title = "Distribution of Outcome in Relation to Treatment and Age",
                   subtitle = "This figure illustrate the distributen of the suvival-rate in the data set.\nThe distribution in relation to age ang treatment, indicates that the 0.1 mg treatment might be the most efficient.",
