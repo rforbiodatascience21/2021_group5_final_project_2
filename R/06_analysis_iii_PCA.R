@@ -18,7 +18,9 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 # Wrangle data ------------------------------------------------------------
 prostate_data_pca <- prostate_clean_aug %>%
   select(-where(is.character), 
-         -c(patient_ID, treatment_mg, acid_phosphatase)) %>% 
+         -patient_ID
+         -treatment_mg, 
+         -acid_phosphatase) %>% 
   mutate(outcome = factor(outcome),
          performance_lvl = factor(performance_lvl),
          EKG_lvl = factor(EKG_lvl)) %>%
