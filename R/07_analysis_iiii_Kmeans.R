@@ -12,31 +12,33 @@ source(file = "R/99_project_functions.R")
 
 # Load data ---------------------------------------------------------------
 load(file = "results/06_mdl_pca_fit.RData")
-read_tsv(file = "data/06_pca_data.tsv.gz")
 prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-
+prostate_data_pca <- prostate_clean_aug %>%
+  select(-where(is.character), 
+         -c(patient_ID, treatment_mg, acid_phosphatase)) %>% 
+  mutate(outcome = factor(outcome),
+         performance_lvl = factor(performance_lvl),
+         EKG_lvl = factor(EKG_lvl)) %>%
+  drop_na()
 
 # Model data --------------------------------------------------------------
 # K-means clustering
 
 ## Extract the first two principal components
 points <- pca_fit %>% 
-  augment(prostate_pca) %>% 
+  augment(prostate_data_pca) %>% 
   select(.fittedPC1, .fittedPC2)
 
 ## K-means clustering with k = 1..6 
 ## and create tidied, glanced and augmented data
-kclusts <- 
-  tibble(k = 1:6) %>%
-  mutate(
-    kclust = map(k, ~kmeans(points, .x)),
-    tidied = map(kclust, tidy),
-    glanced = map(kclust, glance),
-    augmented = map(kclust, augment, points)
-  )
+kclusts <- tibble(k = 1:6) %>%
+  mutate(kclust = map(k, ~kmeans(points, .x)),
+         tidied = map(kclust, tidy),
+         glanced = map(kclust, glance),
+         augmented = map(kclust, augment, points))
 
 ## Turn into three separate data sets using tidy(), augment() and glance()
 clusters <- 

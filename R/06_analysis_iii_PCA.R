@@ -16,17 +16,18 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-prostate_pca <- prostate_clean_aug %>%
-  select(-where(is.character), -patient_ID, -treatment_mg) %>% 
-  mutate(outcome = factor(outcome)) %>%
-  mutate(performance_lvl = factor(performance_lvl)) %>%
-  mutate(EKG_lvl = factor(EKG_lvl)) %>%
+prostate_data_pca <- prostate_clean_aug %>%
+  select(-where(is.character), 
+         -c(patient_ID, treatment_mg, acid_phosphatase)) %>% 
+  mutate(outcome = factor(outcome),
+         performance_lvl = factor(performance_lvl),
+         EKG_lvl = factor(EKG_lvl)) %>%
   drop_na()
 
 # Model data --------------------------------------------------------------
 
 ## PCA analysis
-pca_fit <- prostate_pca %>%
+pca_fit <- prostate_data_pca %>%
   select(where(is.numeric)) %>% # only numeric columns
   prcomp(scale = TRUE) # PCA on scaled data
 
@@ -35,7 +36,7 @@ pca_fit <- prostate_pca %>%
 
 ## Plot data in PC coordinates
 p1 <- pca_fit %>%
-  augment(prostate_pca) %>% # add original dataset back in
+  augment(prostate_data_pca) %>% # add original dataset back in
   ggplot(aes(.fittedPC1, 
              .fittedPC2, 
              color = outcome)) + 
@@ -85,8 +86,6 @@ p3 <- pca_fit %>%
 p3
 # Write data --------------------------------------------------------------
 save(pca_fit, file = "results/06_mdl_pca_fit.RData")
-write_tsv(x = prostate_pca, 
-          file = "data/06_pca_data.tsv.gz")
 ggsave(filename = "results/06_plot_PCA_PCcoords.png",
        plot = p1)
 ggsave(filename = "results/06_plot_PCA_rotation.png",
