@@ -85,7 +85,8 @@ p3 <- pca_fit %>%
 p3
 # Write data --------------------------------------------------------------
 save(pca_fit, file = "results/06_mdl_pca_fit.RData")
-save(prostate_pca, file = "results/06_pca_data.RData")
+write_tsv(x = prostate_pca, 
+          file = "data/06_pca_data.tsv.gz")
 ggsave(filename = "results/06_plot_PCA_PCcoords.png",
        plot = p1)
 ggsave(filename = "results/06_plot_PCA_rotation.png",
