@@ -5,7 +5,7 @@ rm(list = ls())
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("generics")
-
+library("ggthemes")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -78,14 +78,17 @@ p1 <- prostate_1mg_log_mod %>%
   geom_point() + 
   geom_hline(yintercept = -log10(0.05), 
              linetype = "dashed") +
-  theme_classic(base_size = 8, 
+  theme_minimal(base_size = 8, 
                 base_family = "Avenir") +
   theme(legend.position = "bottom", 
         axis.text.x = element_text(angle = 45 , 
                                    vjust = 1, 
                                    hjust = 1)) +
-  labs(x = "Variable", y = "Minus log10(p)")
-
+  scale_fill_economist() +
+  scale_color_economist() +
+  labs(x = "Variable", 
+       y = "Minus log10(p)")
+p1
 ## Plot 7
 ## Plot of confidence intervals for effects of variables
 p2 <- prostate_1mg_log_mod %>% 
