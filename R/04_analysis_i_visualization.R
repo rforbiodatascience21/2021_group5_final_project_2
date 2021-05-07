@@ -222,6 +222,7 @@ p03 / p04
 # Looking at the number of observations within each status-group 
 # additionally we see that the majority of the dead people are 'old'
 prostate_clean_aug %>% 
+  drop_na() %>% 
   ggplot(mapping = aes(status,
                        fill = age_group)) +
   geom_bar()+
@@ -254,6 +255,7 @@ prostate_clean_aug %>%
   scale_fill_economist()
 
 ## Boxplot of tumor size for each outcome stratified on treatment
+#Lucille - do we need this plot?
 ggplot(data = prostate_clean_aug,
            mapping = aes(x = tumor_size,
                          y = outcome, 
