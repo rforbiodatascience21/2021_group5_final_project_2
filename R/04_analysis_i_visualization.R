@@ -18,7 +18,7 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
 
-# Renaming some the binary values 
+# Renaming some of the binary values 
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(outcome = case_when(outcome == 0 ~ "Alive",
                              outcome == 1 ~ "Dead"),

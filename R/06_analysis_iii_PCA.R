@@ -18,7 +18,7 @@ prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 # Wrangle data ------------------------------------------------------------
 prostate_data_pca <- prostate_clean_aug %>%
   select(-where(is.character), 
-         -patient_ID
+         -patient_ID,
          -treatment_mg, 
          -acid_phosphatase) %>% 
   mutate(outcome = factor(outcome),
@@ -42,10 +42,19 @@ p1 <- pca_fit %>%
   ggplot(aes(.fittedPC1, 
              .fittedPC2, 
              color = outcome)) + 
-  geom_point(size = 1.5, 
-             alpha = 0.4) + 
-  theme_minimal()
-
+  geom_point(size = 1.5) + 
+  labs(x = "Fitted PC1", 
+       y = "Fitted PC2",
+       color = "Outcome",
+       title = "PCA plot",
+       subtitle = " PCA plot") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(face = "bold", 
+                                  size = 16),
+        plot.subtitle = element_text(face = "italic")) +
+  scale_fill_manual(outcome = c("#FFDB6D", "#E7B800"))
+#cant' get color scale to work :/ 
 p1
 
 # Arrow style for plot of rotation matrix
@@ -64,27 +73,47 @@ p2 <- pca_fit %>%
   geom_segment(xend = 0, yend = 0, arrow = arrow_style) +
   geom_text(
     aes(label = column),
-    hjust = 1, nudge_x = -0.02, 
-    color = "#904C2F"
-  ) +
+    hjust = "outward",
+    vjust = 0,
+    nudge_x = -0.02,
+    color = "#3399FF") +
   xlim(-0.6,0.5) + ylim(-0.7,0.2)+
   coord_fixed() + # fix aspect ratio to 1:1
-  theme_minimal_grid(10)
-p2
+  theme_minimal_grid(10) + 
+  labs(x = "PC1", 
+       y = "PC2",
+       color = "Outcome",
+       title = "PCA plot",
+       subtitle = " PCA roation plot") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(face = "bold", 
+                                  size = 16),
+        plot.subtitle = element_text(face = "italic")) +
+  scale_color_economist()
 
 ## Plot of variance explained by first 10 PCs
 p3 <- pca_fit %>%
   tidy(matrix = "eigenvalues") %>%
-  ## why?
   filter(percent > 0.05) %>% 
   ggplot(mapping = aes(PC, percent)) +
-  geom_col(fill = "#56B4E9", 
+  geom_col(fill = "#3399FF", 
            alpha = 0.8) +
   scale_x_continuous(breaks = 1:10) +
   scale_y_continuous(labels = scales::percent_format(),
-                     expand = expansion(mult = c(0, 0.01))
-  )
+                     expand = expansion(mult = c(0, 0.01))) +
+  labs(x = "PC", 
+       y = "Percent described",
+       title = " plot",
+       subtitle = "   plot") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(face = "bold", 
+                                  size = 16),
+        plot.subtitle = element_text(face = "italic")) +
+  scale_color_economist()
 
+                       
 p3
 # Write data --------------------------------------------------------------
 save(pca_fit, file = "results/06_mdl_pca_fit.RData")
