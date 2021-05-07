@@ -69,6 +69,7 @@ prostate_1mg_log_mod <- prostate_1mg_log_mod %>%
 
 # Visualise data ----------------------------------------------------------
 
+## Plot 6
 ## Manhattan plot
 p1 <- prostate_1mg_log_mod %>% 
   ggplot(mapping = aes(x = fct_reorder(variable, neg_log10_p, .desc = TRUE), 
@@ -85,6 +86,7 @@ p1 <- prostate_1mg_log_mod %>%
                                    hjust = 1)) +
   labs(x = "Variable", y = "Minus log10(p)")
 
+## Plot 7
 ## Plot of confidence intervals for effects of variables
 p2 <- prostate_1mg_log_mod %>% 
   ggplot(mapping = aes(x = estimate, 
