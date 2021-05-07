@@ -16,8 +16,15 @@ source(file = "R/99_project_functions.R")
 # Load data ---------------------------------------------------------------
 prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
+# Renaming some the binary values 
+prostate_clean_aug <- prostate_clean_aug %>%
+  mutate(outcome = case_when(outcome == 0 ~ "Alive",
+                             outcome == 1 ~ "Dead"),
+         CVD = case_when(CVD == 0 ~ "Yes",
+                         CVD == 1 ~ "No"))
 
 # Wrangle data ------------------------------------------------------------
+# Factorizing variables and adding levels
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(bone_mets = factor(bone_mets),
          CVD = factor(CVD),
@@ -37,10 +44,9 @@ prostate_clean_aug <- prostate_clean_aug %>%
                                  "heart strain",
                                  "old MI",
                                  "recent MI")),
-         EKG_lvl = factor(EKG_lvl),
-         outcome = case_when(outcome == 0 ~ "Alive",
-                             outcome == 1 ~ "Dead"))
+         EKG_lvl = factor(EKG_lvl))
 
+  
 # Creating a variable with real names for the variables 
 variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "age" = "Age [years]",
@@ -57,7 +63,7 @@ variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "bone_mets" = "Bone Metastases",
                      "CVD" = "History of Cardiovascular Disease")
 
-
+# Pivot longer for using facet_wrap to plot several distributions in one plot 
 prostate_clean_aug_longer <- prostate_clean_aug %>% 
   select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
@@ -137,7 +143,7 @@ prostate_clean_aug %>%
 prostate_clean_aug %>%
   select(where(is.numeric), outcome, -patient_ID, -treatment_mg) %>% 
   ggpairs(., mapping = aes(color = outcome), 
-          columns = c(1:9),
+          #columns = c(1:9),
           upper = list(continuous = "blank"),
           diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
           lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
@@ -321,14 +327,12 @@ p4 <- prostate_clean_aug %>%
 p4 + p1 / p2 / p3 +
   plot_annotation( title = "Significant Variables Influencing the Outcome",
                    subtitle = "From the logistic regression it was found that the variables 'CVD', 'age', 'weight' and 'tumor size' had a significant influence on the outcome",
-                   tag_levels = list(c("A", "B1","B2", "B3")),
-                   tag_prefix = "Figure ",
                    theme = theme(plot.title = element_text(face = "bold", 
                                                            size = 16),
                                  plot.subtitle = element_text(face = "italic",
                                                               hjust = 0,
                                                               size = 12),
-                                 plot.tag = element_text(size = 8, hjust = 0.5))) +
+                                 legend.position = "bottom")) +
    plot_layout(guides = "collect") 
 
 # Write data --------------------------------------------------------------
