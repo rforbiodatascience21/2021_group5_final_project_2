@@ -65,8 +65,15 @@ variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
 
 # Pivot longer for using facet_wrap to plot several distributions in one plot 
 prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
-  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
+  select(patient_ID, 
+         stage, 
+         where(is.numeric), 
+         -treatment_mg, 
+         -acid_phosphatase) %>% 
+  pivot_longer(cols = c(-patient_ID, 
+                        -stage), 
+               names_to = "variables", 
+               values_to = "values")
 
 
 # Visualize data ----------------------------------------------------------
