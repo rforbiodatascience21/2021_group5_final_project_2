@@ -23,7 +23,9 @@ prostate_clean_aug <- prostate_clean_aug %>%
          CVD = factor(CVD),
          treatment = factor(treatment),
          stage = factor(stage),
+         performance = factor(performance),
          performance_lvl = factor(performance_lvl),
+         EKG = factor(EKG),
          EKG_lvl = factor(EKG_lvl),
          outcome = case_when(outcome == 0 ~ "alive",
                              outcome == 1 ~ "dead"))
