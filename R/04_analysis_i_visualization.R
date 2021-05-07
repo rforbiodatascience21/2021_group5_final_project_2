@@ -312,7 +312,7 @@ ggplot(prostate_clean_aug,
 #############################################################################
 ### Plots of significant variables found by logistic regression (dose 1mg) ## ? and is treatment a important variable for outcome
 #############################################################################
-## Plot 6
+## Plot 8
 p1 <- prostate_clean_aug %>% 
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(age,
