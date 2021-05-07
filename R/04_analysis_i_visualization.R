@@ -41,7 +41,7 @@ variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "sbp" ="	Systolic Blood Pressure/10",
                      "tumor_size" = "Tumor Size [cm^2]",
                      "weight_index" = "Weight Index",
-                     "performance" = "Performace",
+                     "performance" = "Performance",
                      "performance_lvl" = "Performance level", 
                      "bone_mets" = "Bone Metastases",
                      "CVD" = "History of Cardiovascular Disease")
@@ -112,7 +112,7 @@ prostate_clean_aug %>%
 ## Plot 3
 # Heatmap of correlations between the numeric variables
 prostate_clean_aug %>% 
-  select(where(is.numeric), -patient_ID, -treatment_mg) %>% 
+  select(where(is.numeric), -patient_ID, -treatment_mg, -acid_phosphatase) %>% 
   ggcorr(method = c("pairwise", "pearson"),
          label = TRUE, 
          name = "Person Coefficient",
