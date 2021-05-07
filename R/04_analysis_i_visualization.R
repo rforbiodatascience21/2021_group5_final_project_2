@@ -145,7 +145,7 @@ prostate_clean_aug %>%
 
 # As we don't get any distribution from Acid Phosphatase, we log-transform
 # and plot it for itself
-#Lucille suggest to delete this plot 
+#Lucille suggest to delete this plot. Signe approve. 
 
 prostate_clean_aug %>% 
   mutate(stage = factor(stage),
@@ -158,7 +158,7 @@ prostate_clean_aug %>%
   scale_fill_economist()
 
 # Investigating the condition of the patients 
-#Lucille suggest to delete this plot 
+#Lucille suggest to delete this plot. Signe approve. 
 p01<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = tumor_size,
                      y = outcome)) +
