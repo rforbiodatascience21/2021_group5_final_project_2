@@ -283,31 +283,29 @@ p06 <- prostate_clean_aug %>%
   theme(axis.text.x = element_text(angle = 30, 
                                    hjust = 1),
         legend.position = "bottom") +
-  labs(title = "Treatment, age, outcome",
-       x = "Treatment",
+  labs(x = "Treatment",
        y = "Number of cases",
        fill = "Age Group") +
   scale_fill_economist()
 
 p05 + p06 +
-  plot_annotation(title = "Distribution of outcome in relation to Treatment and Age",
-                  caption = "this figure shows the number of patients alive vs. dead. Additionally ",
+  plot_annotation(title = "Distribution of Outcome in Relation to Treatment and Age",
+                  subtitle = "This figure illustrate the distributen of the suvival-rate in the data set.\nThe distribution in relation to age ang treatment, indicates that the 0.1 mg treatment might be the most efficient.",
+                  caption = "Figure A, shows the number of patients alive vs. dead.\nFigure B, shows the number of cases within each outcome group, additionally stratified on age group. ",
                   tag_levels = "A",
-                  theme = theme(plot.title = element_text(face = "bold", size = 16),
-                                plot.caption = element_text(face = "italic")))
-
-################# show that younger people respond better
-ggplot(prostate_clean_aug, 
-       mapping = aes(treatment,
-                     age, fill = outcome)) +
-  geom_raster(alpha = 0.8) + 
-  geom_hline(yintercept = 70, linetype = "dashed")+
-  theme_minimal() +
-  scale_fill_economist()
-
+                  tag_prefix = "Figure ",
+                  theme = theme(plot.title = element_text(face = "bold", 
+                                                          size = 16),
+                                plot.subtitle = element_text(face = "italic",
+                                                             hjust = 0,
+                                                             size = 12),
+                                plot.caption = element_text(face = "italic",
+                                                            hjust = 0,
+                                                            size = 12),
+                                plot.tag = element_text(size = 12)))
 
 #############################################################################
-### Plots of significant variables found by logistic regression (dose 1mg) ## ? and is treatment a important variable for outcome
+### Plots of significant variables found by logistic regression (dose 1mg) ##
 #############################################################################
 p1 <- prostate_clean_aug %>% 
   filter(treatment_mg == 1.0) %>% 
