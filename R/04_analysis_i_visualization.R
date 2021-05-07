@@ -23,13 +23,15 @@ prostate_clean_aug <- prostate_clean_aug %>%
          CVD = factor(CVD),
          treatment = factor(treatment),
          stage = factor(stage),
+         performance = factor(performance),
          performance_lvl = factor(performance_lvl),
+         EKG = factor(EKG),
          EKG_lvl = factor(EKG_lvl),
          outcome = case_when(outcome == 0 ~ "Alive",
                              outcome == 1 ~ "Dead"))
 
-# Creating a variable with more intuitive names for the variables 
-variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
+# Creating a variable with real names for the variables 
+variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "age" = "Age [years]",
                      "age_group" = "Age Group",
                      "dbp" = "Diastolic Blood Pressure/10", 
@@ -44,18 +46,21 @@ variables_names <- c("acid_phosphatase_log" = "log( Acid Phosphatase )",
                      "bone_mets" = "Bone Metastases",
                      "CVD" = "History of Cardiovascular Disease")
 
+
+prostate_clean_aug_longer <- prostate_clean_aug %>% 
+  select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
+  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
+
+<<<<<<< HEAD
+=======
 # Visualize data ----------------------------------------------------------
 
 ########################################
 ### Plots of pre-treatment variables ###
 ########################################
+>>>>>>> 4a784f6cdb468987d238d314a00d4ae599dab80c
 
 # Distribution plot for the numeric variables stratified on "stage" 
-prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(patient_ID, stage, where(is.numeric), -treatment_mg, -acid_phosphatase) %>% 
-  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values")
-
-
 ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
                      fill = stage)) +
@@ -64,7 +69,7 @@ ggplot(prostate_clean_aug_longer,
              scales = "free", 
              nrow = 2,
              labeller = labeller(variables = variables_names)) +
-theme_minimal() + 
+  theme_minimal() + 
   theme(legend.position = c(0.85, 
                             0.1),
         plot.title = element_text(face = "bold", size = 16),
@@ -144,7 +149,7 @@ prostate_clean_aug %>%
 
 # As we don't get any distribution from Acid Phosphatase, we log-transform
 # and plot it for itself
-#Lucille suggest to delete this plot 
+#Lucille suggest to delete this plot. Signe approve. 
 
 prostate_clean_aug %>% 
   mutate(stage = factor(stage),
@@ -157,7 +162,7 @@ prostate_clean_aug %>%
   scale_fill_economist()
 
 # Investigating the condition of the patients 
-#Lucille suggest to delete this plot 
+#Lucille suggest to delete this plot. Signe approve. 
 p01<-ggplot(data = prostate_clean_aug,
        mapping = aes(x = tumor_size,
                      y = outcome)) +
