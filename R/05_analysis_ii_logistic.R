@@ -68,6 +68,22 @@ prostate_1mg_log_mod <- prostate_1mg_log_mod %>%
 
 
 # Visualise data ----------------------------------------------------------
+# Creating a variable with real names for the variables 
+variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
+                     "age" = "Age",
+                     "age_group" = "Age Group",
+                     "dbp" = "Diastolic Blood Pressure", 
+                     "EKG_lvl" = "EKG level",
+                     "EKG" = "Electrocardiography",
+                     "hemoglobin" ="Hemoglobin",
+                     "sbp" ="	Systolic Blood Pressure",
+                     "tumor_size" = "Tumor Size",
+                     "weight_index" = "Weight Index",
+                     "performance" = "Performance",
+                     "performance_lvl" = "Performance level", 
+                     "bone_mets" = "Bone Metastases",
+                     "CVD" = "History of Cardiovascular Disease",
+                     "stage" = "Stage")
 
 ## Plot 6
 ## Manhattan plot
@@ -78,20 +94,30 @@ p1 <- prostate_1mg_log_mod %>%
   geom_point() + 
   geom_hline(yintercept = -log10(0.05), 
              linetype = "dashed") +
-  theme_minimal(base_size = 8, 
-                base_family = "Avenir") +
-  theme(legend.position = "bottom", 
-        axis.text.x = element_text(angle = 45 , 
-                                   vjust = 1, 
-                                   hjust = 1)) +
-  scale_fill_economist() +
-  scale_color_economist() +
+  geom_text(aes(x = 11,
+                y =  -log10(0.045),
+                label = "Significance level, 0.05"),
+                color = "black",
+            size = 3) +
   labs(x = "Variable", 
-       y = "Minus log10(p)")
-p1
+       y = "Minus log10(p-value)",
+       color = "Identified as:",
+       title = "Manhattan plot",
+       subtitle = "The Manhattan plot shows the -log10(p-value) versus the variables in the data set.\nThe negative log transformation makes the smallest p-values appear in the top") +
+  theme_minimal() +
+  scale_x_discrete(labels = variables_names) +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 35,
+                                   size = 8, 
+                                   hjust = 1),
+        plot.title = element_text(face = "bold", size = 16),
+        plot.subtitle = element_text(face = "italic")) +
+  scale_color_economist()
+
 ## Plot 7
 ## Plot of confidence intervals for effects of variables
 p2 <- prostate_1mg_log_mod %>% 
+  filter(identified_as == "Significant") %>% 
   ggplot(mapping = aes(x = estimate, 
                        y = fct_reorder(variable, estimate, .desc = TRUE),
                        color = identified_as)) + 
@@ -101,11 +127,20 @@ p2 <- prostate_1mg_log_mod %>%
   geom_errorbarh(mapping = aes(xmin = conf.low,
                                xmax = conf.high,
                                height = 0.1)) +
-  theme_classic(base_size = 8, 
-                base_family = "Avenir") +
-  theme(legend.position = "bottom" ) +
-  labs(x = "Estimate", y = "Variable")
-
+  labs(x = "Estimate", 
+       y = "Variable",
+       color = "Identified as:",
+       title = "Confidence Interval plot",
+       subtitle = "The confidence interval plot shows the confidence levels of the estimations found in the logistic regression.\nThe plot further illustrates the direction of the effect by each significant variable influencing the outcome.") +
+  theme_minimal() +
+  scale_y_discrete(labels = variables_names) +
+  theme(legend.position = "bottom",
+        plot.title = element_text(face = "bold", 
+                                  size = 16, 
+                                  hjust = -0.1),
+        plot.subtitle = element_text(face = "italic",
+                                     hjust = -0.1)) +
+  scale_color_economist()
 
 # Write data --------------------------------------------------------------
 ggsave(filename = "results/05_plot_Manhattan.png",
