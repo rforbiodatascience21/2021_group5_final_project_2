@@ -9,13 +9,13 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message = FALSE}
 library("tidyverse")
 library("knitr")
 library("here") # sets path to top level of the project
 ```
 
-```{r}
+```{r, message = FALSE}
 log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 ```
 
@@ -44,7 +44,7 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 ## Introduction | Variables in the data set
 
-Presentation of the variables with a R output, table, or image?
+Presentation of the variables with a R output, table, or image? I feel table is large, and I am thinking how to plot it
 
 ```{r, echo = TRUE}
 
@@ -129,10 +129,14 @@ include_graphics(here("results/06_plot_PCA_varExpl.png"))
 ``` 
 
 ## K-means clustering
+```{r, echo = FALSE, out.width="90%"}
+include_graphics(here("results/07_plot_kmeans_center.png"))
+``` 
 
-
-
-
+## K-means clustering
+```{r, echo = FALSE, out.width="90%"}
+include_graphics(here("results/07_plot_kmeans_scree.png"))
+``` 
 
 ## Results and discussion
 
