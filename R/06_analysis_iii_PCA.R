@@ -6,6 +6,7 @@ rm(list = ls())
 library("tidyverse")
 library("broom")
 library("cowplot")
+library("ggrepel")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -70,11 +71,8 @@ p2 <- pca_fit %>%
               values_from = "value") %>%
   ggplot(aes(PC1, PC2)) +
   geom_segment(xend = 0, yend = 0, arrow = arrow_style) +
-  geom_text(
+  geom_text_repel(
     aes(label = column),
-    hjust = "outward",
-    vjust = 0,
-    nudge_x = -0.02,
     color = "#3399FF") +
   xlim(-0.6,0.5) + 
   ylim(-0.7,0.2) +
