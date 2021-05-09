@@ -139,13 +139,14 @@ plot2 <- prostate_clean_aug %>%
 # Heatmap of correlations between the numeric variables
 plot3 <- prostate_clean_aug %>% 
   select(where(is.numeric), -patient_ID, -treatment_mg, -acid_phosphatase) %>% 
-  ggcorr(method = c("pairwise", "pearson"),
+  ggcorr(method = c("pairwise", 
+                    "pearson"),
          label = TRUE, 
          name = "Person Coefficient",
-         legend.position = "bottom",
          hjust = 0.8) +
   labs(title = "Heatmap of Correlations between the Numeric Variables") +
-  theme(plot.title = element_text(face = "bold", size = 16))
+  theme(plot.title = element_text(face = "bold", 
+                                  size = 16))
 
 # Overall distribution plot, for numeric value
 # NOT TO BE USED FOR PRESENTATION
