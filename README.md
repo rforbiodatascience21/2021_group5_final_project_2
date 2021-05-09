@@ -20,5 +20,10 @@ Further, the data is investigated by visualization and analysis. In the analysis
 - ggtheme
 - Patchwork
 - ggrepel
+- cowplot 
 
-## Contributors 
+### Contributors 
+- Guangya Shen
+- Huijiao Yang
+- Lucille Augusta Green
+- Signe Marcussen
