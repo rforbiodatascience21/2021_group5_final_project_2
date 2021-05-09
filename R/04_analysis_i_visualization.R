@@ -126,7 +126,8 @@ plot2 <- prostate_clean_aug %>%
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 35, 
                                    hjust = 1),
-        plot.title = element_text(face = "bold", size = 16),
+        plot.title = element_text(face = "bold", 
+                                  size = 16),
         plot.subtitle = element_text(face = "italic")) +
   labs(x = " ", 
        y = "Number of cases",
@@ -144,9 +145,11 @@ plot3 <- prostate_clean_aug %>%
          label = TRUE, 
          name = "Person Coefficient",
          hjust = 0.8) +
-  labs(title = "Heatmap of Correlations between the Numeric Variables") +
+  labs(title = "Heatmap of Correlations",
+       subtitle = "Correlations between the Numeric Variables") +
   theme(plot.title = element_text(face = "bold", 
-                                  size = 16))
+                                  size = 16),
+        plot.subtitle = element_text(face = "italic"))
 
 # Overall distribution plot, for numeric value
 # NOT TO BE USED FOR PRESENTATION
@@ -279,7 +282,7 @@ p06 <- prostate_clean_aug %>%
 ## Plot 5
 plot5 <- p05 + p06 +
   plot_annotation(title = "Distribution of Outcome in Relation to Treatment and Age",
-                  subtitle = "This figure illustrate the distributen of the suvival-rate in the data set.\nThe distribution in relation to age ang treatment, indicates that the 0.1 mg treatment might be the most efficient.",
+                  subtitle = "This figure illustrates the distribution of the suvival-rate.",
                   caption = "Figure A, shows the number of patients alive vs. dead.\nFigure B, shows the number of cases within each outcome group, additionally stratified on age group. ",
                   tag_levels = "A",
                   tag_prefix = "Figure ",
@@ -290,7 +293,7 @@ plot5 <- p05 + p06 +
                                                              size = 12),
                                 plot.caption = element_text(face = "italic",
                                                             hjust = 0,
-                                                            size = 12),
+                                                            size = 10),
                                 plot.tag = element_text(size = 12)))
 
 #############################################################################
@@ -341,23 +344,37 @@ p4 <- prostate_clean_aug %>%
 
 plot8 <- p4 + p1 / p2 / p3 +
   plot_annotation( title = "Significant Variables Influencing the Outcome",
-                   subtitle = "From the logistic regression it was found that the variables 'CVD', 'age', 'weight' and 'tumor size' had a significant influence on the outcome",
+                   subtitle = "The significant variables found by logistic regression ('CVD', 'age', 'weight' and 'tumor size').",
                    theme = theme(plot.title = element_text(face = "bold", 
                                                            size = 16),
                                  plot.subtitle = element_text(face = "italic",
                                                               hjust = 0,
-                                                              size = 12),
-                                 legend.position = "bottom")) +
+                                                              size = 12))) +
    plot_layout(guides = "collect") 
 
 # Write data --------------------------------------------------------------
 ggsave(filename = "results/04_plot_preTreatContinuous.png",
-       plot = plot1)
+       plot = plot1,
+       width = 9.22,
+       height = 3.99,
+       units = "in")
 ggsave(filename = "results/04_plot_preTreatCategorical.png",
-       plot = plot2)
+       plot = plot2,
+       width = 9.22,
+       height = 3.99,
+       units = "in")
 ggsave(filename = "results/04_plot_preTreatHeatmap.png",
-       plot = plot3)
+       plot = plot3,
+       width = 7.19,
+       height = 4.02,
+       units = "in")
 ggsave(filename = "results/04_plot_OutcomeTreatment.png",
-       plot = plot5)
+       plot = plot5,
+       width = 8.33,
+       height = 4.02,
+       units = "in")
 ggsave(filename = "results/04_plot_significantVariables.png",
-       plot = plot8)
+       plot = plot8,
+       width = 8.61,
+       height = 3.77,
+       units = "in")
