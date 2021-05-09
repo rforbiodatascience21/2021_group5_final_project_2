@@ -23,9 +23,9 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 ## Outline
 ### Introduction
 - Presentation of data
+- Data wrangling
 
 ### Materials and Methods
-- Data transforming
 - Data visualization
 - Logistic regression
 - Principal Component Analysis
@@ -44,16 +44,22 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 ## Introduction | Variables in the data set
 
-Presentation of the variables with a R output or picture?
+Presentation of the variables with a R output, table, or image?
 
 ```{r, echo = TRUE}
 
 ```
 
+## Data wrangling
+
+#### Raw data -> Clean data
+- Exclude dtime, sdate and sg
+- Renaming
+
+#### Clean data -> Augment data
+- Add five new variables: outcome, treatment_mg, EKG_lvl, performance_lvl, age_group
 
 # Materials and Methods
-
-## Data transforming
 
 ## Data visualization | Pre-treatment variables - Numeric
 
@@ -86,22 +92,21 @@ Output:
 log_mod_treatment
 ```
 
+## Logistic regression for each variable | Treatment 1.0 mg
 
-## Logistic regression | Model outcome as function of each variable 
-Filtered on treatment = 1.0 mg
-
-Manhattan plot
-```{r, echo = FALSE}
+```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/05_plot_Manhattan.png"))
 ```
 
-CI effects plot
-```{r, echo = FALSE}
+## Logistic regression | Effects of significant variables
+
+```{r, echo = FALSE, out.width="70%"}
 include_graphics(here("results/05_plot_CIeffects.png"))
 ```
 
-Significant variables plot
-```{r, echo = FALSE}
+## Logistic regression | Distribution of significant variables for each outcome
+
+```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_significantVariables.png"))
 ```
 
