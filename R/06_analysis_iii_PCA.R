@@ -47,15 +47,14 @@ p1 <- pca_fit %>%
        y = "Fitted PC2",
        color = "Outcome",
        title = "PCA plot",
-       subtitle = " PCA plot") +
+       subtitle = "The first two principal components plotted agianst each other.") +
   theme_minimal() +
   theme(legend.position = "bottom",
         plot.title = element_text(face = "bold", 
                                   size = 16),
         plot.subtitle = element_text(face = "italic")) +
-  scale_fill_manual(outcome = c("#FFDB6D", "#E7B800"))
-#cant' get color scale to work :/ 
-p1
+  scale_color_manual(values = c("0" = "#FF6600", 
+                                "1" = "#0072B2"))
 
 # Arrow style for plot of rotation matrix
 arrow_style <- arrow(angle = 20, 
@@ -83,14 +82,15 @@ p2 <- pca_fit %>%
   labs(x = "PC1", 
        y = "PC2",
        color = "Outcome",
-       title = "PCA plot",
-       subtitle = " PCA roation plot") +
+       title = "PCA, Rotation Matrix",
+       subtitle = "By the rotation matrix we how the data has been rotated from the original form into the found principal components") +
   theme_minimal() +
   theme(legend.position = "bottom",
         plot.title = element_text(face = "bold", 
                                   size = 16),
         plot.subtitle = element_text(face = "italic")) +
   scale_color_economist()
+p2
 
 ## Plot of variance explained by first 10 PCs
 p3 <- pca_fit %>%
@@ -103,9 +103,9 @@ p3 <- pca_fit %>%
   scale_y_continuous(labels = scales::percent_format(),
                      expand = expansion(mult = c(0, 0.01))) +
   labs(x = "PC", 
-       y = "Percent described",
-       title = " plot",
-       subtitle = "   plot") +
+       y = "Percentage of variance described",
+       title = " PCA, Variance Plot",
+       subtitle = "By using the found eigenvalues the variance explained by each PC is plotted.") +
   theme_minimal() +
   theme(legend.position = "bottom",
         plot.title = element_text(face = "bold", 
@@ -113,7 +113,6 @@ p3 <- pca_fit %>%
         plot.subtitle = element_text(face = "italic")) +
   scale_color_economist()
 
-                       
 p3
 # Write data --------------------------------------------------------------
 save(pca_fit, file = "results/06_mdl_pca_fit.RData")
