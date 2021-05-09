@@ -5,6 +5,7 @@ date: "11th May 2021"
 output: ioslides_presentation
 ---
 
+  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
@@ -43,12 +44,12 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - 27 NA values
 
 ## Introduction | Variables in the data set
+##### -Non-numeric
+patno(Patient Number), stage(two types of prostatic cancer), rx(treatment, placebo or different does of estrogen), status(alive or dead from different causes), pf(Time in bed), hx(History of Cardiovascular Disease, yes or no), ekg(Electrocardiography), sg(Combined Index of Stage and Hist. Grade)
 
-Presentation of the variables with a R output, table, or image? I feel table is large, and I am thinking how to plot it
+##### -Numeric
+dtime(Months of Follow-up), age(Age in years), wt(Weight Index, = wt(kg)-ht(cm)+200), sbp(Systolic Blood Pressure/10), dbp(Diastolic Blood Pressure/10), hg(Serum Hemoglobin (g/100ml)), sz(Size of Primary Tumor (cm^2)), ap(Serum Prostatic Acid Phosphatase), bm(Bone Metastases)
 
-```{r, echo = TRUE}
-
-```
 
 ## Data wrangling
 
