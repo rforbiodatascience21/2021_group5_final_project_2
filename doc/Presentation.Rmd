@@ -129,6 +129,8 @@ include_graphics(here("results/06_plot_PCA_varExpl.png"))
 ``` 
 
 ## K-means clustering
+
+## K-means clustering
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/07_plot_kmeans_center.png"))
 ``` 

@@ -4,6 +4,8 @@ rm(list = ls())
 
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
+library("broom")
+library("ggthemes")
 library("NbClust")
 
 # Define functions --------------------------------------------------------
@@ -26,6 +28,7 @@ prostate_data_pca <- prostate_clean_aug %>%
          EKG_lvl = factor(EKG_lvl)) %>%
   drop_na()
 
+
 # Model data --------------------------------------------------------------
 # K-means clustering
 
@@ -37,39 +40,42 @@ points <- pca_fit %>%
 ## K-means clustering with k = 1..6 
 ## and create tidied, glanced and augmented data
 kclusts <- tibble(k = 1:6) %>%
-  mutate(kclust = map(k, ~kmeans(points, .x)),
-         tidied = map(kclust, tidy),
-         glanced = map(kclust, glance),
-         augmented = map(kclust, augment, points))
+  mutate(kclust = map(k, ~kmeans(x = points, 
+                                 centers = .x)),
+         tidied = map(kclust, 
+                      tidy),
+         glanced = map(kclust, 
+                       glance),
+         augmented = map(kclust, 
+                         augment, 
+                         points))
 
 ## Turn into three separate data sets using tidy(), augment() and glance()
-clusters <- 
-  kclusts %>%
+clusters <- kclusts %>%
   unnest(cols = c(tidied))
 
-assignments <- 
-  kclusts %>% 
+assignments <- kclusts %>% 
   unnest(cols = c(augmented))
 
-clusterings <- 
-  kclusts %>%
+clusterings <- kclusts %>%
   unnest(cols = c(glanced))
 
 
 # Visualise data ----------------------------------------------------------
 ## Create 6 plots with varying number of clusters k=1..6
-p1 <- ggplot(assignments, aes(x = .fittedPC1, 
-                              y = .fittedPC2)) +
+p1 <- ggplot(data = assignments, 
+             mapping = aes(x = .fittedPC1, 
+                           y = .fittedPC2)) +
   geom_point(aes(color = .cluster), 
              alpha = 0.8) + 
-  facet_wrap(~ k)+
-  theme_minimal()+
+  facet_wrap(~ k) +
+  theme_minimal() +
   labs(x = "Fitted PC1",
        y = "Fitted PC2",
        title ="K-means Clustering",
        color = "Cluster") +
-  theme(plot.title = element_text(face = "bold", 
-                                          size = 16)) +
+  theme(plot.title = element_text(face = "bold",
+                                  size = 16)) +
   scale_color_economist()
 
 ## With centers of clusters 
@@ -79,13 +85,15 @@ p2 <- p1 + geom_point(data = clusters,
                       color = "red")
 
 ## Variance within clusters, scree-plot 
-p3 <- ggplot(clusterings, aes(k, tot.withinss)) +
+p3 <- ggplot(data = clusterings, 
+             mapping = aes(x = k, 
+                           y = tot.withinss)) +
   geom_line() +
-  geom_point()+   
+  geom_point() +   
   theme_minimal() +
-  labs( x = "Number of clusters, k",
-        y = "Total within cluster variation",
-        title = "Scree-plot") +
+  labs(x = "Number of clusters, k",
+       y = "Total variation within cluster",
+       title = "Scree-plot") +
   theme(plot.title = element_text(face = "bold", 
                                   size = 16))
 
