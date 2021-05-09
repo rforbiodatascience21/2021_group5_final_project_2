@@ -94,7 +94,7 @@ p1 <- prostate_1mg_log_mod %>%
   geom_point() + 
   geom_hline(yintercept = -log10(0.05), 
              linetype = "dashed") +
-  geom_text(aes(x = 11,
+  geom_text(aes(x = 10,
                 y =  -log10(0.045),
                 label = "Significance level, 0.05"),
                 color = "black",
@@ -103,17 +103,16 @@ p1 <- prostate_1mg_log_mod %>%
        y = "Minus log10(p-value)",
        color = "Identified as:",
        title = "Manhattan plot",
-       subtitle = "The Manhattan plot shows the -log10(p-value) versus the variables in the data set.\nThe negative log transformation makes the smallest p-values appear in the top") +
+       subtitle = "The Manhattan plot shows the -log10(p-value) versus the variables in the data set.") +
   theme_minimal() +
   scale_x_discrete(labels = variables_names) +
-  theme(legend.position = "bottom",
-        axis.text.x = element_text(angle = 35,
+  theme(axis.text.x = element_text(angle = 35,
                                    size = 8, 
                                    hjust = 1),
         plot.title = element_text(face = "bold", size = 16),
         plot.subtitle = element_text(face = "italic")) +
   scale_color_economist()
-
+p1
 ## Plot 7
 ## Plot of confidence intervals for effects of variables
 p2 <- prostate_1mg_log_mod %>% 
