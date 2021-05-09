@@ -9,6 +9,17 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+```{r, echo = FALSE}
+library("tidyverse")
+library("knitr")
+library("here") # sets path to top level of the project
+```
+
+```{r}
+log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
+```
+
+
 ## Outline
 ### Introduction
 - Presentation of data
@@ -20,9 +31,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Principal Component Analysis
 - K-means clustering
 
-### Results
-
-### Discussion
+### Results and discussion
 
 
 # Introduction
@@ -31,6 +40,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Byar & Greene prostate cancer data, from Andrews DF and Herzberg AM (1985) 
 - Compare four different treatments
 - 502 observations of 18 variables
+- 27 NA values
 
 ## Introduction | Variables in the data set
 
@@ -45,58 +55,69 @@ Presentation of the variables with a R output or picture?
 
 ## Data transforming
 
-## Data visualization | Pre-treatment variables
+## Data visualization | Pre-treatment variables - Numeric
 
-Plot 1
-```{r}
-
+```{r, echo = FALSE, out.width="100%"}
+include_graphics(here("results/04_plot_preTreatContinuous.png"))
 ```
 
-## Data visualization | Pre-treatment variables
+## Data visualization | Pre-treatment variables - Categorical
 
-Plot 2
-```{r}
-
+```{r, echo = FALSE, out.width="100%"}
+include_graphics(here("results/04_plot_preTreatCategorical.png"))
 ```
 
-## Data visualization | Pre-treatment variables
+## Data visualization | Pre-treatment variables - Heatmap
 
-Plot 3
-```{r}
-
+```{r, echo = FALSE, out.width="100%"}
+include_graphics(here("results/04_plot_preTreatHeatmap.png"))
 ```
 
-## Data visualization | Treatment and outcome
+## Data visualization | Treatment, outcome and age
 
-Plot 5A + 5B
+```{r, echo = FALSE, out.width="100%"}
+include_graphics(here("results/04_plot_OutcomeTreatment.png"))
+```
+
+## Logistic regression | Model outcome as function of treatment
+
+Output:
+```{r, echo = TRUE}
+log_mod_treatment
+```
 
 
-## Logistic regression
-### 
+## Logistic regression | Model outcome as function of each variable 
+Filtered on treatment = 1.0 mg
+
+Manhattan plot
+```{r, echo = FALSE}
+include_graphics(here("results/05_plot_Manhattan.png"))
+```
+
+CI effects plot
+```{r, echo = FALSE}
+include_graphics(here("results/05_plot_CIeffects.png"))
+```
+
+Significant variables plot
+```{r, echo = FALSE}
+include_graphics(here("results/04_plot_significantVariables.png"))
+```
 
 ## Principal Component Analysis
-### 
+ 
 
 ## K-means clustering
-### 
 
 
 
 
 
+## Results and discussion
 
-##  Output slide
-### Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Results
-### Results 
-
-```{r pressure}
-plot(pressure)
-```
+- Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
+- Most effective treatment is 1.0 mg estrogen
+- Significant variables are tumor size, CVD, age, and weight index
 
 

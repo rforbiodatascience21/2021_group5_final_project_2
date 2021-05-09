@@ -42,8 +42,8 @@ prostate_1mg_long_nest <- prostate_data_logi %>%
 log_mod_treatment <- prostate_data_logi %>% 
   glm(outcome ~ treatment_mg,
       data = .,
-      family = binomial(link = "logit"))
-tidy(log_mod_treatment)
+      family = binomial(link = "logit")) %>% 
+  tidy()
 
 ## Creating a logistic model for each variable in data for treatment 1 mg
 prostate_1mg_log_mod <- prostate_1mg_long_nest %>% 
@@ -143,6 +143,8 @@ p2 <- prostate_1mg_log_mod %>%
   scale_color_economist()
 
 # Write data --------------------------------------------------------------
+write_tsv(x = log_mod_treatment,
+          file = "results/log_mod_treatment.tsv.gz")
 ggsave(filename = "results/05_plot_Manhattan.png",
        plot = p1)
 ggsave(filename = "results/05_plot_CIeffects.png",

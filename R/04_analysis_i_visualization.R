@@ -85,10 +85,9 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
 ### Plots of pre-treatment variables ###
 ########################################
 
-
 ## Plot 1
 # Distribution plot for the numeric variables stratified on "stage" 
-ggplot(prostate_clean_aug_longer, 
+plot1 <- ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
                      fill = stage)) +
   geom_density(alpha = 0.6) +
@@ -113,7 +112,7 @@ ggplot(prostate_clean_aug_longer,
 ## Plot 2
 # Distribution of the categorical variables stratified on "stage" 
 # CVD, bone_mets, performance, EKG
-prostate_clean_aug %>%
+plot2 <- prostate_clean_aug %>%
   select(patient_ID, stage, CVD, bone_mets, performance, EKG) %>%
   drop_na() %>% 
   pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values") %>% 
@@ -138,7 +137,7 @@ prostate_clean_aug %>%
 
 ## Plot 3
 # Heatmap of correlations between the numeric variables
-prostate_clean_aug %>% 
+plot3 <- prostate_clean_aug %>% 
   select(where(is.numeric), -patient_ID, -treatment_mg, -acid_phosphatase) %>% 
   ggcorr(method = c("pairwise", "pearson"),
          label = TRUE, 
@@ -233,7 +232,7 @@ prostate_clean_aug %>%
 ### Plots of treatment and outcome ###
 ######################################
 
-## Plot 4
+## Plot 5A
 ## Distribution of alive/dead
 p05 <- prostate_clean_aug %>%   
   ggplot(mapping = aes(outcome,
@@ -258,7 +257,7 @@ ggplot(data = prostate_clean_aug,
   theme_minimal() +
   scale_color_economist()
 
-
+## Plot 5B
 # I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
 ## Histogram of treatment for alive/dead stratified on age_group
 p06 <- prostate_clean_aug %>% 
@@ -275,8 +274,9 @@ p06 <- prostate_clean_aug %>%
        y = "Number of cases",
        fill = "Age Group") +
   scale_fill_economist()
+
 ## Plot 5
-p05 + p06 +
+plot5 <- p05 + p06 +
   plot_annotation(title = "Distribution of Outcome in Relation to Treatment and Age",
                   subtitle = "This figure illustrate the distributen of the suvival-rate in the data set.\nThe distribution in relation to age ang treatment, indicates that the 0.1 mg treatment might be the most efficient.",
                   caption = "Figure A, shows the number of patients alive vs. dead.\nFigure B, shows the number of cases within each outcome group, additionally stratified on age group. ",
@@ -295,6 +295,7 @@ p05 + p06 +
 #############################################################################
 ### Plots of significant variables found by logistic regression (dose 1mg) ##
 #############################################################################
+
 ## Plot 8
 p1 <- prostate_clean_aug %>% 
   filter(treatment_mg == 1.0) %>% 
@@ -337,7 +338,7 @@ p4 <- prostate_clean_aug %>%
          y = "Number of cases") +
   scale_fill_economist()
 
-p4 + p1 / p2 / p3 +
+plot8 <- p4 + p1 / p2 / p3 +
   plot_annotation( title = "Significant Variables Influencing the Outcome",
                    subtitle = "From the logistic regression it was found that the variables 'CVD', 'age', 'weight' and 'tumor size' had a significant influence on the outcome",
                    theme = theme(plot.title = element_text(face = "bold", 
@@ -349,5 +350,13 @@ p4 + p1 / p2 / p3 +
    plot_layout(guides = "collect") 
 
 # Write data --------------------------------------------------------------
-write_tsv(...)
-ggsave(...)
+ggsave(filename = "results/04_plot_preTreatContinuous.png",
+       plot = plot1)
+ggsave(filename = "results/04_plot_preTreatCategorical.png",
+       plot = plot2)
+ggsave(filename = "results/04_plot_preTreatHeatmap.png",
+       plot = plot3)
+ggsave(filename = "results/04_plot_OutcomeTreatment.png",
+       plot = plot5)
+ggsave(filename = "results/04_plot_significantVariables.png",
+       plot = plot8)
