@@ -129,8 +129,8 @@ p2 <- prostate_1mg_log_mod %>%
   labs(x = "Estimate", 
        y = "Variable",
        color = "Identified as:",
-       title = "Confidence Interval plot",
-       subtitle = "The confidence interval plot shows the confidence levels of the estimations found in the logistic regression.") +
+       title = "Confidence Interval for Effects",
+       subtitle = "Only the significant variables found by logistic regression") +
   scale_y_discrete(labels = variables_names) +
   theme_minimal() +
   theme(plot.title = element_text(face = "bold", 
@@ -144,6 +144,12 @@ p2
 write_tsv(x = log_mod_treatment,
           file = "results/log_mod_treatment.tsv.gz")
 ggsave(filename = "results/05_plot_Manhattan.png",
-       plot = p1)
+       plot = p1,
+       width = 6.7,
+       height = 4.14,
+       units = "in")
 ggsave(filename = "results/05_plot_CIeffects.png",
-       plot = p2)
+       plot = p2,
+       width = 6.9,
+       height = 3.33,
+       units = "in")

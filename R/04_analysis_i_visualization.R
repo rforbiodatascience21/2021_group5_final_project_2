@@ -103,7 +103,7 @@ plot1 <- ggplot(prostate_clean_aug_longer,
   labs(x = " ", 
        y = "Density",
        title = "Distribution of the Pre-treatment Numerical Variables",
-       subtitle = "Density plots of the numerical variables for the pre-treatment measurements, stratified on the stage of Prostate cancer",
+       subtitle = "Density plots of the numerical variables stratified on the stage of prostate cancer",
        fill = "Stage of prostate cancer") +
   scale_fill_economist() +
   scale_color_economist()
@@ -113,9 +113,16 @@ plot1 <- ggplot(prostate_clean_aug_longer,
 # Distribution of the categorical variables stratified on "stage" 
 # CVD, bone_mets, performance, EKG
 plot2 <- prostate_clean_aug %>%
-  select(patient_ID, stage, CVD, bone_mets, performance, EKG) %>%
+  select(patient_ID, 
+         stage, 
+         CVD, 
+         bone_mets, 
+         performance, 
+         EKG) %>%
   drop_na() %>% 
-  pivot_longer(cols = c(-patient_ID, -stage), names_to = "variables", values_to = "values") %>% 
+  pivot_longer(cols = c(-patient_ID, -stage), 
+               names_to = "variables", 
+               values_to = "values") %>% 
   ggplot(mapping = aes(values,
                        fill = stage)) +
   geom_bar() +
@@ -132,14 +139,17 @@ plot2 <- prostate_clean_aug %>%
   labs(x = " ", 
        y = "Number of cases",
        title = "Distribution of the Pre-treatment Categorical Variables",
-       subtitle = "Bar plots of the categorical variables for the pre-treatment measurements, stratified on the stage of Prostate cancer",
+       subtitle = "Barplots for each categorical variable stratified on the stage of prostate cancer",
        fill = "Stage") +
   scale_fill_economist()
 
 ## Plot 3
 # Heatmap of correlations between the numeric variables
 plot3 <- prostate_clean_aug %>% 
-  select(where(is.numeric), -patient_ID, -treatment_mg, -acid_phosphatase) %>% 
+  select(where(is.numeric), 
+         -patient_ID, 
+         -treatment_mg, 
+         -acid_phosphatase) %>% 
   ggcorr(method = c("pairwise", 
                     "pearson"),
          label = TRUE, 
@@ -236,6 +246,16 @@ prostate_clean_aug %>%
 ### Plots of treatment and outcome ###
 ######################################
 
+## Boxplot of tumor size for each outcome stratified on treatment
+#Lucille - do we need this plot?
+ggplot(data = prostate_clean_aug,
+           mapping = aes(x = tumor_size,
+                         y = outcome, 
+                         fill = treatment)) +
+  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
+  theme_minimal() +
+  scale_color_economist()
+
 ## Plot 5A
 ## Distribution of alive/dead
 p05 <- prostate_clean_aug %>%   
@@ -250,16 +270,6 @@ p05 <- prostate_clean_aug %>%
   scale_color_economist() +
   scale_fill_economist()
 
-
-## Boxplot of tumor size for each outcome stratified on treatment
-#Lucille - do we need this plot?
-ggplot(data = prostate_clean_aug,
-           mapping = aes(x = tumor_size,
-                         y = outcome, 
-                         fill = treatment)) +
-  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
-  theme_minimal() +
-  scale_color_economist()
 
 ## Plot 5B
 # I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
@@ -282,8 +292,7 @@ p06 <- prostate_clean_aug %>%
 ## Plot 5
 plot5 <- p05 + p06 +
   plot_annotation(title = "Distribution of Outcome in Relation to Treatment and Age",
-                  subtitle = "This figure illustrates the distribution of the suvival-rate.",
-                  caption = "Figure A, shows the number of patients alive vs. dead.\nFigure B, shows the number of cases within each outcome group, additionally stratified on age group. ",
+                  caption = "Figure A shows the number of patients alive vs. dead.\nFigure B shows the distribution of treatment for each outcome stratified on age group.",
                   tag_levels = "A",
                   tag_prefix = "Figure ",
                   theme = theme(plot.title = element_text(face = "bold", 
@@ -361,20 +370,20 @@ ggsave(filename = "results/04_plot_preTreatContinuous.png",
 ggsave(filename = "results/04_plot_preTreatCategorical.png",
        plot = plot2,
        width = 9.22,
-       height = 3.99,
+       height = 5.12,
        units = "in")
 ggsave(filename = "results/04_plot_preTreatHeatmap.png",
        plot = plot3,
-       width = 7.19,
-       height = 4.02,
+       width = 6.05,
+       height = 4.52,
        units = "in")
 ggsave(filename = "results/04_plot_OutcomeTreatment.png",
        plot = plot5,
-       width = 8.33,
-       height = 4.02,
+       width = 7.09,
+       height = 4.86,
        units = "in")
 ggsave(filename = "results/04_plot_significantVariables.png",
        plot = plot8,
        width = 8.61,
-       height = 3.77,
+       height = 5.14,
        units = "in")

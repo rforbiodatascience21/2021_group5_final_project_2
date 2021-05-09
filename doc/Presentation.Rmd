@@ -75,13 +75,13 @@ include_graphics(here("results/04_plot_preTreatCategorical.png"))
 
 ## Data visualization | Pre-treatment variables - Heatmap
 
-```{r, echo = FALSE, out.width="100%"}
+```{r, echo = FALSE, out.width="70%", fig.align = "center"}
 include_graphics(here("results/04_plot_preTreatHeatmap.png"))
 ```
 
 ## Data visualization | Treatment, outcome and age
 
-```{r, echo = FALSE, out.width="100%"}
+```{r, echo = FALSE, out.width="90%", fig.align = "center"}
 include_graphics(here("results/04_plot_OutcomeTreatment.png"))
 ```
 
@@ -101,8 +101,8 @@ include_graphics(here("results/05_plot_Manhattan.png"))
 ```
 
 ## Logistic regression | Effects of significant variables for treatment 1.0 mg
-
-```{r, echo = FALSE, out.width="100%"}
+  
+```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/05_plot_CIeffects.png"))
 ```
 
