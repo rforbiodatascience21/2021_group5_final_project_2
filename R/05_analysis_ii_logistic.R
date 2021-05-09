@@ -122,7 +122,7 @@ p2 <- prostate_1mg_log_mod %>%
                        color = identified_as)) + 
   geom_point() + 
   geom_vline(xintercept = 0, 
-             linetype = "dashed" ) + 
+             linetype = "dashed") + 
   geom_errorbarh(mapping = aes(xmin = conf.low,
                                xmax = conf.high,
                                height = 0.1)) +
@@ -130,17 +130,16 @@ p2 <- prostate_1mg_log_mod %>%
        y = "Variable",
        color = "Identified as:",
        title = "Confidence Interval plot",
-       subtitle = "The confidence interval plot shows the confidence levels of the estimations found in the logistic regression.\nThe plot further illustrates the direction of the effect by each significant variable influencing the outcome.") +
-  theme_minimal() +
+       subtitle = "The confidence interval plot shows the confidence levels of the estimations found in the logistic regression.") +
   scale_y_discrete(labels = variables_names) +
-  theme(legend.position = "bottom",
-        plot.title = element_text(face = "bold", 
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", 
                                   size = 16, 
-                                  hjust = -0.1),
+                                  hjust = 0),
         plot.subtitle = element_text(face = "italic",
-                                     hjust = -0.1)) +
+                                     hjust = 0)) +
   scale_color_economist()
-
+p2
 # Write data --------------------------------------------------------------
 write_tsv(x = log_mod_treatment,
           file = "results/log_mod_treatment.tsv.gz")

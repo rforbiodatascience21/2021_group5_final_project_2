@@ -76,7 +76,8 @@ p2 <- pca_fit %>%
     vjust = 0,
     nudge_x = -0.02,
     color = "#3399FF") +
-  xlim(-0.6,0.5) + ylim(-0.7,0.2)+
+  xlim(-0.6,0.5) + 
+  ylim(-0.7,0.2) +
   coord_fixed() + # fix aspect ratio to 1:1
   theme_minimal_grid(10) + 
   labs(x = "PC1", 
