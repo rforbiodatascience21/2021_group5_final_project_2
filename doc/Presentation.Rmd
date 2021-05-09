@@ -44,7 +44,7 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 ## Introduction | Variables in the data set
 
-Presentation of the variables with a R output, table, or image?
+Presentation of the variables with a R output, table, or image? I feel table is large, and I am thinking how to plot it
 
 ```{r, echo = TRUE}
 
