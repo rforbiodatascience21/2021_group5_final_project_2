@@ -85,6 +85,8 @@ include_graphics(here("results/04_plot_preTreatHeatmap.png"))
 include_graphics(here("results/04_plot_OutcomeTreatment.png"))
 ```
 
+## Logistic regression
+
 ## Logistic regression | Model outcome as function of treatment
 
 Output:
@@ -98,20 +100,33 @@ log_mod_treatment
 include_graphics(here("results/05_plot_Manhattan.png"))
 ```
 
-## Logistic regression | Effects of significant variables
+## Logistic regression | Effects of significant variables for treatment 1.0 mg
 
-```{r, echo = FALSE, out.width="70%"}
+```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/05_plot_CIeffects.png"))
 ```
 
 ## Logistic regression | Distribution of significant variables for each outcome
-
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_significantVariables.png"))
 ```
 
 ## Principal Component Analysis
- 
+
+## Principal Component Analysis
+```{r, echo = FALSE, out.width="90%"}
+include_graphics(here("results/06_plot_PCA_PCcoords.png"))
+```
+
+## Principal Component Analysis
+```{r, echo = FALSE, out.width="90%"}
+include_graphics(here("results/06_plot_PCA_rotation.png"))
+```
+
+## Principal Component Analysis
+```{r, echo = FALSE, out.width="90%"}
+include_graphics(here("results/06_plot_PCA_varExpl.png"))
+``` 
 
 ## K-means clustering
 

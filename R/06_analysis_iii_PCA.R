@@ -46,8 +46,8 @@ p1 <- pca_fit %>%
   labs(x = "Fitted PC1", 
        y = "Fitted PC2",
        color = "Outcome",
-       title = "PCA plot",
-       subtitle = "The first two principal components plotted agianst each other.") +
+       title = "PC1 vs. PC2",
+       subtitle = "The first two principal components plotted against each other.") +
   theme_minimal() +
   theme(legend.position = "bottom",
         plot.title = element_text(face = "bold", 
@@ -83,8 +83,7 @@ p2 <- pca_fit %>%
   labs(x = "PC1", 
        y = "PC2",
        color = "Outcome",
-       title = "PCA, Rotation Matrix",
-       subtitle = "By the rotation matrix we how the data has been rotated from the original form into the found principal components") +
+       title = "Rotation matrix") +
   theme_minimal() +
   theme(legend.position = "bottom",
         plot.title = element_text(face = "bold", 
@@ -93,20 +92,19 @@ p2 <- pca_fit %>%
   scale_color_economist()
 p2
 
-## Plot of variance explained by first 10 PCs
+## Plot of variance explained by first 5 PCs
 p3 <- pca_fit %>%
   tidy(matrix = "eigenvalues") %>%
-  filter(percent > 0.05) %>% 
+  filter(percent > 0.085) %>% 
   ggplot(mapping = aes(PC, percent)) +
   geom_col(fill = "#3399FF", 
            alpha = 0.8) +
-  scale_x_continuous(breaks = 1:10) +
+  scale_x_continuous(breaks = 1:5) +
   scale_y_continuous(labels = scales::percent_format(),
                      expand = expansion(mult = c(0, 0.01))) +
   labs(x = "PC", 
-       y = "Percentage of variance described",
-       title = " PCA, Variance Plot",
-       subtitle = "By using the found eigenvalues the variance explained by each PC is plotted.") +
+       y = "Variance explained",
+       title = "Variance explained by the first 5 PCs") +
   theme_minimal() +
   theme(legend.position = "bottom",
         plot.title = element_text(face = "bold", 
