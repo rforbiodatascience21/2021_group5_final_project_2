@@ -348,7 +348,7 @@ p4 <- prostate_clean_aug %>%
   theme_minimal() +
   theme(legend.title = element_blank()) +
   labs(x = "History of Cardiovascular Disease", 
-         y = "Number of cases") +
+         y = "Frequency") +
   scale_fill_economist()
 
 plot8 <- p4 + p1 / p2 / p3 +
