@@ -116,8 +116,17 @@ p3
 # Write data --------------------------------------------------------------
 save(pca_fit, file = "results/06_mdl_pca_fit.RData")
 ggsave(filename = "results/06_plot_PCA_PCcoords.png",
-       plot = p1)
+       plot = p1,
+       width = 6.49,
+       height = 4.64,
+       units = "in")
 ggsave(filename = "results/06_plot_PCA_rotation.png",
-       plot = p2)
+       plot = p2,
+       width = 5.78,
+       height = 4.49,
+       units = "in")
 ggsave(filename = "results/06_plot_PCA_varExpl.png",
-       plot = p3)
+       plot = p3,
+       width = 5.78,
+       height = 4.32,
+       units = "in")

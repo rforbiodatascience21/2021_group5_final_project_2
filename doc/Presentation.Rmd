@@ -101,7 +101,7 @@ include_graphics(here("results/05_plot_Manhattan.png"))
 ```
 
 ## Logistic regression | Effects of significant variables for treatment 1.0 mg
-
+  
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/05_plot_CIeffects.png"))
 ```
