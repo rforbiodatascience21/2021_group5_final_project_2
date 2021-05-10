@@ -126,8 +126,16 @@ ggsave(filename = "results/07_plot_kmeans_center.png",
        width = 8.51,
        height = 4.3,
        units = "in")
+
 ggsave(filename = "results/07_plot_kmeans_scree.png",
        plot = p3,
        width = 8.51,
        height = 4.3,
        units = "in")
+
+ggsave(filename = "results/07_plot_kmeans_CCC.png",
+       plot = p4,
+       width = 8.51,
+       height = 4.3,
+       units = "in"
+       )
