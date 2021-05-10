@@ -20,14 +20,16 @@ prostate_clean_aug <- prostate_clean %>%
   mutate(outcome = case_when(status == "alive" ~ 0,
                              status != "alive" ~ 1),
          outcome = factor(outcome)) %>% 
-  relocate(outcome, .after = status)
+  relocate(outcome, 
+           .after = status)
 
 ## Add numeric variable of estrogen dose
 prostate_clean_aug <- prostate_clean_aug %>%
   mutate(treatment_mg = str_sub(treatment, 1, 3),
          treatment_mg = str_replace(treatment_mg, "pla", "0"),
          treatment_mg = factor(treatment_mg)) %>% 
-  relocate(treatment_mg, .after = treatment)
+  relocate(treatment_mg, 
+           .after = treatment)
 
 ## Add variable of performance level
 prostate_clean_aug <- prostate_clean_aug %>% 
@@ -36,7 +38,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
                                      performance == "in bed > 50% daytime" ~ 2,
                                      performance == "confined to bed" ~ 1),
          performance_lvl = factor(performance_lvl)) %>% 
-  relocate(performance_lvl, .after = performance)
+  relocate(performance_lvl, 
+           .after = performance)
 
 # Add variable of EKG level  
 prostate_clean_aug <- prostate_clean_aug %>%   
@@ -48,7 +51,8 @@ prostate_clean_aug <- prostate_clean_aug %>%
                              EKG == "old MI" ~ 5,
                              EKG == "recent MI" ~ 6),
          EKG_lvl = factor(EKG_lvl)) %>% 
-  relocate(EKG_lvl, .after = EKG)
+  relocate(EKG_lvl, 
+           .after = EKG)
 
 # Find mean of age
 prostate_clean_aug %>% 
@@ -59,12 +63,15 @@ prostate_clean_aug %>%
 prostate_clean_aug <- prostate_clean_aug %>% 
   mutate(age_group = case_when(age <= 71 ~ "Young",
                                age > 71 ~ "Old")) %>% 
-  relocate(age_group, .after = age)
+  relocate(age_group, 
+           .after = age)
+
 
 ## Add log-transformed variable of the acid_phosphatase 
 prostate_clean_aug <- prostate_clean_aug %>% 
-  mutate( acid_phosphatase_log = log(acid_phosphatase)) %>% 
-  relocate(acid_phosphatase_log, .after = acid_phosphatase)
+  mutate(acid_phosphatase_log = log(acid_phosphatase)) %>% 
+  relocate(acid_phosphatase_log, 
+           .after = acid_phosphatase)
 
 # Write data --------------------------------------------------------------
 write_tsv(x = prostate_clean_aug,
