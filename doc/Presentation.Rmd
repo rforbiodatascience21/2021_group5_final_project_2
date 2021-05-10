@@ -249,11 +249,14 @@ include_graphics(here("results/07_plot_kmeans_CCC.png"))
 
 ## Discussion
 
-- Include death causes, not only analysis outcome as a binary variable 
+- Include death causes and Month of Follow-Up
 
 - Limitations of the data set: 
-  + There is no correlation between the variables.
-  + Measurements *before* and *after* treatment might make it easier distinguish between classes.
+  + Too few variables - No correlation between the variables
+  
+- Genomic data
+  
+- Measurements *before* and *after* treatment might make it easier distinguish between classes.
 
 ## Conclusion
 
