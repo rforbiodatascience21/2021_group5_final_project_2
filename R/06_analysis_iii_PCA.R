@@ -14,8 +14,8 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 prostate_data_pca <- read_tsv(file = "data/03_prostate_data_pca.tsv.gz")
+
 
 # Wrangle data ------------------------------------------------------------
 prostate_data_pca <- prostate_data_pca %>%
@@ -25,6 +25,7 @@ prostate_data_pca <- prostate_data_pca %>%
          stage = factor(stage),
          CVD = factor(CVD),
          bone_mets = factor(bone_mets))
+
 
 # Model data --------------------------------------------------------------
 

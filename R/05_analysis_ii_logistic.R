@@ -11,7 +11,6 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 prostate_data_logistic <- read_tsv(file = "data/03_prostate_data_logistic.tsv.gz")
 
 
