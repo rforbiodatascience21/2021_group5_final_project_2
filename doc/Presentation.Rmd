@@ -48,29 +48,29 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 ## The Raw Data set
 ```{r}
-Variables <- c("patno", 
+Variables <- c("patno",
+               "stage",
                "rx", 
-               "status", 
-               "pf",
-               "bm",
+               "status",
                "hx", 
-               "ekg" )
+               "ekg", 
+               "pf" )
 
-Description <- c("Patient number", 
+Description <- c("Patient number",
+                 "Stage of prostate cancer",
                  "Dosage of estrogen treatment in mg", 
-                 "Status of the patient, alive or or cause of death", 
-                 "Activity level based on time in bed",
-                 "The presence of Bone Metastases",
-                 "History of Cardiovascular Disease", 
-                 "Electrocardiography")
+                 "Status of the patient, alive or or cause of death",
+                 "History of Cardiovascular Disease",
+                 "Electrocardiography",
+                 "Activity level based on time in bed")
 
-Levels <- c("-",
+Levels <- c(" - ",
+            " 3 or 4",
             "Placebo, 0.2 mg, 1.0 mg, 5.0 mg",
             "alive, dead - prostatic ca, dead - heart or vascular, dead - cerebrovascular, dead - pulmonary embolus, dead - other ca, dead - respiratory disease, dead - other specific non-ca, dead - unspecified non-ca, dead - unknown cause",
-            "normal activity, in bed < 50% daytime, in bed > 50% daytime, confined to bed",
             "Yes/No", 
-            "Yes/No",
-            "normal, benign, rhythmic disturb & electrolyte ch, heart block or conduction def, heart strain, old MI, recent MI")
+            "normal, benign, rhythmic disturb & electrolyte ch, heart block or conduction def, heart strain, old MI, recent MI",
+            "normal activity, in bed < 50% daytime, in bed > 50% daytime, confined to bed")
 
 table <- cbind(Variables, 
                Description, 
@@ -87,38 +87,38 @@ table %>%
 
 ## The Data set
 ```{r}
-Variables <- c("stage",
-               "age",
+Variables <- c("age",
                "wt",
                "sbp",
                "dbp",
                "hg",
-               "sz",
                "ap",
-               "sdate",
+               "sz",
+               "bm",
                "sg",
+               "sdate",
                "dtime")
 
-Description <- c("Stage of prostate cancer",
-                 "Age of patient in years",
+Description <- c( "Age of patient in years",
                  "Weight Index = wt(kg)-ht(cm)+200",
                  "Systolic Blood Pressure/10",
                  "Diastolic Blood Pressure/10",
                  "Serum Hemoglobin [g/100ml]",
-                 "Size of Primary Tumor [cm^2]",
                  "Serum Prostatic Acid Phosphatase",
-                 "Date of study",
+                 "Size of Primary Tumor [cm^2]",
+                 "The presence of Bone Metastases",
                  "Combined Index of Stage and Hist. Grade",
+                 "Date of study",
                  "Months of Follow-up")
 
-Statistics <- c( " 3 or 4",
-                 "71.51 (48.00 ~ 89.00)", 
+Statistics <- c( "71.51 (48.00 ~ 89.00)", 
                  "98.93 (69.00 ~ 152.00)",
                  "14.35 (8.00 ~ 30.00)",
                  "8.15 (4.00 ~ 18.00)",
                  "13.45 (5.90 ~ 21.20)",
-                 "14.57 (0.00 ~ 69.00)",
                  "12.18 (0.01 ~ 999.88)",
+                 "14.57 (0.00 ~ 69.00)",
+                 "Yes/No",
                  " - ",
                  " - ",
                  " - ")
