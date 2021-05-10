@@ -1,5 +1,7 @@
 ---
-title: "Analysis of prostate cancer data"
+title: "Final Project"
+subtitle: "Analysis of prostate cancer data"
+
 author: "Group 5: Signe Marcussen, Lucille Augusta Green, Guangya Shen, Huijiao Yang"
 date: "11th May 2021"
 output: ioslides_presentation
@@ -39,12 +41,12 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 # Introduction
 
 ## Introduction
-- Prostate cancer data set from Andrews DF and Herzberg AM (1985) 
+- Prostate cancer data set, Andrews DF and Herzberg AM (1985) 
 - Compare four different treatments
 - 502 observations of 18 variables
 - 27 NA values
 
-# Materials | The data set
+# Materials | The Data set
 
 ## The Raw Data set
 ```{r}
@@ -79,13 +81,13 @@ table <- cbind(Variables,
 table %>% 
   kable(caption = "Variables in the data set, 1/2",
         format = "html",
-        col.names = c("Variable Name", 
+        col.names = c("Variable", 
                       "Desription", 
                       "Level / Summary Statistic")) %>% 
   kable_styling("striped", font_size = 13)
 ```
 
-## The Data set
+## The Raw Data set
 ```{r}
 Variables <- c("age",
                "wt",
@@ -129,7 +131,7 @@ table <- cbind(Variables,
 table %>% 
   kable(caption = "Variables in the data set, 2/2",
         format = "html",
-        col.names = c("Variable Name", 
+        col.names = c("Variable", 
                       "Desription", 
                       "Level / Summary Statistic")) %>% 
   kable_styling("striped", 
@@ -152,6 +154,7 @@ table %>%
   + <font size="3">age_group = forming two age groups young/old based on the mean </font>
   + <font size="3">acid_phosphatase_log = log transforming the *acid phosphatase* </font>
  
+## Methods | Visualization of pre-treatment variables
 
 ## Methods | Visualization of pre-treatment variables - Numeric
 
