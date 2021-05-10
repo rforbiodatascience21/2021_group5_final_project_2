@@ -13,19 +13,18 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
+prostate_data_pca <- read_tsv(file = "data/03_prostate_data_pca.tsv.gz")
 load(file = "results/06_mdl_pca_fit.RData")
-prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-prostate_data_pca <- prostate_clean_aug %>%
-  select(-where(is.character), 
-         -patient_ID,
-         -treatment_mg,
-         -acid_phosphatase_log) %>% 
+prostate_data_pca <- prostate_data_pca %>%
   mutate(outcome = factor(outcome),
          performance_lvl = factor(performance_lvl),
-         EKG_lvl = factor(EKG_lvl)) %>%
+         EKG_lvl = factor(EKG_lvl),
+         stage = factor(stage),
+         CVD = factor(CVD),
+         bone_mets = factor(bone_mets))
   drop_na()
 
 
@@ -105,7 +104,7 @@ nc <- NbClust(points,
               method = "kmeans")
 p4 <- nc %>%
   pluck("All.index") %>%
-  as.tibble() %>%
+  as_tibble() %>%
   select(CCC) %>%
   ggplot(aes(y = CCC, 
              x = c(2,3,4,5,6))) +
