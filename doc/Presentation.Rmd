@@ -23,23 +23,18 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 
 ## Outline
-#### Introduction
+- Introduction
 
-#### Materials
-- <font size="3">Description of data set</font> 
+- Materials
+  + <font size="3">Description of data set</font> 
 
-#### Methods
-- <font size="3">Data cleaning and wrangling</font>
-- <font size="3">Vizualization</font>
-- <font size="3">Modelling</font>
+- Methods
+  + <font size="3">Data wrangling, visualization and modelling</font>
 
-#### Results 
-- <font size="3">Data visualization</font>
-- <font size="3">Logistic regression</font>
-- <font size="3">PCA</font>
-- <font size="3">K-means clustering</font>
+- Results 
 
-#### Discussion and Conclusion
+- Discussion and Conclusion
+
 
 # Introduction
 
@@ -143,7 +138,7 @@ table %>%
 
 # Methods
 
-## Methods, Data cleaning and wrangling
+## Methods - Data cleaning and wrangling
 #### **Raw data to Clean data**
 * Exclude *dtime*, *sdate* and *sg*
 * Renaming variables 
