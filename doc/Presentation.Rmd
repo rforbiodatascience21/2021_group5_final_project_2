@@ -261,10 +261,6 @@ include_graphics(here("results/07_plot_kmeans_CCC.png"))
 - Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
 - Most effective treatment is 1.0 mg estrogen
 - Significant variables are tumor size, CVD, age, and weight index
-- Based on PCA, bone_mets,tumor_size and stage have strongly corralation.
-- CVD and hemglobin, dbp and sbp have relationship separately 
-- and they both have relationship with weight_index. 
-- Therefore, the reason resulting in dealth could have 3 class:healthy situation, cancer and age. 
-- If the treatment is helpful to improve surval, it is unclear.
+
 
 
