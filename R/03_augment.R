@@ -74,6 +74,20 @@ prostate_clean_aug <- prostate_clean_aug %>%
   relocate(acid_phosphatase_log, 
            .after = acid_phosphatase)
 
+
+############################
+## Data for visualization ##
+############################
+
+# Renaming some of the binary values 
+prostate_data_visualize <- prostate_clean_aug %>%
+  mutate(outcome = case_when(outcome == 0 ~ "Alive",
+                             outcome == 1 ~ "Dead"),
+         CVD = case_when(CVD == 0 ~ "No",
+                         CVD == 1 ~ "Yes"),
+         bone_mets = case_when(bone_mets == 0 ~ "No",
+                               bone_mets == 1 ~ "Yes"))
+
 ##################################
 ## Data for logistic regression ##
 ##################################
@@ -83,7 +97,7 @@ prostate_data_logistic <- prostate_clean_aug %>%
          -patient_ID, 
          -performance_lvl,
          -acid_phosphatase) %>% 
-  drop_na
+  drop_na()
 
 ##############################
 ## Data for PCA and K-means ##
@@ -98,10 +112,11 @@ prostate_data_pca <- prostate_clean_aug %>%
 
 
 
-
 # Write data --------------------------------------------------------------
 write_tsv(x = prostate_clean_aug,
           file = "data/03_prostate_clean_aug.tsv.gz")
+write_tsv(x = prostate_data_visualize,
+          file = "data/03_prostate_data_visualize.tsv.gz")
 write_tsv(x = prostate_data_logistic,
           file = "data/03_prostate_data_logistic.tsv.gz")
 write_tsv(x = prostate_data_pca,

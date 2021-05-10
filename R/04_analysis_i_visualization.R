@@ -14,21 +14,10 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
+prostate_data_visualize <- read_tsv(file = "data/03_prostate_data_visualize.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
-
-# Renaming some of the binary values 
-prostate_clean_aug <- prostate_clean_aug %>%
-  mutate(outcome = case_when(outcome == 0 ~ "Alive",
-                             outcome == 1 ~ "Dead"),
-         CVD = case_when(CVD == 0 ~ "No",
-                         CVD == 1 ~ "Yes"),
-         bone_mets = case_when(bone_mets == 0 ~ "No",
-                               bone_mets == 1 ~ "Yes"))
-
-# Factorizing variables and adding levels 
-prostate_clean_aug <- prostate_clean_aug %>%
+prostate_data_visualize <- prostate_data_visualize %>%
   mutate(bone_mets = factor(bone_mets),
          CVD = factor(CVD),
          treatment = factor(treatment),
@@ -49,8 +38,18 @@ prostate_clean_aug <- prostate_clean_aug %>%
                                  "recent MI")),
          EKG_lvl = factor(EKG_lvl))
 
-  
-# Creating a variable with real names for the variables 
+# Pivot longer for using facet_wrap to plot several distributions in one plot 
+prostate_data_visualize_long <- prostate_data_visualize %>% 
+  select(where(is.numeric), 
+         stage,
+         -treatment_mg, 
+         -acid_phosphatase) %>% 
+  pivot_longer(cols = c(-patient_ID, 
+                        -stage), 
+               names_to = "variables", 
+               values_to = "values")
+
+# Creating a vector with real names for the variables 
 variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "age" = "Age [years]",
                      "age_group" = "Age Group",
@@ -65,17 +64,6 @@ variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
                      "performance_lvl" = "Performance level", 
                      "bone_mets" = "Bone Metastases",
                      "CVD" = "History of Cardiovascular Disease")
-
-# Pivot longer for using facet_wrap to plot several distributions in one plot 
-prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(stage, 
-         where(is.numeric), 
-         -treatment_mg, 
-         -acid_phosphatase) %>% 
-  pivot_longer(cols = c(-patient_ID, 
-                        -stage), 
-               names_to = "variables", 
-               values_to = "values")
 
 
 # Visualize data ----------------------------------------------------------
