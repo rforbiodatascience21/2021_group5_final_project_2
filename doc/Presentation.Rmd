@@ -85,7 +85,7 @@ table %>%
   kable_styling("striped", font_size = 13)
 ```
 
-## The Data set
+## The Raw Data set
 ```{r}
 Variables <- c("age",
                "wt",
