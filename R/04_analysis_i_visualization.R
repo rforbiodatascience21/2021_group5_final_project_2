@@ -73,7 +73,7 @@ variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
 ########################################
 
 # Distribution plot for the numeric variables stratified on "stage" 
-plot1 <- ggplot(prostate_clean_aug_longer, 
+plot1 <- ggplot(prostate_data_visualize_long, 
        mapping = aes(values, 
                      fill = stage)) +
   geom_density(alpha = 0.6) +
@@ -98,7 +98,7 @@ plot1 <- ggplot(prostate_clean_aug_longer,
 
 # Distribution of the categorical variables stratified on "stage" 
 # CVD, bone_mets, performance, EKG
-plot2 <- prostate_clean_aug %>%
+plot2 <- prostate_data_visualize %>%
   select(patient_ID, 
          stage, 
          CVD, 
@@ -131,7 +131,7 @@ plot2 <- prostate_clean_aug %>%
 
 
 # Heatmap of correlations between the numeric variables
-plot3 <- prostate_clean_aug %>% 
+plot3 <- prostate_data_visualize %>% 
   select(where(is.numeric), 
          -patient_ID, 
          -treatment_mg, 
@@ -149,7 +149,7 @@ plot3 <- prostate_clean_aug %>%
 
 # Overall distribution plot, for numeric value
 # NOT TO BE USED FOR PRESENTATION
-prostate_clean_aug %>%
+prostate_data_visualize %>%
   select(where(is.numeric), 
          outcome, 
          -patient_ID, 
@@ -175,7 +175,7 @@ prostate_clean_aug %>%
 
 # NOT USED FOR PRESENTATION
 
-p03 <- prostate_clean_aug %>% 
+p03 <- prostate_data_visualize %>% 
   ggplot(mapping = aes(tumor_size,
                        fill = status)) +
   geom_histogram(binwidth = 5) +
@@ -183,7 +183,7 @@ p03 <- prostate_clean_aug %>%
   scale_color_economist() + 
   scale_fill_economist()
 
-p04 <- prostate_clean_aug %>% 
+p04 <- prostate_data_visualize %>% 
     ggplot(mapping = aes(tumor_size,
                          fill = outcome)) +
     geom_histogram(binwidth = 5) +
@@ -198,7 +198,7 @@ p03 / p04
 
 # Looking at the number of observations within each status-group 
 # additionally we see that the majority of the dead people are 'old'
-prostate_clean_aug %>% 
+prostate_data_visualize %>% 
   drop_na() %>% 
   ggplot(mapping = aes(status,
                        fill = age_group)) +
@@ -209,7 +209,7 @@ prostate_clean_aug %>%
 
 #OR 
 
-prostate_clean_aug %>% 
+prostate_data_visualize %>% 
   ggplot(mapping = aes(status,
                        fill = outcome)) +
   geom_bar(show.legend = FALSE)+
@@ -225,7 +225,7 @@ prostate_clean_aug %>%
 ######################################
 
 ## Distribution of alive/dead
-p05 <- prostate_clean_aug %>%   
+p05 <- prostate_data_visualize %>%   
   ggplot(mapping = aes(outcome,
                        color = outcome,
                        fill = outcome)) +
@@ -238,7 +238,7 @@ p05 <- prostate_clean_aug %>%
   scale_fill_economist()
 
 ## Histogram of treatment for alive/dead stratified on age_group
-p06 <- prostate_clean_aug %>% 
+p06 <- prostate_data_visualize %>% 
   drop_na() %>%  
   ggplot(mapping = aes(treatment,
                      fill = age_group)) +
@@ -275,7 +275,7 @@ plot5 <- p05 + p06 +
 #############################################################################
 
 ## Plot 8
-p1 <- prostate_clean_aug %>% 
+p1 <- prostate_data_visualize %>% 
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(age,
                        color = outcome)) +
@@ -285,7 +285,7 @@ p1 <- prostate_clean_aug %>%
   theme_minimal() +
   scale_color_economist()
 
-p2 <- prostate_clean_aug %>% 
+p2 <- prostate_data_visualize %>% 
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(weight_index,
                        color = outcome)) +
@@ -295,7 +295,7 @@ p2 <- prostate_clean_aug %>%
   theme_minimal() +
   scale_color_economist()
 
-p3 <- prostate_clean_aug %>% 
+p3 <- prostate_data_visualize %>% 
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(tumor_size,
                        color = outcome)) +
@@ -305,7 +305,7 @@ p3 <- prostate_clean_aug %>%
   theme_minimal() +
   scale_color_economist()
 
-p4 <- prostate_clean_aug %>% 
+p4 <- prostate_data_visualize %>% 
   filter(treatment_mg == 1.0) %>% 
   ggplot(mapping = aes(CVD,
                        fill = outcome)) +

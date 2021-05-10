@@ -24,7 +24,7 @@ prostate_data_pca <- prostate_data_pca %>%
          EKG_lvl = factor(EKG_lvl),
          stage = factor(stage),
          CVD = factor(CVD),
-         bone_mets = factor(bone_mets))
+         bone_mets = factor(bone_mets)) %>% 
   drop_na()
 
 
