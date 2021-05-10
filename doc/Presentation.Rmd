@@ -39,8 +39,7 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - <font size="3">PCA</font>
 - <font size="3">K-means clustering</font>
 
-#### Discussion and conclusion
-
+#### Discussion and Conclusion
 
 # Introduction
 
@@ -50,15 +49,10 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - 502 observations of 18 variables
 - 27 NA values
 
-<<<<<<< HEAD
+# Materials | The data set
 
-# Materials
-
-## Materials | The data set
-=======
-## Introduction
+## The Data set
 ```{r}
-#Non-numeric table 
 Variables <- c("patient_ID", 
                "treatment", 
                "status", 
@@ -75,7 +69,7 @@ Description <- c("Patient number",
                  "History of Cardiovascular Disease", 
                  "Electrocardiography")
 
-Levels <- c(" ",
+Levels <- c("-",
             "Placebo, 0.2 mg, 1.0 mg, 5.0 mg",
             "alive, dead - prostatic ca, dead - heart or vascular, dead - cerebrovascular, dead - pulmonary embolus, dead - other ca, dead - respiratory disease, dead - other specific non-ca, dead - unspecified non-ca, dead - unknown cause",
             "normal activity, in bed < 50% daytime, in bed > 50% daytime, confined to bed",
@@ -88,17 +82,16 @@ table <- cbind(Variables,
                Levels)
 
 table %>% 
-  kable(caption = "Non-numeric Variables in the data set", 
-             format = "html") %>% 
+  kable(caption = "Variables in the data set, 1/2",
+        format = "html",
+        col.names = c("Variable Name", 
+                      "Desription", 
+                      "Level / Summary Statistic")) %>% 
   kable_styling("striped", font_size = 13)
->>>>>>> 14da71bb52ecae56270a2d2509fd21044acbe2d6
-
 ```
 
-<<<<<<< HEAD
-## Numeric Variables in the data set
+## The Data set
 ```{r}
-#Numeric table 
 Variables <- c("stage",
                "age",
                "weight_index",
@@ -106,7 +99,10 @@ Variables <- c("stage",
                "dbp",
                "hemoglobin",
                "tumor_size",
-               "acid_phosphatase")
+               "acid_phosphatase",
+               "sdate",
+               "sg",
+               "dtime")
 
 Description <- c("Stage of prostate cancer",
                  "Age of patient in years",
@@ -115,49 +111,48 @@ Description <- c("Stage of prostate cancer",
                  "Diastolic Blood Pressure/10",
                  "Serum Hemoglobin [g/100ml]",
                  "Size of Primary Tumor [cm^2]",
-                 "Serum Prostatic Acid Phosphatase")
-Statistics <- c( " ",
+                 "Serum Prostatic Acid Phosphatase",
+                 "Date of study",
+                 "Combined Index of Stage and Hist. Grade",
+                 "Months of Follow-up")
+
+Statistics <- c( " 3 or 4",
                  "71.51 (48.00 ~ 89.00)", 
                  "98.93 (69.00 ~ 152.00)",
                  "14.35 (8.00 ~ 30.00)",
                  "8.15 (4.00 ~ 18.00)",
                  "13.45 (5.90 ~ 21.20)",
                  "14.57 (0.00 ~ 69.00)",
-                 "12.18 (0.01 ~ 999.88)")
-=======
-### Numeric Variables in the data set | Continuous  variables
-- wt(Weight Index = wt(kg)-ht(cm)+200): 98.93(69.00 ~ 152.00)
-- sbp(Systolic Blood Pressure/10): 14.35(8.00 ~ 30.00)
-- dbp(Diastolic Blood Pressure/10): 8.15(4.00 ~ 18.00)
-- hg(Serum Hemoglobin (g/100ml)): 13.45(5.90 ~ 21.20)
-- sz(Size of Primary Tumor (cm^2)): 14.57(0.00 ~ 69.00)
-- ap(Serum Prostatic Acid Phosphatase): 12.18(0.01 ~ 999.88)
-- bm(Bone Metastases): 0.16(0.00 ~ 1.00)
-- age(Age in years): 71.51(48.00 ~ 89.00)
->>>>>>> 4ade70261e8c2e960fd3866dbffd89801a0b295e
+                 "12.18 (0.01 ~ 999.88)",
+                 " - ",
+                 " - ",
+                 " - ")
 
 table <- cbind(Variables, 
                Description, 
                Statistics)
-
 table %>% 
-  kable(caption = "Numeric Variables in the data set", 
-             format = "html") %>% 
-  kable_styling("striped", font_size = 13)
-
+  kable(caption = "Variables in the data set, 2/2",
+        format = "html",
+        col.names = c("Variable Name", 
+                      "Desription", 
+                      "Level / Summary Statistic")) %>% 
+  kable_styling("striped", 
+                font_size = 13)
 ```
 
 # Methods
 
 ## Methods | Data cleaning and wrangling
 
-#### Raw data -> Clean data
+#### Raw data to Clean data
 - Exclude dtime, sdate and sg
 - Renaming
 
-#### Clean data -> Augment data
+#### Clean data to Augment data
 - Add five new variables: outcome, treatment_mg, EKG_lvl, performance_lvl, age_group
-
+1. dd
+2. sds 
 
 ## Methods | Visualization of pre-treatment variables - Numeric
 
