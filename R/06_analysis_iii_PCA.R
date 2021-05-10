@@ -22,7 +22,7 @@ prostate_data_pca <- prostate_clean_aug %>%
   select(-where(is.character), 
          -patient_ID,
          -treatment_mg, 
-         -acid_phosphatase) %>% 
+         -acid_phosphatase_log) %>% 
   mutate(outcome = factor(outcome),
          performance_lvl = factor(performance_lvl),
          EKG_lvl = factor(EKG_lvl)) %>%
