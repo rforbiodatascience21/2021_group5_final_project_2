@@ -10,12 +10,11 @@ source(file = "R/99_project_functions.R")
 # Load data and wrangle----------------------------------------------------
 my_data <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
 
-num_data<- my_data %>% select(patient_ID, stage, outcome, age, where(is.numeric), -treatment_mg)
-
-longer_data <- num_data %>% pivot_longer(cols = c(-patient_ID, -stage, -outcome), 
+num_data<- my_data %>% select(patient_ID, stage, outcome, where(is.numeric))%>%drop_na 
+                        
+longer_data <- num_data %>% pivot_longer(cols = c(-patient_ID,-outcome,-stage), 
                             names_to = "variables", 
                             values_to = "values")
-
 # Summary (total)----------------------------------------------------------
 total_table <- longer_data %>% group_by(variables) %>% 
                 summarise(n = n(),
@@ -72,5 +71,9 @@ SummaryByStage_table<- full_join(table_stage3,table_stage4,by="variables")
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = summary_table,
-          file = "data/summary_table")
+write_tsv(x = SummaryByOutcome_table,
+          file = "data/SummaryByOutcome_table.tsv")
+write_tsv(x = SummaryByStage_table,
+          file = "data/SummaryByStage_table.tsv")
+write_tsv(x = total_table,
+          file = "data/total_table.tsv")
