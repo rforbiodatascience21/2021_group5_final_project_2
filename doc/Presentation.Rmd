@@ -57,30 +57,29 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 ## Materials | The data set
 =======
 ## Introduction
-
 ```{r}
 #Non-numeric table 
 Variables <- c("patient_ID", 
-               "stage", 
                "treatment", 
                "status", 
-               "performance", 
+               "performance",
+               "bone_mets",
                "CVD", 
                "EKG" )
 
 Description <- c("Patient number", 
-                 "Stage of prostate cancer", 
                  "Dosage of estrogen treatment in mg", 
                  "Status of the patient, alive or or cause of death", 
-                 "Activity level based on time in bed", 
+                 "Activity level based on time in bed",
+                 "The presence of Bone Metastases",
                  "History of Cardiovascular Disease", 
                  "Electrocardiography")
 
 Levels <- c(" ",
-            "3, 4",
             "Placebo, 0.2 mg, 1.0 mg, 5.0 mg",
             "alive, dead - prostatic ca, dead - heart or vascular, dead - cerebrovascular, dead - pulmonary embolus, dead - other ca, dead - respiratory disease, dead - other specific non-ca, dead - unspecified non-ca, dead - unknown cause",
             "normal activity, in bed < 50% daytime, in bed > 50% daytime, confined to bed",
+            "Yes/No", 
             "Yes/No",
             "normal, benign, rhythmic disturb & electrolyte ch, heart block or conduction def, heart strain, old MI, recent MI")
 
@@ -96,6 +95,36 @@ table %>%
 
 ```
 
+<<<<<<< HEAD
+## Numeric Variables in the data set
+```{r}
+#Numeric table 
+Variables <- c("stage",
+               "age",
+               "weight_index",
+               "sbp",
+               "dbp",
+               "hemoglobin",
+               "tumor_size",
+               "acid_phosphatase")
+
+Description <- c("Stage of prostate cancer",
+                 "Age of patient in years",
+                 "Weight Index = wt(kg)-ht(cm)+200",
+                 "Systolic Blood Pressure/10",
+                 "Diastolic Blood Pressure/10",
+                 "Serum Hemoglobin [g/100ml]",
+                 "Size of Primary Tumor [cm^2]",
+                 "Serum Prostatic Acid Phosphatase")
+Statistics <- c( " ",
+                 "71.51 (48.00 ~ 89.00)", 
+                 "98.93 (69.00 ~ 152.00)",
+                 "14.35 (8.00 ~ 30.00)",
+                 "8.15 (4.00 ~ 18.00)",
+                 "13.45 (5.90 ~ 21.20)",
+                 "14.57 (0.00 ~ 69.00)",
+                 "12.18 (0.01 ~ 999.88)")
+=======
 ### Numeric Variables in the data set | Continuous  variables
 - wt(Weight Index = wt(kg)-ht(cm)+200): 98.93(69.00 ~ 152.00)
 - sbp(Systolic Blood Pressure/10): 14.35(8.00 ~ 30.00)
@@ -105,10 +134,18 @@ table %>%
 - ap(Serum Prostatic Acid Phosphatase): 12.18(0.01 ~ 999.88)
 - bm(Bone Metastases): 0.16(0.00 ~ 1.00)
 - age(Age in years): 71.51(48.00 ~ 89.00)
+>>>>>>> 4ade70261e8c2e960fd3866dbffd89801a0b295e
 
-### Discrete  variables
-- dtime(Months of Follow-up)
+table <- cbind(Variables, 
+               Description, 
+               Statistics)
 
+table %>% 
+  kable(caption = "Numeric Variables in the data set", 
+             format = "html") %>% 
+  kable_styling("striped", font_size = 13)
+
+```
 
 # Methods
 
