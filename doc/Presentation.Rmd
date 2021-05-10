@@ -244,18 +244,19 @@ include_graphics(here("results/07_plot_kmeans_center.png"))
 include_graphics(here("results/07_plot_kmeans_scree.png"))
 ``` 
 
-<<<<<<< HEAD
-## K-means clustering
+## Results | K-means clustering
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/07_plot_kmeans_CCC.png"))
 ``` 
 
-## Results and discussion
-=======
 # Discussion and conclusion
 
-## Discussion and conclusion
->>>>>>> ac5039a8f46c9261629698a2de1ee4dc80d0aac9
+## Discussion
+
+- Include death causes
+- Limitations of the data set
+
+## Conclusion
 
 - Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
 - Most effective treatment is 1.0 mg estrogen
