@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r, echo = FALSE, message = FALSE}
 library("tidyverse")
 library("knitr")
+library("kableExtra")
 library("here") # sets path to top level of the project
 ```
 
@@ -49,19 +50,51 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - 502 observations of 18 variables
 - 27 NA values
 
+<<<<<<< HEAD
 
 # Materials
 
 ## Materials | The data set
+=======
+## Introduction
 
-- patno(Patient Number)
-- stage(two types of prostatic cancer）
-- rx(treatment, placebo or different does of estrogen)
-- status(alive or dead from different causes)
-- pf(Time in bed)
-- hx(History of Cardiovascular Disease, yes or no)
-- ekg(Electrocardiography)
-- sg(Combined Index of Stage and Hist. Grade)
+```{r}
+#Non-numeric table 
+Variables <- c("patient_ID", 
+               "stage", 
+               "treatment", 
+               "status", 
+               "performance", 
+               "CVD", 
+               "EKG" )
+
+Description <- c("Patient number", 
+                 "Stage of prostate cancer", 
+                 "Dosage of estrogen treatment in mg", 
+                 "Status of the patient, alive or or cause of death", 
+                 "Activity level based on time in bed", 
+                 "History of Cardiovascular Disease", 
+                 "Electrocardiography")
+
+Levels <- c(" ",
+            "3, 4",
+            "Placebo, 0.2 mg, 1.0 mg, 5.0 mg",
+            "alive, dead - prostatic ca, dead - heart or vascular, dead - cerebrovascular, dead - pulmonary embolus, dead - other ca, dead - respiratory disease, dead - other specific non-ca, dead - unspecified non-ca, dead - unknown cause",
+            "normal activity, in bed < 50% daytime, in bed > 50% daytime, confined to bed",
+            "Yes/No",
+            "normal, benign, rhythmic disturb & electrolyte ch, heart block or conduction def, heart strain, old MI, recent MI")
+
+table <- cbind(Variables, 
+               Description, 
+               Levels)
+
+table %>% 
+  kable(caption = "Non-numeric Variables in the data set", 
+             format = "html") %>% 
+  kable_styling("striped", font_size = 13)
+>>>>>>> 14da71bb52ecae56270a2d2509fd21044acbe2d6
+
+```
 
 ### Numeric Variables in the data set | Continuous  variables
 - wt(Weight Index = wt(kg)-ht(cm)+200): 98.93(69.00 ~ 152.00)
