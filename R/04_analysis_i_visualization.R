@@ -68,8 +68,7 @@ variables_names <- c("acid_phosphatase_log" = "log(Acid Phosphatase)",
 
 # Pivot longer for using facet_wrap to plot several distributions in one plot 
 prostate_clean_aug_longer <- prostate_clean_aug %>% 
-  select(patient_ID, 
-         stage, 
+  select(stage, 
          where(is.numeric), 
          -treatment_mg, 
          -acid_phosphatase) %>% 
@@ -85,7 +84,6 @@ prostate_clean_aug_longer <- prostate_clean_aug %>%
 ### Plots of pre-treatment variables ###
 ########################################
 
-## Plot 1
 # Distribution plot for the numeric variables stratified on "stage" 
 plot1 <- ggplot(prostate_clean_aug_longer, 
        mapping = aes(values, 
@@ -98,7 +96,8 @@ plot1 <- ggplot(prostate_clean_aug_longer,
   theme_minimal() + 
   theme(legend.position = c(0.85, 
                             0.1),
-        plot.title = element_text(face = "bold", size = 16),
+        plot.title = element_text(face = "bold", 
+                                  size = 16),
         plot.subtitle = element_text(face = "italic")) +
   labs(x = " ", 
        y = "Density",
@@ -109,7 +108,6 @@ plot1 <- ggplot(prostate_clean_aug_longer,
   scale_color_economist()
              
 
-## Plot 2
 # Distribution of the categorical variables stratified on "stage" 
 # CVD, bone_mets, performance, EKG
 plot2 <- prostate_clean_aug %>%
@@ -143,7 +141,7 @@ plot2 <- prostate_clean_aug %>%
        fill = "Stage") +
   scale_fill_economist()
 
-## Plot 3
+
 # Heatmap of correlations between the numeric variables
 plot3 <- prostate_clean_aug %>% 
   select(where(is.numeric), 
@@ -164,36 +162,28 @@ plot3 <- prostate_clean_aug %>%
 # Overall distribution plot, for numeric value
 # NOT TO BE USED FOR PRESENTATION
 prostate_clean_aug %>%
-  select(where(is.numeric), outcome, -patient_ID, -treatment_mg) %>% 
+  select(where(is.numeric), 
+         outcome, 
+         -patient_ID, 
+         -treatment_mg) %>% 
   ggpairs(., mapping = aes(color = outcome), 
-          #columns = c(1:9),
+          columns = c(1:8),
           upper = list(continuous = "blank"),
-          diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
-          lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
+          diag = list(continuous = wrap("densityDiag", 
+                                        alpha=0.3 )),
+          lower = list(continuous = wrap("points", 
+                                         alpha=0.5 ), 
+                       combo = "box_no_facet"),
           axisLabels = "show") +
   theme(legend.position = "bottom") +
   theme_minimal() 
-
-## Same as above, but no color according to a variable.
-prostate_clean_aug %>%
-  select(where(is.numeric), outcome, -patient_ID, -treatment_mg,-stage,-performance_lvl,-EKG_lvl) %>% 
-  ggpairs(., 
-          columns = c(1:7),
-          upper = list(continuous = "blank"),
-          diag = list(continuous = wrap("densityDiag", alpha=0.3 )),
-          lower = list(continuous = wrap("points", alpha=0.5 ), combo = "box_no_facet"),
-          axisLabels = "show") +
-  theme(legend.position = "bottom") +
-  theme_minimal() + 
-  scale_color_economist() + 
-  scale_fill_economist() 
 
 
 ###############################
 ## Plots with status reasons ##
 ###############################
 ## Distribution of tumor size stratified on status with reason
-# Investigating if the tumor size have an affect of death reason
+# Investigating if the tumor size have an effect of death reason
 
 # NOT USED FOR PRESENTATION
 
@@ -246,17 +236,6 @@ prostate_clean_aug %>%
 ### Plots of treatment and outcome ###
 ######################################
 
-## Boxplot of tumor size for each outcome stratified on treatment
-#Lucille - do we need this plot?
-ggplot(data = prostate_clean_aug,
-           mapping = aes(x = tumor_size,
-                         y = outcome, 
-                         fill = treatment)) +
-  geom_boxplot(alpha = 0.5, show.legend = TRUE) +
-  theme_minimal() +
-  scale_color_economist()
-
-## Plot 5A
 ## Distribution of alive/dead
 p05 <- prostate_clean_aug %>%   
   ggplot(mapping = aes(outcome,
@@ -265,14 +244,11 @@ p05 <- prostate_clean_aug %>%
   geom_bar(alpha = 0.1,
            show.legend = FALSE) +
   theme_minimal() +
-  labs( x = "Outcome",
-        y = "Number of cases") +
+  labs(x = "Outcome",
+       y = "Number of cases") +
   scale_color_economist() +
   scale_fill_economist()
 
-
-## Plot 5B
-# I think the below should use "geom_bar(alpha = 0.8, position = "fill")"
 ## Histogram of treatment for alive/dead stratified on age_group
 p06 <- prostate_clean_aug %>% 
   drop_na() %>%  
@@ -289,7 +265,7 @@ p06 <- prostate_clean_aug %>%
        fill = "Age Group") +
   scale_fill_economist()
 
-## Plot 5
+## Plot with both of them
 plot5 <- p05 + p06 +
   plot_annotation(title = "Distribution of Outcome in Relation to Treatment and Age",
                   caption = "Figure A shows the number of patients alive vs. dead.\nFigure B shows the distribution of treatment for each outcome stratified on age group.",
@@ -304,6 +280,7 @@ plot5 <- p05 + p06 +
                                                             hjust = 0,
                                                             size = 10),
                                 plot.tag = element_text(size = 12)))
+
 
 #############################################################################
 ### Plots of significant variables found by logistic regression (dose 1mg) ##
