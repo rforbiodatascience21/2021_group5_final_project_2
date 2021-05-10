@@ -26,10 +26,10 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - Introduction
 
 - Materials
-  + <font size="3">Description of data set</font> 
+  + <font size="4">Description of data set</font> 
 
 - Methods
-  + <font size="3">Data wrangling, visualization and modelling</font>
+  + <font size="4">Data wrangling, visualization and modelling</font>
 
 - Results 
 
@@ -214,24 +214,24 @@ include_graphics(here("results/04_plot_significantVariables.png"))
 ## Results | Principal Component Analysis
 
 ## Results | Principal Component Analysis
-```{r, echo = FALSE, out.width="90%"}
+```{r, echo = FALSE, out.width="80%", fig.align = 'center'}
 include_graphics(here("results/06_plot_PCA_PCcoords.png"))
 ```
 
 ## Results | Principal Component Analysis
-```{r, echo = FALSE, out.width="90%"}
+```{r, echo = FALSE, out.width="70%", fig.align = 'center'}
 include_graphics(here("results/06_plot_PCA_rotation.png"))
 ```
 
 ## Results | Principal Component Analysis
-```{r, echo = FALSE, out.width="80%"}
+```{r, echo = FALSE, out.width="70%", fig.align = 'center'}
 include_graphics(here("results/06_plot_PCA_varExpl.png"))
 ``` 
 
 ## Results | K-means clustering
 
 ## Results | K-means clustering
-```{r, echo = FALSE, out.width="100%"}
+```{r, echo = FALSE, out.width="100%", fig.align = 'center'}
 include_graphics(here("results/07_plot_kmeans_center.png"))
 ``` 
 
