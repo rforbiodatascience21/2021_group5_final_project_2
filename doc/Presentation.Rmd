@@ -51,15 +51,15 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 # Materials | The data set
 
-## The Data set
+## The Raw Data set
 ```{r}
-Variables <- c("patient_ID", 
-               "treatment", 
+Variables <- c("patno", 
+               "rx", 
                "status", 
-               "performance",
-               "bone_mets",
-               "CVD", 
-               "EKG" )
+               "pf",
+               "bm",
+               "hx", 
+               "ekg" )
 
 Description <- c("Patient number", 
                  "Dosage of estrogen treatment in mg", 
@@ -94,12 +94,12 @@ table %>%
 ```{r}
 Variables <- c("stage",
                "age",
-               "weight_index",
+               "wt",
                "sbp",
                "dbp",
-               "hemoglobin",
-               "tumor_size",
-               "acid_phosphatase",
+               "hg",
+               "sz",
+               "ap",
                "sdate",
                "sg",
                "dtime")
@@ -143,16 +143,19 @@ table %>%
 
 # Methods
 
-## Methods | Data cleaning and wrangling
+## Methods, Data cleaning and wrangling
+#### **Raw data to Clean data**
+* Exclude *dtime*, *sdate* and *sg*
+* Renaming variables 
 
-#### Raw data to Clean data
-- Exclude dtime, sdate and sg
-- Renaming
-
-#### Clean data to Augment data
-- Add five new variables: outcome, treatment_mg, EKG_lvl, performance_lvl, age_group
-1. dd
-2. sds 
+#### **Clean data to Augment data**
+* Add five new variables: 
+  + <font size="4">outcome = mutating *status* into alive vs dead</font> 
+  + <font size="4">treatment_mg = making a numeric variable by removing string </font>
+  + <font size="4">EKG_lvl = creating a factorized variable with the levels in numbers </font>
+  + <font size="4">performance_lvl = creating a factorized variable with the levels in numbers </font>
+  + <font size="4">age_group = forming two age groups young/old based on the mean </font>
+ 
 
 ## Methods | Visualization of pre-treatment variables - Numeric
 
