@@ -121,7 +121,6 @@ table %>%
 #### Clean data -> Augment data
 - Add five new variables: outcome, treatment_mg, EKG_lvl, performance_lvl, age_group
 
-# Materials and Methods
 
 ## Methods | Visualization of pre-treatment variables - Numeric
 
