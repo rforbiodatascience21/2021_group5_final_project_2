@@ -245,16 +245,19 @@ include_graphics(here("results/07_plot_kmeans_scree.png"))
 include_graphics(here("results/07_plot_kmeans_CCC.png"))
 ``` 
 
-# Discussion and conclusion
+# Discussion and Conclusion
 
 ## Discussion
 
-- Include death causes
-- Limitations of the data set
+- Include death causes, not only analysis outcome as a binary variable 
+
+- Limitations of the data set: 
+  + There is no correlation between the variables.
+  + Measurements *before* and *after* treatment might make it easier distinguish between classes.
 
 ## Conclusion
 
-- Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
+- Stage 3 and 4 patients differ in tumor size and Acid Phosphatase levels
 - Most effective treatment is 1.0 mg estrogen
 - Significant variables are tumor size, CVD, age, and weight index
 
