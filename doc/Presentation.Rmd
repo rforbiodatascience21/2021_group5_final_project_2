@@ -156,6 +156,11 @@ include_graphics(here("results/07_plot_kmeans_center.png"))
 include_graphics(here("results/07_plot_kmeans_scree.png"))
 ``` 
 
+## K-means clustering
+```{r, echo = FALSE, out.width="100%"}
+include_graphics(here("results/07_plot_kmeans_CCC.png"))
+``` 
+
 ## Results and discussion
 
 - Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
