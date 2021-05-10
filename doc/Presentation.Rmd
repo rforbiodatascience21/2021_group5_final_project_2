@@ -155,6 +155,7 @@ table %>%
   + <font size="3">EKG_lvl = creating a factorized variable with the levels in numbers </font>
   + <font size="3">performance_lvl = creating a factorized variable with the levels in numbers </font>
   + <font size="3">age_group = forming two age groups young/old based on the mean </font>
+  + <font size="3">acid_phosphatase_log = log transforming the *acid phosphatase* </font>
  
 
 ## Methods | Visualization of pre-treatment variables - Numeric
