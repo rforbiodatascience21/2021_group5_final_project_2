@@ -43,12 +43,29 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - 502 observations of 18 variables
 - 27 NA values
 
-## Introduction | Variables in the data set
-##### -Non-numeric
-patno(Patient Number), stage(two types of prostatic cancer), rx(treatment, placebo or different does of estrogen), status(alive or dead from different causes), pf(Time in bed), hx(History of Cardiovascular Disease, yes or no), ekg(Electrocardiography), sg(Combined Index of Stage and Hist. Grade)
+## Introduction | Non-numeric Variables in the data set
 
-##### -Numeric
-dtime(Months of Follow-up), age(Age in years), wt(Weight Index, = wt(kg)-ht(cm)+200), sbp(Systolic Blood Pressure/10), dbp(Diastolic Blood Pressure/10), hg(Serum Hemoglobin (g/100ml)), sz(Size of Primary Tumor (cm^2)), ap(Serum Prostatic Acid Phosphatase), bm(Bone Metastases)
+- patno(Patient Number)
+- stage(two types of prostatic cancer）
+- rx(treatment, placebo or different does of estrogen)
+- status(alive or dead from different causes)
+- pf(Time in bed)
+- hx(History of Cardiovascular Disease, yes or no)
+- ekg(Electrocardiography)
+- sg(Combined Index of Stage and Hist. Grade)
+
+## Numeric Variables in the data set | Continuous  variables
+- wt(Weight Index = wt(kg)-ht(cm)+200): 98.93(69.00 ~ 152.00)
+- sbp(Systolic Blood Pressure/10): 14.35(8.00 ~ 30.00)
+- dbp(Diastolic Blood Pressure/10): 8.15(4.00 ~ 18.00)
+- hg(Serum Hemoglobin (g/100ml)): 13.45(5.90 ~ 21.20)
+- sz(Size of Primary Tumor (cm^2)): 14.57(0.00 ~ 69.00)
+- ap(Serum Prostatic Acid Phosphatase): 12.18(0.01 ~ 999.88)
+- bm(Bone Metastases): 0.16(0.00 ~ 1.00)
+- age(Age in years): 71.51(48.00 ~ 89.00)
+
+### Discrete  variables
+- dtime(Months of Follow-up)
 
 
 ## Data wrangling
@@ -85,8 +102,6 @@ include_graphics(here("results/04_plot_preTreatHeatmap.png"))
 ```{r, echo = FALSE, out.width="90%", fig.align = "center"}
 include_graphics(here("results/04_plot_OutcomeTreatment.png"))
 ```
-
-## Logistic regression
 
 ## Logistic regression | Model outcome as function of treatment
 
