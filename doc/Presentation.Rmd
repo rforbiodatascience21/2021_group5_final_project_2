@@ -263,3 +263,4 @@ include_graphics(here("results/07_plot_kmeans_CCC.png"))
 - Significant variables are tumor size, CVD, age, and weight index
 
 
+
