@@ -15,18 +15,16 @@ source(file = "R/99_project_functions.R")
 
 # Load data ---------------------------------------------------------------
 prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
-
+prostate_data_pca <- read_tsv(file = "data/03_prostate_data_pca.tsv.gz")
 
 # Wrangle data ------------------------------------------------------------
-prostate_data_pca <- prostate_clean_aug %>%
-  select(-where(is.character), 
-         -patient_ID,
-         -treatment_mg, 
-         -acid_phosphatase_log) %>% 
+prostate_data_pca <- prostate_data_pca %>%
   mutate(outcome = factor(outcome),
          performance_lvl = factor(performance_lvl),
-         EKG_lvl = factor(EKG_lvl)) %>%
-  drop_na()
+         EKG_lvl = factor(EKG_lvl),
+         stage = factor(stage),
+         CVD = factor(CVD),
+         bone_mets = factor(bone_mets))
 
 # Model data --------------------------------------------------------------
 
@@ -75,8 +73,8 @@ p2 <- pca_fit %>%
   geom_text_repel(
     aes(label = column),
     color = "#3399FF") +
-  xlim(-0.6,0.5) + 
-  ylim(-0.7,0.2) +
+  xlim(-1,1) + 
+  ylim(-1,1) +
   coord_fixed() + # fix aspect ratio to 1:1
   theme_minimal_grid(10) + 
   labs(x = "PC1", 
@@ -94,7 +92,7 @@ p2
 ## Plot of variance explained by first 5 PCs
 p3 <- pca_fit %>%
   tidy(matrix = "eigenvalues") %>%
-  filter(percent > 0.085) %>% 
+  filter(percent > 0.11) %>% 
   ggplot(mapping = aes(PC, percent)) +
   geom_col(fill = "#3399FF", 
            alpha = 0.8) +

@@ -12,19 +12,16 @@ source(file = "R/99_project_functions.R")
 
 # Load data ---------------------------------------------------------------
 prostate_clean_aug <- read_tsv(file = "data/03_prostate_clean_aug.tsv.gz")
+prostate_data_logistic <- read_tsv(file = "data/03_prostate_data_logistic.tsv.gz")
 
 
 # Wrangle data ------------------------------------------------------------
-prostate_data_logi <- prostate_clean_aug %>% 
-  select(-where(is.character), 
-         -patient_ID, 
-         -performance_lvl,
-         -acid_phosphatase) %>% 
-  drop_na %>% 
+prostate_data_logistic <- prostate_data_logistic %>% 
   mutate(treatment_mg = factor(treatment_mg))
 
-## Subset data according to most significant treatment (1 mg) and create long nested version
-prostate_1mg_long_nest <- prostate_data_logi %>% 
+## Subset data according to most significant treatment (1 mg) and create 
+## long nested version
+prostate_1mg_long_nest <- prostate_data_logistic %>% 
   filter(treatment_mg == 1) %>% 
   select(-treatment_mg) %>% 
   pivot_longer(cols = -outcome, 
@@ -34,11 +31,10 @@ prostate_1mg_long_nest <- prostate_data_logi %>%
   nest() %>%
   ungroup()
 
-
 # Model data --------------------------------------------------------------
 
 ## Logistic regression based on treatments to find significant treatment dose
-log_mod_treatment <- prostate_data_logi %>% 
+log_mod_treatment <- prostate_data_logistic %>% 
   glm(outcome ~ treatment_mg,
       data = .,
       family = binomial(link = "logit")) %>% 
