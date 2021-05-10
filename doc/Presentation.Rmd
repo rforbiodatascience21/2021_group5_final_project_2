@@ -22,28 +22,37 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 
 ## Outline
-### Introduction
-- Presentation of data
-- Data wrangling
+#### Introduction
 
-### Materials and Methods
-- Data visualization
-- Logistic regression
-- Principal Component Analysis
-- K-means clustering
+#### Materials
+- <font size="3">Description of data set</font> 
 
-### Results and discussion
+#### Methods
+- <font size="3">Data cleaning and wrangling</font>
+- <font size="3">Vizualization</font>
+- <font size="3">Modelling</font>
+
+#### Results 
+- <font size="3">Data visualization</font>
+- <font size="3">Logistic regression</font>
+- <font size="3">PCA</font>
+- <font size="3">K-means clustering</font>
+
+#### Discussion and conclusion
 
 
 # Introduction
 
-## Introduction | Introduction
-- Byar & Greene prostate cancer data, from Andrews DF and Herzberg AM (1985) 
+## Introduction
+- Prostate cancer data set from Andrews DF and Herzberg AM (1985) 
 - Compare four different treatments
 - 502 observations of 18 variables
 - 27 NA values
 
-## Introduction | Non-numeric Variables in the data set
+
+# Materials
+
+## Materials | The data set
 
 - patno(Patient Number)
 - stage(two types of prostatic cancer）
@@ -54,7 +63,7 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - ekg(Electrocardiography)
 - sg(Combined Index of Stage and Hist. Grade)
 
-## Numeric Variables in the data set | Continuous  variables
+### Numeric Variables in the data set | Continuous  variables
 - wt(Weight Index = wt(kg)-ht(cm)+200): 98.93(69.00 ~ 152.00)
 - sbp(Systolic Blood Pressure/10): 14.35(8.00 ~ 30.00)
 - dbp(Diastolic Blood Pressure/10): 8.15(4.00 ~ 18.00)
@@ -68,7 +77,9 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 - dtime(Months of Follow-up)
 
 
-## Data wrangling
+# Methods
+
+## Methods | Data cleaning and wrangling
 
 #### Raw data -> Clean data
 - Exclude dtime, sdate and sg
@@ -79,84 +90,96 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 # Materials and Methods
 
-## Data visualization | Pre-treatment variables - Numeric
+## Methods | Visualization of pre-treatment variables - Numeric
 
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_preTreatContinuous.png"))
 ```
 
-## Data visualization | Pre-treatment variables - Categorical
+## Methods | Visualization of pre-treatment variables - Categorical
 
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_preTreatCategorical.png"))
 ```
 
-## Data visualization | Pre-treatment variables - Heatmap
+## Methods | Visualization of pre-treatment variables - Heatmap
 
 ```{r, echo = FALSE, out.width="70%", fig.align = "center"}
 include_graphics(here("results/04_plot_preTreatHeatmap.png"))
 ```
 
-## Data visualization | Treatment, outcome and age
+## Methods | Modelling
+
+- Logistic regression
+- PCA
+- K-means clustering
+
+
+# Results
+
+## Results | Treatment, outcome and age
 
 ```{r, echo = FALSE, out.width="90%", fig.align = "center"}
 include_graphics(here("results/04_plot_OutcomeTreatment.png"))
 ```
 
-## Logistic regression | Model outcome as function of treatment
+## Results | Logistic model - Outcome as function of treatment
 
 Output:
 ```{r, echo = TRUE}
 log_mod_treatment
 ```
 
-## Logistic regression for each variable | Treatment 1.0 mg
+## Results | Logistic model for each variable - Treatment = 1.0 mg
 
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/05_plot_Manhattan.png"))
 ```
 
-## Logistic regression | Effects of significant variables for treatment 1.0 mg
+## Results | Logistic model for each variable - Treatment = 1.0 mg
   
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/05_plot_CIeffects.png"))
 ```
 
-## Logistic regression | Distribution of significant variables for each outcome
+## Results | Distribution of significant variables for each outcome
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_significantVariables.png"))
 ```
 
-## Principal Component Analysis
 
-## Principal Component Analysis
+## Results | Principal Component Analysis
+
+## Results | Principal Component Analysis
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/06_plot_PCA_PCcoords.png"))
 ```
 
-## Principal Component Analysis
+## Results | Principal Component Analysis
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/06_plot_PCA_rotation.png"))
 ```
 
-## Principal Component Analysis
+## Results | Principal Component Analysis
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/06_plot_PCA_varExpl.png"))
 ``` 
 
-## K-means clustering
+## Results | K-means clustering
 
-## K-means clustering
+## Results | K-means clustering
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/07_plot_kmeans_center.png"))
 ``` 
 
-## K-means clustering
+## Results | K-means clustering
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/07_plot_kmeans_scree.png"))
 ``` 
 
-## Results and discussion
+# Discussion and conclusion
+
+## Discussion and conclusion
 
 - Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
 - Most effective treatment is 1.0 mg estrogen
