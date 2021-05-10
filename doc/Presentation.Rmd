@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r, echo = FALSE, message = FALSE}
 library("tidyverse")
 library("knitr")
+library("kableExtra")
 library("here") # sets path to top level of the project
 ```
 
@@ -22,146 +23,239 @@ log_mod_treatment <- read_tsv(file = here("results/log_mod_treatment.tsv.gz"))
 
 
 ## Outline
-### Introduction
-- Presentation of data
-- Data wrangling
+#### Introduction
 
-### Materials and Methods
-- Data visualization
-- Logistic regression
-- Principal Component Analysis
-- K-means clustering
+#### Materials
+- <font size="3">Description of data set</font> 
 
-### Results and discussion
+#### Methods
+- <font size="3">Data cleaning and wrangling</font>
+- <font size="3">Vizualization</font>
+- <font size="3">Modelling</font>
 
+#### Results 
+- <font size="3">Data visualization</font>
+- <font size="3">Logistic regression</font>
+- <font size="3">PCA</font>
+- <font size="3">K-means clustering</font>
+
+#### Discussion and Conclusion
 
 # Introduction
 
-## Introduction | Introduction
-- Byar & Greene prostate cancer data, from Andrews DF and Herzberg AM (1985) 
+## Introduction
+- Prostate cancer data set from Andrews DF and Herzberg AM (1985) 
 - Compare four different treatments
 - 502 observations of 18 variables
 - 27 NA values
 
-## Introduction | Non-numeric Variables in the data set
+# Materials | The data set
 
-- patno(Patient Number)
-- stage(two types of prostatic cancer）
-- rx(treatment, placebo or different does of estrogen)
-- status(alive or dead from different causes)
-- pf(Time in bed)
-- hx(History of Cardiovascular Disease, yes or no)
-- ekg(Electrocardiography)
-- sg(Combined Index of Stage and Hist. Grade)
+## The Raw Data set
+```{r}
+Variables <- c("patno", 
+               "rx", 
+               "status", 
+               "pf",
+               "bm",
+               "hx", 
+               "ekg" )
 
-## Numeric Variables in the data set | Continuous  variables
-- wt(Weight Index = wt(kg)-ht(cm)+200): 98.93(69.00 ~ 152.00)
-- sbp(Systolic Blood Pressure/10): 14.35(8.00 ~ 30.00)
-- dbp(Diastolic Blood Pressure/10): 8.15(4.00 ~ 18.00)
-- hg(Serum Hemoglobin (g/100ml)): 13.45(5.90 ~ 21.20)
-- sz(Size of Primary Tumor (cm^2)): 14.57(0.00 ~ 69.00)
-- ap(Serum Prostatic Acid Phosphatase): 12.18(0.01 ~ 999.88)
-- bm(Bone Metastases): 0.16(0.00 ~ 1.00)
-- age(Age in years): 71.51(48.00 ~ 89.00)
+Description <- c("Patient number", 
+                 "Dosage of estrogen treatment in mg", 
+                 "Status of the patient, alive or or cause of death", 
+                 "Activity level based on time in bed",
+                 "The presence of Bone Metastases",
+                 "History of Cardiovascular Disease", 
+                 "Electrocardiography")
 
-### Discrete  variables
-- dtime(Months of Follow-up)
+Levels <- c("-",
+            "Placebo, 0.2 mg, 1.0 mg, 5.0 mg",
+            "alive, dead - prostatic ca, dead - heart or vascular, dead - cerebrovascular, dead - pulmonary embolus, dead - other ca, dead - respiratory disease, dead - other specific non-ca, dead - unspecified non-ca, dead - unknown cause",
+            "normal activity, in bed < 50% daytime, in bed > 50% daytime, confined to bed",
+            "Yes/No", 
+            "Yes/No",
+            "normal, benign, rhythmic disturb & electrolyte ch, heart block or conduction def, heart strain, old MI, recent MI")
 
+table <- cbind(Variables, 
+               Description, 
+               Levels)
 
-## Data wrangling
+table %>% 
+  kable(caption = "Variables in the data set, 1/2",
+        format = "html",
+        col.names = c("Variable Name", 
+                      "Desription", 
+                      "Level / Summary Statistic")) %>% 
+  kable_styling("striped", font_size = 13)
+```
 
-#### Raw data -> Clean data
-- Exclude dtime, sdate and sg
-- Renaming
+## The Data set
+```{r}
+Variables <- c("stage",
+               "age",
+               "wt",
+               "sbp",
+               "dbp",
+               "hg",
+               "sz",
+               "ap",
+               "sdate",
+               "sg",
+               "dtime")
 
-#### Clean data -> Augment data
-- Add five new variables: outcome, treatment_mg, EKG_lvl, performance_lvl, age_group
+Description <- c("Stage of prostate cancer",
+                 "Age of patient in years",
+                 "Weight Index = wt(kg)-ht(cm)+200",
+                 "Systolic Blood Pressure/10",
+                 "Diastolic Blood Pressure/10",
+                 "Serum Hemoglobin [g/100ml]",
+                 "Size of Primary Tumor [cm^2]",
+                 "Serum Prostatic Acid Phosphatase",
+                 "Date of study",
+                 "Combined Index of Stage and Hist. Grade",
+                 "Months of Follow-up")
 
-# Materials and Methods
+Statistics <- c( " 3 or 4",
+                 "71.51 (48.00 ~ 89.00)", 
+                 "98.93 (69.00 ~ 152.00)",
+                 "14.35 (8.00 ~ 30.00)",
+                 "8.15 (4.00 ~ 18.00)",
+                 "13.45 (5.90 ~ 21.20)",
+                 "14.57 (0.00 ~ 69.00)",
+                 "12.18 (0.01 ~ 999.88)",
+                 " - ",
+                 " - ",
+                 " - ")
 
-## Data visualization | Pre-treatment variables - Numeric
+table <- cbind(Variables, 
+               Description, 
+               Statistics)
+table %>% 
+  kable(caption = "Variables in the data set, 2/2",
+        format = "html",
+        col.names = c("Variable Name", 
+                      "Desription", 
+                      "Level / Summary Statistic")) %>% 
+  kable_styling("striped", 
+                font_size = 13)
+```
+
+# Methods
+
+## Methods, Data cleaning and wrangling
+#### **Raw data to Clean data**
+* Exclude *dtime*, *sdate* and *sg*
+* Renaming variables 
+
+#### **Clean data to Augment data**
+* Add five new variables: 
+  + <font size="4">outcome = mutating *status* into alive vs dead</font> 
+  + <font size="4">treatment_mg = making a numeric variable by removing string </font>
+  + <font size="4">EKG_lvl = creating a factorized variable with the levels in numbers </font>
+  + <font size="4">performance_lvl = creating a factorized variable with the levels in numbers </font>
+  + <font size="4">age_group = forming two age groups young/old based on the mean </font>
+ 
+
+## Methods | Visualization of pre-treatment variables - Numeric
 
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_preTreatContinuous.png"))
 ```
 
-## Data visualization | Pre-treatment variables - Categorical
+## Methods | Visualization of pre-treatment variables - Categorical
 
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_preTreatCategorical.png"))
 ```
 
-## Data visualization | Pre-treatment variables - Heatmap
+## Methods | Visualization of pre-treatment variables - Heatmap
 
 ```{r, echo = FALSE, out.width="70%", fig.align = "center"}
 include_graphics(here("results/04_plot_preTreatHeatmap.png"))
 ```
 
-## Data visualization | Treatment, outcome and age
+## Methods | Modelling
+
+- Logistic regression
+- PCA
+- K-means clustering
+
+
+# Results
+
+## Results | Treatment, outcome and age
 
 ```{r, echo = FALSE, out.width="90%", fig.align = "center"}
 include_graphics(here("results/04_plot_OutcomeTreatment.png"))
 ```
 
-## Logistic regression | Model outcome as function of treatment
+## Results | Logistic model - Outcome as function of treatment
 
 Output:
 ```{r, echo = TRUE}
 log_mod_treatment
 ```
 
-## Logistic regression for each variable | Treatment 1.0 mg
+## Results | Logistic model for each variable - Treatment = 1.0 mg
 
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/05_plot_Manhattan.png"))
 ```
 
-## Logistic regression | Effects of significant variables for treatment 1.0 mg
+## Results | Logistic model for each variable - Treatment = 1.0 mg
   
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/05_plot_CIeffects.png"))
 ```
 
-## Logistic regression | Distribution of significant variables for each outcome
+## Results | Distribution of significant variables for each outcome
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/04_plot_significantVariables.png"))
 ```
 
-## Principal Component Analysis
 
-## Principal Component Analysis
+## Results | Principal Component Analysis
+
+## Results | Principal Component Analysis
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/06_plot_PCA_PCcoords.png"))
 ```
 
-## Principal Component Analysis
+## Results | Principal Component Analysis
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/06_plot_PCA_rotation.png"))
 ```
 
-## Principal Component Analysis
+## Results | Principal Component Analysis
 ```{r, echo = FALSE, out.width="90%"}
 include_graphics(here("results/06_plot_PCA_varExpl.png"))
 ``` 
 
-## K-means clustering
+## Results | K-means clustering
 
-## K-means clustering
+## Results | K-means clustering
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/07_plot_kmeans_center.png"))
 ``` 
 
-## K-means clustering
+## Results | K-means clustering
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/07_plot_kmeans_scree.png"))
 ``` 
 
+<<<<<<< HEAD
 ## K-means clustering
 ```{r, echo = FALSE, out.width="100%"}
 include_graphics(here("results/07_plot_kmeans_CCC.png"))
 ``` 
 
 ## Results and discussion
+=======
+# Discussion and conclusion
+
+## Discussion and conclusion
+>>>>>>> ac5039a8f46c9261629698a2de1ee4dc80d0aac9
 
 - Stage 3 and 4 patients differ in tumor size and acid phosphatase levels
 - Most effective treatment is 1.0 mg estrogen
