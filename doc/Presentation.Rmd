@@ -149,12 +149,12 @@ table %>%
 * Renaming variables 
 
 #### **Clean data to Augment data**
-* Add five new variables: 
-  + <font size="4">outcome = mutating *status* into alive vs dead</font> 
-  + <font size="4">treatment_mg = making a numeric variable by removing string </font>
-  + <font size="4">EKG_lvl = creating a factorized variable with the levels in numbers </font>
-  + <font size="4">performance_lvl = creating a factorized variable with the levels in numbers </font>
-  + <font size="4">age_group = forming two age groups young/old based on the mean </font>
+* Add six new variables: 
+  + <font size="3">outcome = mutating *status* into alive vs dead</font> 
+  + <font size="3">treatment_mg = making a numeric variable by removing string </font>
+  + <font size="3">EKG_lvl = creating a factorized variable with the levels in numbers </font>
+  + <font size="3">performance_lvl = creating a factorized variable with the levels in numbers </font>
+  + <font size="3">age_group = forming two age groups young/old based on the mean </font>
  
 
 ## Methods | Visualization of pre-treatment variables - Numeric
