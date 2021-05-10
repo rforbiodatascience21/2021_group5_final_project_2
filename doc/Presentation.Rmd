@@ -228,7 +228,7 @@ include_graphics(here("results/06_plot_PCA_rotation.png"))
 ```
 
 ## Results | Principal Component Analysis
-```{r, echo = FALSE, out.width="90%"}
+```{r, echo = FALSE, out.width="80%"}
 include_graphics(here("results/06_plot_PCA_varExpl.png"))
 ``` 
 
